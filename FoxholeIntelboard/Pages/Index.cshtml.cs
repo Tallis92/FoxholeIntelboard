@@ -1,19 +1,28 @@
+using FoxholeIntelboard.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Xml.Linq;
 
 namespace FoxholeIntelboard.Pages;
 
 public class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
-    {
-        _logger = logger;
-    }
-
+    public Ammunition Ammo { get; set; }
+    
     public void OnGet()
     {
+        var ammo = new Ammunition
+        {
+            Name = "7.62mm",
+            Damage = DamageType.Kinetic, // Enum-värdet sätts här
+            Description = "Standard rifle ammo", // Unik beskrivning för denna ammo
+            CrateAmount = 100,
+            ProductionCost = new List<Cost> { /* ... */ },
+        };
+        Ammo = ammo;
+        Console.WriteLine($"Name: {ammo.Name}");
+        Console.WriteLine($"Object Description: {ammo.Description}");        // "Standard rifle ammo"
+        Console.WriteLine($"Damage Description: {ammo.GetDamageDescription()}");
 
     }
 }
