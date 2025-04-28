@@ -21,8 +21,8 @@ public class IndexModel : PageModel
         };
         Ammo = ammo;
         Console.WriteLine($"Name: {ammo.Name}");
-        Console.WriteLine($"Object Description: {ammo.Description}");        // "Standard rifle ammo"
-        Console.WriteLine($"Damage Description: {ammo.GetDamageDescription()}");
+        Console.WriteLine($"Ammo Description: {ammo.Description}");        // "Standard rifle ammo"
+        Console.WriteLine($"Damage type: {ammo.GetDamageDescription()}");
 
     }
 }

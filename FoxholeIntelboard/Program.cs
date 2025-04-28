@@ -1,9 +1,20 @@
+using FoxholeIntelboard.Data;
+using FoxholeIntelboard.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddDbContext<IntelboardDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
+builder.Services.AddScoped<IResourceService, ResourceService>();
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

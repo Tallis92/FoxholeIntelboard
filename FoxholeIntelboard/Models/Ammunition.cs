@@ -35,15 +35,15 @@ namespace FoxholeIntelboard.Models
 
         public string GetDamageDescription()
         {
-            var field = Damage.GetType().GetField(Damage.ToString());
-            var attribute = field?.GetCustomAttribute<DescriptionAttribute>();
+            var damage = Damage.GetType().GetField(Damage.ToString());
+            var attribute = damage?.GetCustomAttribute<DescriptionAttribute>();
             return attribute?.Description ?? Damage.ToString();
         }
     }
 
     public class Cost
     {
-        public RefinedMaterial Name { get; set; } 
+        public Material Name { get; set; } 
         public int Amount { get; set; }
     }
 }
