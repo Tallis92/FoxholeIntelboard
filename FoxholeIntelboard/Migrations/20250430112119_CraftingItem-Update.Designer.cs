@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoxholeIntelboard.Migrations
 {
     [DbContext(typeof(IntelboardDBContext))]
-    [Migration("20250430085127_CraftableItems")]
-    partial class CraftableItems
+    [Migration("20250430112119_CraftingItem-Update")]
+    partial class CraftingItemUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,13 +24,70 @@ namespace FoxholeIntelboard.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("FoxholeIntelboard.Models.Ammunition", b =>
+            modelBuilder.Entity("FoxholeIntelboard.Models.Cost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CraftableItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CraftableItemId");
+
+                    b.ToTable("Cost", (string)null);
+                });
+
+            modelBuilder.Entity("FoxholeIntelboard.Models.CraftableItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CraftableItem");
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("FoxholeIntelboard.Models.Resource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Resources", (string)null);
+                });
+
+            modelBuilder.Entity("FoxholeIntelboard.Models.Ammunition", b =>
+                {
+                    b.HasBaseType("FoxholeIntelboard.Models.CraftableItem");
 
                     b.Property<int>("CrateAmount")
                         .HasColumnType("int");
@@ -48,48 +105,12 @@ namespace FoxholeIntelboard.Migrations
                     b.PrimitiveCollection<string>("SpecialProperties")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Ammunitions");
-                });
-
-            modelBuilder.Entity("FoxholeIntelboard.Models.Cost", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AmmunitionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MaterialId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AmmunitionId");
-
-                    b.HasIndex("MaterialId");
-
-                    b.ToTable("Cost");
+                    b.ToTable("Ammunitions", (string)null);
                 });
 
             modelBuilder.Entity("FoxholeIntelboard.Models.Material", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.HasBaseType("FoxholeIntelboard.Models.CraftableItem");
 
                     b.Property<int>("ConversionRate")
                         .HasColumnType("int");
@@ -101,43 +122,39 @@ namespace FoxholeIntelboard.Migrations
                     b.Property<int>("RefinedFromId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
                     b.HasIndex("RefinedFromId");
 
-                    b.ToTable("Materials");
-                });
-
-            modelBuilder.Entity("FoxholeIntelboard.Models.Resource", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Resources");
+                    b.ToTable("Materials", (string)null);
                 });
 
             modelBuilder.Entity("FoxholeIntelboard.Models.Cost", b =>
                 {
-                    b.HasOne("FoxholeIntelboard.Models.Ammunition", null)
+                    b.HasOne("FoxholeIntelboard.Models.CraftableItem", "CraftableItem")
                         .WithMany("ProductionCost")
-                        .HasForeignKey("AmmunitionId");
+                        .HasForeignKey("CraftableItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("FoxholeIntelboard.Models.Material", null)
-                        .WithMany("ProductionCost")
-                        .HasForeignKey("MaterialId");
+                    b.Navigation("CraftableItem");
+                });
+
+            modelBuilder.Entity("FoxholeIntelboard.Models.Ammunition", b =>
+                {
+                    b.HasOne("FoxholeIntelboard.Models.CraftableItem", null)
+                        .WithOne()
+                        .HasForeignKey("FoxholeIntelboard.Models.Ammunition", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FoxholeIntelboard.Models.Material", b =>
                 {
+                    b.HasOne("FoxholeIntelboard.Models.CraftableItem", null)
+                        .WithOne()
+                        .HasForeignKey("FoxholeIntelboard.Models.Material", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("FoxholeIntelboard.Models.Resource", "RefinedFrom")
                         .WithMany()
                         .HasForeignKey("RefinedFromId")
@@ -147,12 +164,7 @@ namespace FoxholeIntelboard.Migrations
                     b.Navigation("RefinedFrom");
                 });
 
-            modelBuilder.Entity("FoxholeIntelboard.Models.Ammunition", b =>
-                {
-                    b.Navigation("ProductionCost");
-                });
-
-            modelBuilder.Entity("FoxholeIntelboard.Models.Material", b =>
+            modelBuilder.Entity("FoxholeIntelboard.Models.CraftableItem", b =>
                 {
                     b.Navigation("ProductionCost");
                 });

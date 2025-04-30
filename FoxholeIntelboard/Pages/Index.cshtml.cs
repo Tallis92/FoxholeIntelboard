@@ -7,11 +7,11 @@ namespace FoxholeIntelboard.Pages;
 
 public class IndexModel : PageModel
 {
-    public Ammunition Ammo { get; set; }
+    public Models.Ammunition Ammo { get; set; }
     
     public void OnGet()
     {
-        var ammo = new Ammunition
+        var ammo = new Models.Ammunition
         {
             Name = "7.62mm",
             Damage = DamageType.Kinetic, // Enum-värdet sätts här
