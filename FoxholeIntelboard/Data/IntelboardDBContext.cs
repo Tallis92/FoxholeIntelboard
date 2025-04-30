@@ -11,7 +11,7 @@ namespace FoxholeIntelboard.Data
 
         }
         public DbSet<Resource> Resources { get; set; }
-        //public DbSet<Material> Materials { get; set; }
-        //public DbSet<Ammunition> Ammunitions { get; set; }
+        public DbSet<Material> Materials { get; set; }
+        public DbSet<Ammunition> Ammunitions { get; set; }
     }
 }
