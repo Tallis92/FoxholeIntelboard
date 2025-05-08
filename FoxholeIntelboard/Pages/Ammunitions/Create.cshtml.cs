@@ -1,67 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using FoxholeIntelboard.Data;
+using FoxholeIntelboard.Models;
+using FoxholeIntelboard.Services;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using FoxholeIntelboard.Data;
-using FoxholeIntelboard.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.Reflection;
 
 namespace FoxholeIntelboard.Pages.Ammunitions
+{ 
+
+public class CreateModel : PageModel
 {
-    public class CreateModel : PageModel
+    private readonly IntelboardDBContext _context;
+    private readonly IMaterialService _materialService;
+
+    public CreateModel(IntelboardDBContext context, IMaterialService materialService)
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
-        [BindProperty]
-        public Ammunition Ammunition { get; set; }
-        public List<SelectListItem> DamageTypeOptions { get; set; } // För dropdown
+        _context = context;
+        _materialService = materialService;
+    }
 
-        public CreateModel(FoxholeIntelboard.Data.IntelboardDBContext context)
-        {
-            _context = context;
-            Ammunition = new Ammunition();
+    [BindProperty]
+    public Ammunition Ammunitions { get; set; } = default!;
 
-            // Hämta DamageType-värden och deras beskrivningar
-            DamageTypeOptions = Enum.GetValues(typeof(DamageType))
-                .Cast<DamageType>()
-                .Select(dt => new SelectListItem
-                {
-                    Value = dt.ToString(),
-                    Text = dt.GetType()
-                        .GetField(dt.ToString())
-                        .GetCustomAttribute<DescriptionAttribute>()
-                        ?.Description ?? dt.ToString()
-                })
-                .ToList();
-        }
+    [BindProperty]
+    public List<Material> Materials { get; set; } = new();
 
-        public IActionResult OnPost()
-        {
-            if (!ModelState.IsValid)
+    public List<SelectListItem> DamageTypeOptions { get; set; } = new();
+
+    public async Task<IActionResult> OnGetAsync()
+    {
+        Materials = await _materialService.GetMaterialsAsync();
+
+        DamageTypeOptions = Enum.GetValues(typeof(DamageType))
+            .Cast<DamageType>()
+            .Select(d => new SelectListItem
             {
-                // Återskapa DamageTypeOptions vid valideringsfel
-                DamageTypeOptions = Enum.GetValues(typeof(DamageType))
-                    .Cast<DamageType>()
-                    .Select(dt => new SelectListItem
-                    {
-                        Value = dt.ToString(),
-                        Text = dt.GetType()
-                            .GetField(dt.ToString())
-                            .GetCustomAttribute<DescriptionAttribute>()
-                            ?.Description ?? dt.ToString()
-                    })
-                    .ToList();
-                return Page();
+                Value = d.ToString(),
+                Text = GetEnumDescription(d)
+            }).ToList();
+
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid)
+        {
+            if (Ammunitions.ProductionCost == null || !Ammunitions.ProductionCost.Any())
+            {
+                Ammunitions.ProductionCost = new List<Cost> { new Cost() };
             }
 
-            Ammunition.Name = Ammunition.Name ?? "Default Item"; // Sätt ItemName
-            _context.Ammunitions.Add(Ammunition);
-            _context.SaveChanges();
+            DamageTypeOptions = Enum.GetValues(typeof(DamageType))
+                .Cast<DamageType>()
+                .Select(d => new SelectListItem
+                {
+                    Value = d.ToString(),
+                    Text = GetEnumDescription(d)
+                }).ToList();
 
-            return RedirectToPage("./Index");
+            return Page();
         }
+
+        foreach (var cost in Ammunitions.ProductionCost)
+        {
+            cost.CraftableItem = Ammunitions;
+        }
+
+        _context.Ammunitions.Add(Ammunitions);
+        await _context.SaveChangesAsync();
+
+        return RedirectToPage("./Index");
     }
+
+    private string GetEnumDescription(Enum value)
+    {
+        var field = value.GetType().GetField(value.ToString());
+        var attr = field?.GetCustomAttribute<DescriptionAttribute>();
+        return attr?.Description ?? value.ToString();
+    }
+}
 }

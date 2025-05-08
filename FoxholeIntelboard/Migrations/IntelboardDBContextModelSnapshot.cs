@@ -60,13 +60,11 @@ namespace FoxholeIntelboard.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
 
                     b.ToTable("CraftableItems", (string)null);
 
@@ -87,7 +85,7 @@ namespace FoxholeIntelboard.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Resources", (string)null);
+                    b.ToTable("Resources");
                 });
 
             modelBuilder.Entity("FoxholeIntelboard.Models.Ammunition", b =>
@@ -103,75 +101,10 @@ namespace FoxholeIntelboard.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.PrimitiveCollection<string>("SpecialProperties")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Ammunitions", (string)null);
-                });
-
-            modelBuilder.Entity("FoxholeIntelboard.Models.Material", b =>
-                {
-                    b.HasBaseType("FoxholeIntelboard.Models.CraftableItem");
-
-                    b.Property<int>("ConversionRate")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RefinedFromId")
-                        .HasColumnType("int");
-
-                    b.HasIndex("RefinedFromId");
-
-                    b.ToTable("Materials", (string)null);
-                });
-
-            modelBuilder.Entity("FoxholeIntelboard.Models.Cost", b =>
-                {
-                    b.HasOne("FoxholeIntelboard.Models.CraftableItem", "CraftableItem")
-                        .WithMany("ProductionCost")
-                        .HasForeignKey("CraftableItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CraftableItem");
-                });
-
-            modelBuilder.Entity("FoxholeIntelboard.Models.Ammunition", b =>
-                {
-                    b.HasOne("FoxholeIntelboard.Models.CraftableItem", null)
-                        .WithOne()
-                        .HasForeignKey("FoxholeIntelboard.Models.Ammunition", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FoxholeIntelboard.Models.Material", b =>
-                {
-                    b.HasOne("FoxholeIntelboard.Models.CraftableItem", null)
-                        .WithOne()
-                        .HasForeignKey("FoxholeIntelboard.Models.Material", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoxholeIntelboard.Models.Resource", "RefinedFrom")
-                        .WithMany()
-                        .HasForeignKey("RefinedFromId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RefinedFrom");
-                });
-
-            modelBuilder.Entity("FoxholeIntelboard.Models.CraftableItem", b =>
-                {
-                    b.Navigation("ProductionCost");
+                    b.ToTable("Ammunitions");
                 });
 
             modelBuilder.Entity("FoxholeIntelboard.Models.Material", b =>

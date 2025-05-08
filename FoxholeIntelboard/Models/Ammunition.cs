@@ -27,8 +27,6 @@ namespace FoxholeIntelboard.Models
 
     public class Ammunition : CraftableItem
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
         public string? Description { get; set; }
         public int CrateAmount { get; set; }
         public List<string>? SpecialProperties { get; set; }

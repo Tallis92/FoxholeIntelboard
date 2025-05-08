@@ -1,45 +1,57 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Ammunitions.CreateModel
 
-        @{
-        ViewData["Title"] = "Create";
-        }
-        
-        <h1>Create</h1>
-        
-    <h4>Ammunition</h4>
-    <hr />
-    <div class="row">
-    <div class="col-md-4">
-    <form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@{
+    ViewData["Title"] = "Ammunition";
+}
+<h1>Create</h1>
+
+<h4>Ammunition</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="Ammunition.Name" class="control-label"></label>
-                <input asp-for="Ammunition.Name" class="form-control" />
-                <span asp-validation-for="Ammunition.Name" class="text-danger"></span>
+                <label asp-for="Ammunitions.Name" class="control-label"></label>
+                <input asp-for="Ammunitions.Name" class="form-control" />
+                <span asp-validation-for="Ammunitions.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Ammunitions.Description" class="control-label"></label>
+                <textarea asp-for="Ammunitions.Description" class="form-control"></textarea>
+                <span asp-validation-for="Ammunitions.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Ammunitions.CrateAmount" class="control-label"></label>
+                <input asp-for="Ammunitions.CrateAmount" class="form-control" />
+                <span asp-validation-for="Ammunitions.CrateAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Ammunition.Description" class="control-label"></label>
-                <input asp-for="Ammunition.Description" class="form-control" />
-                <span asp-validation-for="Ammunition.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ammunition.CrateAmount" class="control-label"></label>
-                <input asp-for="Ammunition.CrateAmount" class="form-control" />
-                <span asp-validation-for="Ammunition.CrateAmount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ammunition.SpecialProperties" class="control-label"></label>
-                <input asp-for="Ammunition.SpecialProperties" class="form-control" />
-                <span asp-validation-for="Ammunition.SpecialProperties" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ammunition.Damage"></label>
-                <select asp-for="Ammunition.Damage" asp-items="Model.DamageTypeOptions">
-                    <option value="">Välj skadetyp</option>
+                <label asp-for="Ammunitions.Damage">Damage Type</label>
+                <select asp-for="Ammunitions.Damage" asp-items="Model.DamageTypeOptions" class="form-control">
+                    <option value="">-- Select Damage Type --</option>
                 </select>
+                <span asp-validation-for="Ammunitions.Damage" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <p>Choose amount of materials required:</p>
+            <input type="hidden" name="SelectedCost" id="SelectedCost" />
+
+            <div id="selectCosts" style="display: flex; gap: 10px;">
+                <input type="radio" name="cost" value="1"> 1 Material
+                <input type="radio" name="cost" value="2"> 2 Materials
+                <input type="radio" name="cost" value="3"> 3 Materials
+            </div>
+
+            <h2>Material Cost</h2>
+            <br />
+            <div id="materialCostsContainer"></div>
+
+            <div class="form-group mt-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -50,6 +62,41 @@
     <a asp-page="Index">Back to List</a>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectedCosts = document.getElementById("selectCosts");
+        const materialCostsContainer = document.getElementById("materialCostsContainer");
+        const materials = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Materials));
+
+        selectedCosts.addEventListener('change', function () {
+            const selectedRadio = selectedCosts.querySelector('input[name="cost"]:checked');
+            if (!selectedRadio) return;
+
+            const selectedValue = parseInt(selectedRadio.value);
+            materialCostsContainer.innerHTML = "";
+
+            for (let i = 0; i < selectedValue; i++) {
+                const group = document.createElement("div");
+                group.classList.add("form-group");
+                group.innerHTML = `
+                    <div style="border: 1px solid grey; padding: 10px;">
+                        <label for="Ammunition_ProductionCost_${i}__MaterialId">Material ${i + 1}</label>
+                        <select name="Ammunition.ProductionCost[${i}].MaterialId" class="form-control">
+                            <option value="">-- Select Material --</option>
+                            ${materials.map(m => `<option value="${m.Id}">${m.Name}</option>`).join('')}
+                        </select>
+                        <label for="Ammunition_ProductionCost_${i}__Amount">Amount</label>
+                        <input type="number" name="Ammunition.ProductionCost[${i}].Amount" class="form-control" />
+                    </div><br/>
+                `;
+                materialCostsContainer.appendChild(group);
+            }
+        });
+    });
+</script>
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

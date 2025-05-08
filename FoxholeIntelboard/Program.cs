@@ -12,6 +12,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<IntelboardDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
 builder.Services.AddScoped<IResourceService, ResourceService>();
+builder.Services.AddScoped<IMaterialService, MaterialService>();
+
 
 var app = builder.Build();
 

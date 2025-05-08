@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoxholeIntelboard.Migrations
 {
     [DbContext(typeof(IntelboardDBContext))]
-    [Migration("20250430230642_RemovedNameFromCost")]
-    partial class RemovedNameFromCost
+    [Migration("20250508123105_Ammo")]
+    partial class Ammo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,7 @@ namespace FoxholeIntelboard.Migrations
                     b.Property<int>("CraftableItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MaterialId")
+                    b.Property<int?>("MaterialId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ResourceId")
@@ -91,6 +91,25 @@ namespace FoxholeIntelboard.Migrations
                     b.ToTable("Resources");
                 });
 
+            modelBuilder.Entity("FoxholeIntelboard.Models.Ammunition", b =>
+                {
+                    b.HasBaseType("FoxholeIntelboard.Models.CraftableItem");
+
+                    b.Property<int>("CrateAmount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.PrimitiveCollection<string>("SpecialProperties")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("Ammunitions");
+                });
+
             modelBuilder.Entity("FoxholeIntelboard.Models.Material", b =>
                 {
                     b.HasBaseType("FoxholeIntelboard.Models.CraftableItem");
@@ -112,8 +131,7 @@ namespace FoxholeIntelboard.Migrations
                     b.HasOne("FoxholeIntelboard.Models.Material", "Material")
                         .WithMany()
                         .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("FoxholeIntelboard.Models.Resource", "Resource")
                         .WithMany()
