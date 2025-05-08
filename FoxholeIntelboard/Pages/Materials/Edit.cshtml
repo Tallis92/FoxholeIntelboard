@@ -1,6 +1,5 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Materials.EditModel
-
 @{
     ViewData["Title"] = "Edit";
 }
@@ -19,6 +18,7 @@
                 <input asp-for="Material.CrateAmount" class="form-control" />
                 <span asp-validation-for="Material.CrateAmount" class="text-danger"></span>
             </div>
+
             <input type="hidden" asp-for="Material.Id" />
             <div class="form-group">
                 

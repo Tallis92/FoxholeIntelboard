@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
 namespace FoxholeIntelboard.Models
@@ -23,12 +25,11 @@ namespace FoxholeIntelboard.Models
         Demolition,
     }
 
-    public class Ammunition
+    public class Ammunition : CraftableItem
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
-        public List<Cost> ProductionCost { get; set; }
         public int CrateAmount { get; set; }
         public List<string>? SpecialProperties { get; set; }
         public DamageType Damage { get; set; }
@@ -40,5 +41,4 @@ namespace FoxholeIntelboard.Models
             return attribute?.Description ?? Damage.ToString();
         }
     }
-
 }

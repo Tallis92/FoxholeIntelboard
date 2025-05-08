@@ -1,0 +1,60 @@
+﻿@page
+@model FoxholeIntelboard.Pages.Ammunitions.CreateModel
+
+        @{
+        ViewData["Title"] = "Create";
+        }
+        
+        <h1>Create</h1>
+        
+    <h4>Ammunition</h4>
+    <hr />
+    <div class="row">
+    <div class="col-md-4">
+    <form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Ammunition.Name" class="control-label"></label>
+                <input asp-for="Ammunition.Name" class="form-control" />
+                <span asp-validation-for="Ammunition.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ammunition.Description" class="control-label"></label>
+                <input asp-for="Ammunition.Description" class="form-control" />
+                <span asp-validation-for="Ammunition.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ammunition.CrateAmount" class="control-label"></label>
+                <input asp-for="Ammunition.CrateAmount" class="form-control" />
+                <span asp-validation-for="Ammunition.CrateAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ammunition.SpecialProperties" class="control-label"></label>
+                <input asp-for="Ammunition.SpecialProperties" class="form-control" />
+                <span asp-validation-for="Ammunition.SpecialProperties" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ammunition.Damage"></label>
+                <select asp-for="Ammunition.Damage" asp-items="Model.DamageTypeOptions">
+                    <option value="">Välj skadetyp</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ammunition.ItemName" class="control-label"></label>
+                <input asp-for="Ammunition.ItemName" class="form-control" />
+                <span asp-validation-for="Ammunition.ItemName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

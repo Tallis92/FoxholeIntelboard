@@ -31,8 +31,6 @@ namespace FoxholeIntelboard.Pages.Materials
             return Page();
         }
 
-
-
         public async Task<IActionResult> OnPostAsync()
         {
 
@@ -53,6 +51,7 @@ namespace FoxholeIntelboard.Pages.Materials
 
             _context.Materials.Add(Material);
           
+
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

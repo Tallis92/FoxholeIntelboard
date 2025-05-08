@@ -6,19 +6,20 @@ namespace FoxholeIntelboard.Data
     public class IntelboardDBContext : DbContext
     {
         public IntelboardDBContext(DbContextOptions<IntelboardDBContext> options)
-        : base(options)
+            : base(options)
         {
-
         }
+
         public DbSet<Resource> Resources { get; set; }
         public DbSet<Material> Materials { get; set; }
+        public DbSet<Ammunition> Ammunitions { get; set; }
         public DbSet<Cost> Costs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<CraftableItem>().HasKey(c => c.Id);
             modelBuilder.Entity<Material>().ToTable("Materials");
-
             modelBuilder.Entity<CraftableItem>()
                 .HasMany(c => c.ProductionCost)
                 .WithOne(c => c.CraftableItem)
@@ -45,7 +46,5 @@ namespace FoxholeIntelboard.Data
 
            
         }
-
-
     }
 }

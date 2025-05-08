@@ -1,23 +1,23 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Materials.DetailsModel
-
 @{
     ViewData["Title"] = "Details";
 }
 
 <h1>Details</h1>
-
 <div>
     <h4>Material</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
+
             @Html.DisplayNameFor(model => model.Material.CrateAmount)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Material.CrateAmount)
         </dd>
         <dt class="col-sm-2">
+
             @Html.DisplayNameFor(model => model.Material.Name)
         </dt>
         <dd class="col-sm-10">

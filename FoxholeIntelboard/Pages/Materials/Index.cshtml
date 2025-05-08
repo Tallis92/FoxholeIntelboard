@@ -1,12 +1,10 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Materials.IndexModel
-
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
-
 <p>
     <a asp-page="Create">Create New</a>
 </p>
@@ -18,6 +16,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Material[0].Name)
+
             </th>
             <th></th>
         </tr>
