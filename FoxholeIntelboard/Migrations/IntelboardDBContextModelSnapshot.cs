@@ -104,7 +104,7 @@ namespace FoxholeIntelboard.Migrations
                     b.PrimitiveCollection<string>("SpecialProperties")
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Ammunitions");
+                    b.ToTable("Ammunitions", (string)null);
                 });
 
             modelBuilder.Entity("FoxholeIntelboard.Models.Material", b =>
@@ -140,6 +140,15 @@ namespace FoxholeIntelboard.Migrations
                     b.Navigation("Material");
 
                     b.Navigation("Resource");
+                });
+
+            modelBuilder.Entity("FoxholeIntelboard.Models.Ammunition", b =>
+                {
+                    b.HasOne("FoxholeIntelboard.Models.CraftableItem", null)
+                        .WithOne()
+                        .HasForeignKey("FoxholeIntelboard.Models.Ammunition", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FoxholeIntelboard.Models.Material", b =>
