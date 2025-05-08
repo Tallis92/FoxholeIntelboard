@@ -13,15 +13,17 @@
     <div class="col-md-4">
     <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Material.CrateAmount" class="control-label"></label>
-                <input asp-for="Material.CrateAmount" class="form-control" />
-                <span asp-validation-for="Material.CrateAmount" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Material.Name" class="control-label"></label>
                 <input asp-for="Material.Name" class="form-control" />
                 <span asp-validation-for="Material.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Material.CrateAmount" class="control-label"></label>
+                <input asp-for="Material.CrateAmount" class="form-control" />
+                <span asp-validation-for="Material.CrateAmount" class="text-danger"></span>
             </div>
 
              <p>Choose amount of resources:</p>
@@ -33,31 +35,11 @@
             </div>
 
             <h2>Material Cost</h2>
-            <div class="form-group">
-                <label asp-for="Material.ProductionCost[0].ResourceId" class="control-label">Resource</label>
-                @if(Model.Resources != null && Model.Resources.Count > 0)
-                {
-                    <select asp-for="Material.ProductionCost[0].ResourceId">
-                        <option value="">-- Select Resource --</option>
-                        @foreach (var resource in @Model.Resources)
-                        {
-                            <option value="@resource.Id">@resource.Name</option>
-                        }
-                    </select>
-                    <br /><br />
-                    <label asp-for="Material.ProductionCost[0].Amount" class="control.label">Amount</label>
-                    <input asp-for="Material.ProductionCost[0].Amount" class="form-control" />
-                }
-                else
-                {
-                    <h4>--No resources where found--</h4>
-                }
-
-                
-            </div>
+            <div id="materialCostsContainer"></div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+            
         </form>
     </div>
 </div>
@@ -68,19 +50,38 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let selectedValue;
         const selectedCosts = document.getElementById("selectCosts");
-        const hiddenInput = document.getElementById("SelectedCost");
+        const materialCostsContainer = document.getElementById("materialCostsContainer");
+        const resources = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Resources));
 
         selectedCosts.addEventListener('change', function () {
             const selectedRadio = selectedCosts.querySelector('input[name="cost"]:checked');
-            if (selectedRadio) {
-                selectedValue = selectedRadio.value;
-                console.log(selectedValue);
+            if (!selectedRadio) return;
+
+            const selectedValue = parseInt(selectedRadio.value);
+            materialCostsContainer.innerHTML = ""; // Clear existing inputs
+
+            for (let i = 0; i < selectedValue; i++) {
+                const group = document.createElement("div");
+                group.classList.add("form-group");
+                group.innerHTML = `
+                    <div style="border: 1px solid grey; text-align: center;">
+                        <label for="Material_ProductionCost_${i}__ResourceId">Resource ${i + 1}</label>
+                        <select style="text-align: center; background-color: #f8f9fa;" name="Material.ProductionCost[${i}].ResourceId" class="form-control">
+                            <option value="">-- Select Resource --</option>
+                            ${resources.map(resource => `<option value="${resource.Id}">${resource.Name}</option>`).join('')}
+                        </select>
+                        <label for="Material_ProductionCost_${i}__Amount">Amount</label>
+                        <input type="number" name="Material.ProductionCost[${i}].Amount" class="form-control" />
+                    </div>
+                    <br/>
+                `;
+                materialCostsContainer.appendChild(group);
             }
         });
     });
 </script>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -28,16 +28,11 @@ namespace FoxholeIntelboard.Pages.Materials
         public async Task<IActionResult> OnGetAsync()
         {
             Resources = await _resourceService.GetResourcesAsync();
-            Material = new Material
-            {
-                ProductionCost = new List<Cost> { new Cost() }
-            };
             return Page();
         }
 
 
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
 
