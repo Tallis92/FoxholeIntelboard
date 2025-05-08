@@ -57,7 +57,7 @@ namespace FoxholeIntelboard.Pages.Ammunitions
                 return Page();
             }
 
-            Ammunition.ItemName = Ammunition.Name ?? "Default Item"; // Sätt ItemName
+            Ammunition.Name = Ammunition.Name ?? "Default Item"; // Sätt ItemName
             _context.Ammunitions.Add(Ammunition);
             _context.SaveChanges();
 

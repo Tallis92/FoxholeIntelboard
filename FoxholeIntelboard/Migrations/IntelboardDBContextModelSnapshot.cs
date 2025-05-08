@@ -35,31 +35,21 @@ namespace FoxholeIntelboard.Migrations
                     b.Property<int>("CraftableItemId")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
                     b.Property<int?>("MaterialId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ResourceId")
                         .HasColumnType("int");
-=======
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
->>>>>>> 49c42f444a140a9da8926f7471284a17fbed0dc2
 
                     b.HasKey("Id");
 
                     b.HasIndex("CraftableItemId");
 
-<<<<<<< HEAD
                     b.HasIndex("MaterialId");
 
                     b.HasIndex("ResourceId");
 
                     b.ToTable("Costs", (string)null);
-=======
-                    b.ToTable("Cost", (string)null);
->>>>>>> 49c42f444a140a9da8926f7471284a17fbed0dc2
                 });
 
             modelBuilder.Entity("FoxholeIntelboard.Models.CraftableItem", b =>
@@ -70,21 +60,15 @@ namespace FoxholeIntelboard.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
+
                     b.Property<string>("Name")
                         .IsRequired()
-=======
-                    b.Property<string>("ItemName")
->>>>>>> 49c42f444a140a9da8926f7471284a17fbed0dc2
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-<<<<<<< HEAD
+
                     b.ToTable("CraftableItems", (string)null);
-=======
-                    b.ToTable("CraftableItem");
->>>>>>> 49c42f444a140a9da8926f7471284a17fbed0dc2
 
                     b.UseTptMappingStrategy();
                 });

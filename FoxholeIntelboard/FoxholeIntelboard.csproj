@@ -16,11 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
     <Folder Include="Pages\Ammunitions\" />
-=======
     <Folder Include="Migrations\" />
->>>>>>> 49c42f444a140a9da8926f7471284a17fbed0dc2
   </ItemGroup>
 
 </Project>
