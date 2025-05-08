@@ -3,6 +3,7 @@ using FoxholeIntelboard.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoxholeIntelboard.Migrations
 {
     [DbContext(typeof(IntelboardDBContext))]
-    partial class IntelboardDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250430215030_UpdateWithAbstractions")]
+    partial class UpdateWithAbstractions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,19 +38,13 @@ namespace FoxholeIntelboard.Migrations
                     b.Property<int>("CraftableItemId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MaterialId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ResourceId")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CraftableItemId");
-
-                    b.HasIndex("MaterialId");
-
-                    b.HasIndex("ResourceId");
 
                     b.ToTable("Costs", (string)null);
                 });
@@ -106,21 +103,7 @@ namespace FoxholeIntelboard.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FoxholeIntelboard.Models.Material", "Material")
-                        .WithMany()
-                        .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("FoxholeIntelboard.Models.Resource", "Resource")
-                        .WithMany()
-                        .HasForeignKey("ResourceId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("CraftableItem");
-
-                    b.Navigation("Material");
-
-                    b.Navigation("Resource");
                 });
 
             modelBuilder.Entity("FoxholeIntelboard.Models.Material", b =>

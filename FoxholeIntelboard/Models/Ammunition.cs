@@ -41,9 +41,4 @@ namespace FoxholeIntelboard.Models
         }
     }
 
-    public class Cost
-    {
-        public Material Name { get; set; } 
-        public int Amount { get; set; }
-    }
 }
