@@ -80,13 +80,13 @@
                 group.classList.add("form-group");
                 group.innerHTML = `
                     <div style="border: 1px solid grey; padding: 10px;">
-                        <label for="Ammunition_ProductionCost_${i}__MaterialId">Material ${i + 1}</label>
-                        <select name="Ammunition.ProductionCost[${i}].MaterialId" class="form-control">
+                        <label for="Ammunitions_ProductionCost_${i}__MaterialId">Material ${i + 1}</label>
+                        <select name="Ammunitions.ProductionCost[${i}].MaterialId" class="form-control">
                             <option value="">-- Select Material --</option>
                             ${materials.map(m => `<option value="${m.Id}">${m.Name}</option>`).join('')}
                         </select>
-                        <label for="Ammunition_ProductionCost_${i}__Amount">Amount</label>
-                        <input type="number" name="Ammunition.ProductionCost[${i}].Amount" class="form-control" />
+                        <label for="Ammunitions_ProductionCost_${i}__Amount">Amount</label>
+                        <input type="number" name="Ammunitions.ProductionCost[${i}].Amount" class="form-control" />
                     </div><br/>
                 `;
                 materialCostsContainer.appendChild(group);
