@@ -14,9 +14,9 @@ namespace FoxholeIntelboard.Pages.Materials
     public class IndexModel : PageModel
     {
         private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
-        private readonly IMaterialService _materialService;
+        private readonly FoxholeIntelboard.Services.IMaterialService _materialService;
 
-        public IndexModel(FoxholeIntelboard.Data.IntelboardDBContext context, IMaterialService materialService)
+        public IndexModel(FoxholeIntelboard.Data.IntelboardDBContext context, Services.IMaterialService materialService)
         {
             _context = context;
             _materialService = materialService;
@@ -34,6 +34,5 @@ namespace FoxholeIntelboard.Pages.Materials
             await _materialService.SeedMaterialsAsync();
             return RedirectToPage();
         }
-
     }
 }
