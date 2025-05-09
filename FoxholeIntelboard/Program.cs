@@ -1,24 +1,21 @@
 using FoxholeIntelboard.Data;
 using FoxholeIntelboard.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
+Console.WriteLine("Connection string: " + builder.Configuration.GetConnectionString("IntelboardDB"));
 builder.Services.AddDbContext<IntelboardDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
 builder.Services.AddScoped<IResourceService, ResourceService>();
 builder.Services.AddScoped<IMaterialService, MaterialService>();
 
 
+
 var app = builder.Build();
-
-
-// Configure the HTTP request pipeline.
+Console.WriteLine("Build is starting...");
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -35,5 +32,9 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
-
+Console.WriteLine("App is starting...");
 app.Run();
+
+
+// Configure the HTTP request pipeline.
+
