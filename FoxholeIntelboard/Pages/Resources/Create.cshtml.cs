@@ -24,6 +24,7 @@ namespace FoxholeIntelboard.Pages.Resources
             return Page();
         }
 
+
         [BindProperty]
         public Resource Resource { get; set; } = default!;
 
