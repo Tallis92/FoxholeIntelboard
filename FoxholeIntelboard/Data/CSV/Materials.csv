@@ -1,3 +1,10 @@
-Name,CrateAmount
-Basic Materials,100
-Diesel,100
+Name,CrateAmount,TechMaterial,LargeMaterial, FacilityMade
+Basic Materials,100,false,false,false
+Diesel,100,false,false,false
+Explosive Powder,40,false,false,false
+Heavy Explosive Powder,30,false,false,false
+Gravel,20,false,false,false
+Refined Materials,20,false,false,false
+Aluminum Alloy,20,true,false,false
+Copper Alloy,20,true,false,false
+Iron Alloy,20,true,false,false

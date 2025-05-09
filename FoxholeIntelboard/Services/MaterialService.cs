@@ -18,6 +18,8 @@ namespace FoxholeIntelboard.Services
             return _context.Materials.ToListAsync();
         }
 
+        // Loads and loops through csv file, checks for identical objects in the database and then saves a new material into the database.
+        // Uses dictionary to look for matches in Materials table.
         public async Task SeedMaterialsAsync()
         {
             var resourceLookup = await _context.Resources.ToDictionaryAsync(r => r.Name);
@@ -25,7 +27,6 @@ namespace FoxholeIntelboard.Services
 
             var materialFilePath = Path.Combine(_env.ContentRootPath, "Data\\CSV", "Materials.csv");
             var costFilePath = Path.Combine(_env.ContentRootPath, "Data\\CSV", "MaterialCosts.csv");
-
             var materialLookup = new Dictionary<string, Material>();
 
             if (File.Exists(materialFilePath))
@@ -35,6 +36,9 @@ namespace FoxholeIntelboard.Services
                     var parts = line.Split(',');
                     string name = parts[0];
                     int crateAmount = int.Parse(parts[1]);
+                    bool tech = bool.Parse(parts[2]);
+                    bool large = bool.Parse(parts[3]);
+                    bool facility = bool.Parse(parts[4]);
 
                     if (!materialNames.Contains(name))
                     {
@@ -42,6 +46,9 @@ namespace FoxholeIntelboard.Services
                         {
                             Name = name,
                             CrateAmount = crateAmount,
+                            TechMaterial = tech,
+                            LargeMaterial = large,
+                            FacilityMade = facility,
                             ProductionCost = new List<Cost>()
                         };
 
@@ -58,7 +65,9 @@ namespace FoxholeIntelboard.Services
                 await _context.SaveChangesAsync(); 
             }
 
-            // Refresh the lookup with updated IDs
+            // Reloads Materials table to give access to newly assigned Id's, then uses a dictionary with a Name key to check
+            // for a match. If a match is found, load the whole material object to gain access to the Id to be stored in craftableItem Table.
+            // Then creates corresponding Cost data.
             var allMaterials = await _context.Materials.ToListAsync();
             var materialByName = allMaterials.ToDictionary(m => m.Name);
 
@@ -84,6 +93,8 @@ namespace FoxholeIntelboard.Services
                         CraftableItemId = parentMaterial.Id
                     };
 
+                    // Checks csv Title 'Type' to assign either a resourceId or materialIdand keep the other null.
+
                     if (type == "Resource" && resourceLookup.TryGetValue(itemName, out var resource))
                     {
                         cost.ResourceId = resource.Id;
@@ -95,7 +106,22 @@ namespace FoxholeIntelboard.Services
                         cost.Material = materialCostItem;
                     }
 
-                    _context.Costs.Add(cost);
+                    // Checks for identical costs in database to avoid duplicate entries. 
+                    bool costExists = await _context.Costs.AnyAsync(c =>
+                        c.CraftableItemId == parentMaterial.Id &&
+                        c.Amount == amount &&
+                        ((c.Resource != null && c.Resource.Name == itemName) ||
+                         (c.Material != null && c.Material.Name == itemName)));
+
+                    if (!costExists)
+                    {
+                        _context.Costs.Add(cost);
+                        Console.WriteLine($"Cost successfully added to {itemName}!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"An identical cost already exists in database!");
+                    }
                 }
 
                 await _context.SaveChangesAsync();

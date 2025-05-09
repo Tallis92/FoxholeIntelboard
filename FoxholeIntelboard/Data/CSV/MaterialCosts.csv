@@ -1,3 +1,10 @@
 Amount,MaterialName,Type,ItemName
 2,Basic Materials,Resource,Salvage
 10,Diesel,Resource,Salvage
+5,Explosive Powder,Resource,Salvage
+5,Heavy Explosive Powder,Resource,Sulfur
+5,Gravel,Resource,Coal
+20,Refined Materials,Resource,Components
+1,Aluminum Alloy,Resource,Aluminum
+1,Copper Alloy,Resource,Copper
+1,Iron Alloy,Resource,Iron
