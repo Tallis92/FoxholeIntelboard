@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\CSV\" />
     <Folder Include="Pages\Ammunitions\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
