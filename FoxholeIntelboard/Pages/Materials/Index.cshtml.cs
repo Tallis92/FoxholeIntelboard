@@ -13,10 +13,12 @@ namespace FoxholeIntelboard.Pages.Materials
     public class IndexModel : PageModel
     {
         private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
+        private readonly FoxholeIntelboard.Services.IMaterialService _materialService;
 
-        public IndexModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        public IndexModel(FoxholeIntelboard.Data.IntelboardDBContext context, Services.IMaterialService materialService)
         {
             _context = context;
+            _materialService = materialService;
         }
 
         public IList<Material> Material { get;set; } = default!;
@@ -24,6 +26,11 @@ namespace FoxholeIntelboard.Pages.Materials
         public async Task OnGetAsync()
         {
             Material = await _context.Materials.ToListAsync();
+        }
+        public async Task<IActionResult> OnPostSeedMaterialsAsync()
+        {
+            await _materialService.SeedMaterialsAsync();
+            return RedirectToPage();
         }
     }
 }
