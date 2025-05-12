@@ -5,31 +5,30 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.Data;
 using FoxholeIntelboard.Models;
+using FoxholeIntelboard.DAL;
 
 namespace FoxholeIntelboard.Pages.Ammunitions
 {
     public class DetailsModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
-
-        public DetailsModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        private readonly AmmunitionManager _ammunitionManager;
+        public DetailsModel(AmmunitionManager ammunitionManager)
         {
-            _context = context;
+            _ammunitionManager = ammunitionManager;
         }
 
         public Ammunition Ammunition { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var ammunition = await _context.Ammunitions.FirstOrDefaultAsync(m => m.Id == id);
-
+            var ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
+            var ammunition = ammunitions.FirstOrDefault(m => m.Id == id);
             if (ammunition is not null)
             {
                 Ammunition = ammunition;

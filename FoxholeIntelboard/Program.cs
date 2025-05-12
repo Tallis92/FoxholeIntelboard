@@ -1,18 +1,10 @@
-using FoxholeIntelboard.Data;
-using FoxholeIntelboard.Services;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-Console.WriteLine("Connection string: " + builder.Configuration.GetConnectionString("IntelboardDB"));
-builder.Services.AddDbContext<IntelboardDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
-builder.Services.AddScoped<IResourceService, ResourceService>();
-builder.Services.AddScoped<IMaterialService, MaterialService>();
-
-
 
 var app = builder.Build();
 Console.WriteLine("Build is starting...");

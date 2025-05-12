@@ -6,31 +6,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.Data;
 using FoxholeIntelboard.Models;
+using FoxholeIntelboard.DAL;
 
 namespace FoxholeIntelboard.Pages.Ammunitions
 {
     public class EditModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
+        private readonly AmmunitionManager _ammunitionManager;
 
-        public EditModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        public EditModel(AmmunitionManager ammunitionManager)
         {
-            _context = context;
+            _ammunitionManager = ammunitionManager;
         }
 
         [BindProperty]
         public Ammunition Ammunition { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var ammunition =  await _context.Ammunitions.FirstOrDefaultAsync(m => m.Id == id);
+            var ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
+            var ammunition = ammunitions.FirstOrDefault(m => m.Id == id);
             if (ammunition == null)
             {
                 return NotFound();
@@ -45,33 +46,25 @@ namespace FoxholeIntelboard.Pages.Ammunitions
         {
             if (!ModelState.IsValid)
             {
+
                 return Page();
             }
-
-            _context.Attach(Ammunition).State = EntityState.Modified;
-
-            try
+            if (!await AmmunitionExistsAsync(Ammunition.Id))
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AmmunitionExists(Ammunition.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+          
+            _ammunitionManager.EditAmmunitionAsync(Ammunition);
+
 
             return RedirectToPage("./Index");
         }
 
-        private bool AmmunitionExists(int id)
+        private async Task<bool> AmmunitionExistsAsync(int id)
         {
-            return _context.Ammunitions.Any(e => e.Id == id);
+
+            var ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
+            return  ammunitions.Any(m => m.Id == id);
         }
     }
 }

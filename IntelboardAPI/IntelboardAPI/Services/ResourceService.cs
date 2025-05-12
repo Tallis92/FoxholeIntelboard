@@ -1,15 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.Models;
+using IntelboardAPI.Models;
 using System.ComponentModel.Design;
-using FoxholeIntelboard.Data;
+using IntelboardAPI.Data;
+using System.Text;
+using System.Text.Json;
 
-namespace FoxholeIntelboard.Services
+namespace IntelboardAPI.Services
 {
     public class ResourceService : IResourceService
     {
         private readonly IWebHostEnvironment _env;
-        private readonly Data.IntelboardDBContext _context;
-        public ResourceService(Data.IntelboardDBContext context, IWebHostEnvironment env)
+        private readonly IntelboardDbContext _context;
+        private static Uri BaseAddress = new Uri("https://localhost:7088/");
+
+        public ResourceService(IntelboardDbContext context, IWebHostEnvironment env)
         {
             _context = context;
             _env = env;
@@ -19,8 +23,21 @@ namespace FoxholeIntelboard.Services
 
         public async Task<List<Resource>> GetResourcesAsync()
         {
-            List<Resource> resources = await _context.Resources.ToListAsync();
-            return resources;
+            using (var client = new HttpClient())
+            {
+                List<Resource> resources = new List<Resource>();
+
+                client.BaseAddress = BaseAddress;
+                string uri = "/api/Resource/";
+                HttpResponseMessage responseProducts = await client.GetAsync(uri);
+
+                if (responseProducts.IsSuccessStatusCode)
+                {
+                    string responseString = await responseProducts.Content.ReadAsStringAsync();
+                    resources = JsonSerializer.Deserialize<List<Resource>>(responseString);
+                }
+                return resources;
+            }
         }
 
         // Reads data from Resources.csv to check if the Resources table already contains each resource.

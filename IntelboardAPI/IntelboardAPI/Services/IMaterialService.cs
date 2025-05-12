@@ -1,6 +1,6 @@
-﻿using FoxholeIntelboard.Models;
+﻿using IntelboardAPI.Models;
 
-namespace FoxholeIntelboard.Services
+namespace IntelboardAPI.Services
 {
     public interface IMaterialService
     {

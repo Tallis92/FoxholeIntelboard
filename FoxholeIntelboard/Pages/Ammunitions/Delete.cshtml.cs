@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.Data;
 using FoxholeIntelboard.Models;
+using FoxholeIntelboard.DAL;
 
 namespace FoxholeIntelboard.Pages.Ammunitions
 {
     public class DeleteModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
+        private readonly AmmunitionManager _ammunitionManager;
 
-        public DeleteModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        public DeleteModel(AmmunitionManager ammunitionManger)
         {
-            _context = context;
+           _ammunitionManager = ammunitionManger;
         }
 
         [BindProperty]
@@ -29,7 +29,9 @@ namespace FoxholeIntelboard.Pages.Ammunitions
                 return NotFound();
             }
 
-            var ammunition = await _context.Ammunitions.FirstOrDefaultAsync(m => m.Id == id);
+            // TODO: Gör om detta till en metod i AmmunitionManager
+            var ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
+            var ammunition = ammunitions.FirstOrDefault(c => c.Id == id);
 
             if (ammunition is not null)
             {
@@ -41,20 +43,15 @@ namespace FoxholeIntelboard.Pages.Ammunitions
             return NotFound();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var ammunition = await _context.Ammunitions.FindAsync(id);
-            if (ammunition != null)
-            {
-                Ammunition = ammunition;
-                _context.Ammunitions.Remove(Ammunition);
-                await _context.SaveChangesAsync();
-            }
+            _ammunitionManager.DeleteAmmunitionAsync(id);
+
 
             return RedirectToPage("./Index");
         }

@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace FoxholeIntelboard.Migrations
+namespace IntelboardAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class RemodelForTPT : Migration
+    public partial class First : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,7 +43,6 @@ namespace FoxholeIntelboard.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CrateAmount = table.Column<int>(type: "int", nullable: false),
-                    SpecialProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Damage = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

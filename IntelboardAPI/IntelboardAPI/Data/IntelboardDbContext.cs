@@ -1,38 +1,43 @@
-﻿using FoxholeIntelboard.Models;
+﻿using IntelboardAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
-namespace FoxholeIntelboard.Data
+namespace IntelboardAPI.Data
 {
-    public class IntelboardDBContext : DbContext
+    public class IntelboardDbContext : DbContext
     {
-        public IntelboardDBContext(DbContextOptions<IntelboardDBContext> options)
+        public IntelboardDbContext(DbContextOptions<IntelboardDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<Resource> Resources { get; set; }
-        public DbSet<Material> Materials { get; set; }
+        public DbSet<CraftableItem> CraftableItems { get; set; }
         public DbSet<Ammunition> Ammunitions { get; set; }
+        public DbSet<Material> Materials { get; set; }
         public DbSet<Cost> Costs { get; set; }
+        public DbSet<Resource> Resources { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
+            // 1) Map base
             builder.Entity<CraftableItem>()
-                   .UseTptMappingStrategy()  
+                   .UseTptMappingStrategy()          // Använd TPT istället för TPH
                    .ToTable("CraftableItems");
 
-            builder.Entity<Material>()
-                   .ToTable("Materials");
+            // 2) Map each derived type
             builder.Entity<Ammunition>()
                    .ToTable("Ammunitions");
+            builder.Entity<Material>()
+                   .ToTable("Materials");
 
+            // 3) Costs ←→ CraftableItem
             builder.Entity<CraftableItem>()
                    .HasMany(ci => ci.ProductionCost)
                    .WithOne(c => c.CraftableItem)
                    .HasForeignKey(c => c.CraftableItemId)
                    .OnDelete(DeleteBehavior.Cascade);
 
+            // 4) Cost → Material (restrict)
             builder.Entity<Cost>()
                    .ToTable("Costs")
                    .HasOne(c => c.Material)
@@ -40,11 +45,13 @@ namespace FoxholeIntelboard.Data
                    .HasForeignKey(c => c.MaterialId)
                    .OnDelete(DeleteBehavior.Restrict);
 
+            // 5) Cost → Resource (restrict)
             builder.Entity<Cost>()
                    .HasOne(c => c.Resource)
                    .WithMany()
                    .HasForeignKey(c => c.ResourceId)
                    .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

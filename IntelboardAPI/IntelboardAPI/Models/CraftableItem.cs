@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 
-namespace FoxholeIntelboard.Models
+namespace IntelboardAPI.Models
 {
     public abstract class CraftableItem
     {

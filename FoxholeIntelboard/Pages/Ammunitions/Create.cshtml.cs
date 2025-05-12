@@ -1,6 +1,5 @@
-﻿using FoxholeIntelboard.Data;
+﻿using FoxholeIntelboard.DAL;
 using FoxholeIntelboard.Models;
-using FoxholeIntelboard.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,13 +11,13 @@ namespace FoxholeIntelboard.Pages.Ammunitions
 
     public class CreateModel : PageModel
     {
-        private readonly IntelboardDBContext _context;
-        private readonly IMaterialService _materialService;
+        private readonly MaterialManager _materialManager;
+        private readonly AmmunitionManager _ammunitonManager;
 
-        public CreateModel(IntelboardDBContext context, IMaterialService materialService)
+        public CreateModel(MaterialManager materialManager, AmmunitionManager ammunitionManager)
         {
-            _context = context;
-            _materialService = materialService;
+            _materialManager = materialManager;
+            _ammunitonManager = ammunitionManager;
         }
 
         [BindProperty]
@@ -31,7 +30,7 @@ namespace FoxholeIntelboard.Pages.Ammunitions
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Materials = await _materialService.GetMaterialsAsync();
+            Materials = await _materialManager.GetMaterialsAsync();
 
             DamageTypeOptions = Enum.GetValues(typeof(DamageType))
                 .Cast<DamageType>()
@@ -68,8 +67,7 @@ namespace FoxholeIntelboard.Pages.Ammunitions
                 cost.CraftableItem = Ammunitions;
             }
 
-            _context.Ammunitions.Add(Ammunitions);
-            await _context.SaveChangesAsync();
+            _ammunitonManager.CreateAmmunitionAsync(Ammunitions);
 
             return RedirectToPage("./Index");
         }

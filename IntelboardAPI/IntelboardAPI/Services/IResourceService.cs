@@ -1,5 +1,5 @@
-﻿using FoxholeIntelboard.Models;
-namespace FoxholeIntelboard.Services;
+﻿using IntelboardAPI.Models;
+namespace IntelboardAPI.Services;
 
 public interface IResourceService
     {

@@ -2,14 +2,20 @@
 
 #nullable disable
 
-namespace FoxholeIntelboard.Migrations
+namespace IntelboardAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedBoolsToMaterialModel : Migration
+    public partial class APIDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<bool>(
+                name: "FacilityMade",
+                table: "Materials",
+                type: "bit",
+                nullable: true);
+
             migrationBuilder.AddColumn<bool>(
                 name: "LargeMaterial",
                 table: "Materials",
@@ -26,6 +32,10 @@ namespace FoxholeIntelboard.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "FacilityMade",
+                table: "Materials");
+
             migrationBuilder.DropColumn(
                 name: "LargeMaterial",
                 table: "Materials");

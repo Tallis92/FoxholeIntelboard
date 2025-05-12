@@ -1,13 +1,13 @@
-﻿using FoxholeIntelboard.Models;
+﻿using IntelboardAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace FoxholeIntelboard.Services
+namespace IntelboardAPI.Services
 {
     public class MaterialService : IMaterialService
     {
         private readonly IWebHostEnvironment _env;
-        private readonly Data.IntelboardDBContext _context;
-        public MaterialService(Data.IntelboardDBContext context, IWebHostEnvironment env)
+        private readonly Data.IntelboardDbContext _context;
+        public MaterialService(Data.IntelboardDbContext context, IWebHostEnvironment env)
         {
             _context = context;
             _env = env;
