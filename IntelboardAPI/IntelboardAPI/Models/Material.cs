@@ -4,13 +4,13 @@ namespace IntelboardAPI.Models
 {
     public class Material : CraftableItem
     {
-        [JsonPropertyName("crate amount")]
+        [JsonPropertyName("crateAmount")]
         public int CrateAmount { get; set; }
-        [JsonPropertyName("Tech Material")]
+        [JsonPropertyName("techMaterial")]
         public bool? TechMaterial { get; set; }
-        [JsonPropertyName("Large Material")]
+        [JsonPropertyName("largeMaterial")]
         public bool? LargeMaterial { get; set; }
-        [JsonPropertyName("Facilitymade")]
+        [JsonPropertyName("facilitymade")]
         public bool? FacilityMade { get; set; }
 
     }

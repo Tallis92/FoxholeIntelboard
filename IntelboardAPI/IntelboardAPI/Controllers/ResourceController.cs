@@ -27,6 +27,58 @@ namespace IntelboardAPI.Controllers
             return resources;
 
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Resource>> GetResourceByIdAsync(int id)
+        {
+            var resource = await _context.Resources.FindAsync(id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+            return Ok(resource);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateResourceAsync(Resource resource)
+        {
+            if (resource == null)
+            {
+                return BadRequest();
+            }
+            await _context.Resources.AddAsync(resource);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateResourceAsync(Resource editedResource)
+        {
+
+            if (editedResource == null)
+            {
+                return NotFound();
+            }
+            _context.Resources.Update(editedResource);
+            await _context.SaveChangesAsync();
+
+            return Ok(editedResource);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteResourceAsync(int id)
+        {
+            var resource = await _context.Resources.FindAsync(id);
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            _context.Resources.Remove(resource);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
         [HttpPost("Seed")]
         public async Task<IActionResult> SeedResourcesAsync()
         {

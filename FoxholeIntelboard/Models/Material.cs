@@ -5,12 +5,12 @@ namespace FoxholeIntelboard.Models
 {
     public class Material : CraftableItem
     {
-        [JsonPropertyName("crate amount")]
+        [JsonPropertyName("crateAmount")]
 
         public int CrateAmount { get; set; }
-        [JsonPropertyName("Tech Material")]
+        [JsonPropertyName("TechMaterial")]
         public bool? TechMaterial { get; set; }
-        [JsonPropertyName("Large Material")]
+        [JsonPropertyName("LargeMaterial")]
 
         public bool? LargeMaterial { get; set; }
         [JsonPropertyName("Facilitymade")]

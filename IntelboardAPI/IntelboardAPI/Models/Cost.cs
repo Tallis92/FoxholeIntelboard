@@ -8,15 +8,15 @@ namespace IntelboardAPI.Models
         public int Id { get; set; }
         [JsonPropertyName("amount")]
         public int Amount { get; set; }
-        [JsonPropertyName("craftableitem id")]
+        [JsonPropertyName("craftableItemId")]
         public int CraftableItemId { get; set; }
-        [JsonPropertyName("craftable item")]
+        [JsonPropertyName("craftableItem")]
         public CraftableItem? CraftableItem { get; set; }
-        [JsonPropertyName("resource id")]
+        [JsonPropertyName("resourceId")]
         public int? ResourceId { get; set; }
         [JsonPropertyName("resource")]
         public Resource? Resource { get; set; }
-        [JsonPropertyName("material id")]
+        [JsonPropertyName("materialId")]
         public int? MaterialId { get; set; }
         [JsonPropertyName("material")]
         public Material? Material { get; set; }

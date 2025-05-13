@@ -2,6 +2,7 @@
 using Humanizer.Localisation;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace FoxholeIntelboard.DAL
 {
     public class MaterialManager
@@ -59,10 +60,24 @@ namespace FoxholeIntelboard.DAL
             {
                 client.BaseAddress = BaseAddress;
                 string uri = "/api/Material/";
-                var json = JsonSerializer.Serialize(material);
+
+                // Adds options to serialize the productionCosts and not cause any conflicts in posting the material
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                };
+                var json = JsonSerializer.Serialize(material, options);
+
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PostAsync(uri, content);
-
+                if (!response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Status: {response.StatusCode}");
+                    Console.WriteLine($"Response Body: {responseBody}");
+                }
                 Console.WriteLine(response);
             }
         }
@@ -100,7 +115,7 @@ namespace FoxholeIntelboard.DAL
                 client.BaseAddress = BaseAddress;
                 string uri = "/api/Material/Seed";
 
-                HttpResponseMessage responseResource = await client.GetAsync(uri);
+                HttpResponseMessage responseResource = await client.PostAsync(uri, null);
 
                 if (responseResource.IsSuccessStatusCode)
                 {

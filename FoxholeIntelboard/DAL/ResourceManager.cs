@@ -104,7 +104,7 @@ namespace FoxholeIntelboard.DAL
                 string uri = "/api/Resource/Seed";
                 var resources = new List<Resource>();
 
-                HttpResponseMessage responseResource = await client.GetAsync(uri);
+                HttpResponseMessage responseResource = await client.PostAsync(uri, null);
 
                 if (responseResource.IsSuccessStatusCode)
                 {

@@ -11,7 +11,7 @@ namespace IntelboardAPI.Models
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonPropertyName("cost")]
+        [JsonPropertyName("productionCost")]
         public List<Cost> ProductionCost { get; set; } = new();
     }
 }

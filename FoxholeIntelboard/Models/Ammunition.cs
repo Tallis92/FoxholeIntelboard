@@ -30,7 +30,7 @@ namespace FoxholeIntelboard.Models
     {
         [JsonPropertyName("description")]
         public string? Description { get; set; }
-        [JsonPropertyName("crate amount")]
+        [JsonPropertyName("crateAmount")]
         public int CrateAmount { get; set; }
 
         [JsonPropertyName("damage")]

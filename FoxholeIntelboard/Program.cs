@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<AmmunitionManager>();
 builder.Services.AddScoped<MaterialManager>();
 builder.Services.AddScoped<ResourceManager>();

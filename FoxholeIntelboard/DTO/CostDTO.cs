@@ -1,22 +1,21 @@
-﻿using System.Text.Json.Serialization;
+﻿using FoxholeIntelboard.Models;
+using System.Text.Json.Serialization;
 
-namespace FoxholeIntelboard.Models
+namespace FoxholeIntelboard.DTO
 {
-    public class Cost
+    public class CostDTO
     {
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
         [JsonPropertyName("amount")]
         public int Amount { get; set; }
-        [JsonPropertyName("craftableItemId")]
+        [JsonPropertyName("craftableitem id")]
         public int CraftableItemId { get; set; }
-        [JsonPropertyName("craftableItem")]
+        [JsonPropertyName("craftable item")]
         public CraftableItem? CraftableItem { get; set; }
-        [JsonPropertyName("resourceId")]
+        [JsonPropertyName("resource id")]
         public int? ResourceId { get; set; }
         [JsonPropertyName("resource")]
         public Resource? Resource { get; set; }
-        [JsonPropertyName("materialId")]
+        [JsonPropertyName("material id")]
         public int? MaterialId { get; set; }
         [JsonPropertyName("material")]
         public Material? Material { get; set; }

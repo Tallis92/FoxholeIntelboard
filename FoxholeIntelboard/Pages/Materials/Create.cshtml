@@ -48,38 +48,63 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", async () => {
         const selectedCosts = document.getElementById("selectCosts");
         const materialCostsContainer = document.getElementById("materialCostsContainer");
-        const resources = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Resources));
+        let resources = [];
 
-        selectedCosts.addEventListener('change', function () {
+        // 1) fetch resources from your API endpoint
+        try {
+            const resp = await fetch("https://localhost:7088/api/Resource");        // or "/api/Resource"
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            resources = await resp.json();
+        } catch (err) {
+            console.error("Failed to load resources:", err);
+            return;
+        }
+
+        // 2) wire up your radio buttons
+        selectedCosts.addEventListener("change", () => {
             const selectedRadio = selectedCosts.querySelector('input[name="cost"]:checked');
             if (!selectedRadio) return;
 
-            const selectedValue = parseInt(selectedRadio.value);
-            materialCostsContainer.innerHTML = ""; // Clear existing inputs
+            const selectedValue = parseInt(selectedRadio.value, 10);
+            materialCostsContainer.innerHTML = "";
 
             for (let i = 0; i < selectedValue; i++) {
-                const group = document.createElement("div");
-                group.classList.add("form-group");
-                group.innerHTML = `
-                    <div style="border: 1px solid grey; text-align: center;">
-                        <label for="Material_ProductionCost_${i}__ResourceId">Resource ${i + 1}</label>
-                        <select style="text-align: center; background-color: #f8f9fa;" name="Material.ProductionCost[${i}].ResourceId" class="form-control">
-                            <option value="">-- Select Resource --</option>
-                            ${resources.map(resource => `<option value="${resource.Id}">${resource.Name}</option>`).join('')}
-                        </select>
-                        <label for="Material_ProductionCost_${i}__Amount">Amount</label>
-                        <input type="number" name="Material.ProductionCost[${i}].Amount" class="form-control" />
-                    </div>
-                    <br/>
-                `;
-                materialCostsContainer.appendChild(group);
+                const div = document.createElement("div");
+                div.className = "form-group";
+                div.innerHTML = `
+              <div style="border: 1px solid grey; text-align: center; padding: 10px;">
+                <label for="Material_ProductionCost_${i}__ResourceId">
+                  Resource ${i + 1}
+                </label>
+                <select
+                  name="Material.ProductionCost[${i}].ResourceId"
+                  class="form-control"
+                  style="background-color: #f8f9fa; text-align: center;"
+                >
+                  <option value="">-- Select Resource --</option>
+                  ${resources.map(r => `<option value="${r.id}">${r.name}</option>`).join("")}
+                </select>
+
+                <label for="Material_ProductionCost_${i}__Amount">
+                  Amount
+                </label>
+                <input
+                  type="number"
+                  name="Material.ProductionCost[${i}].Amount"
+                  class="form-control"
+                />
+              </div>
+              <br/>
+            `;
+                materialCostsContainer.appendChild(div);
             }
         });
     });
 </script>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
