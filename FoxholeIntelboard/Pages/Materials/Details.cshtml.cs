@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.Data;
 using FoxholeIntelboard.Models;
+using FoxholeIntelboard.DAL;
 
 namespace FoxholeIntelboard.Pages.Materials
 {
     public class DetailsModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
+        private readonly MaterialManager _materialManager;
 
-        public DetailsModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        public DetailsModel(MaterialManager materialManager)
         {
-            _context = context;
+            _materialManager = materialManager;
         }
 
         public Material Material { get; set; } = default!;
@@ -28,7 +28,7 @@ namespace FoxholeIntelboard.Pages.Materials
                 return NotFound();
             }
 
-            var material = await _context.Materials.FirstOrDefaultAsync(m => m.Id == id);
+            var material = await _materialManager.GetMaterialByIdAsync(id);
 
             if (material is not null)
             {

@@ -28,10 +28,8 @@ namespace FoxholeIntelboard.Pages.Ammunitions
             {
                 return NotFound();
             }
-
-            // TODO: Gör om detta till en metod i AmmunitionManager
-            var ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
-            var ammunition = ammunitions.FirstOrDefault(c => c.Id == id);
+          
+            var ammunition = await _ammunitionManager.GetAmmunitionByIdAsync(id);
 
             if (ammunition is not null)
             {
@@ -43,14 +41,14 @@ namespace FoxholeIntelboard.Pages.Ammunitions
             return NotFound();
         }
 
-        public async Task<IActionResult> OnPostAsync(int id)
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            _ammunitionManager.DeleteAmmunitionAsync(id);
+            await _ammunitionManager.DeleteAmmunitionAsync(id);
 
 
             return RedirectToPage("./Index");

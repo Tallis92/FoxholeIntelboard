@@ -6,18 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.Data;
+using FoxholeIntelboard.DAL;
 using FoxholeIntelboard.Models;
 
 namespace FoxholeIntelboard.Pages.Resources
 {
     public class EditModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
+        private readonly ResourceManager _resourceManager;
 
-        public EditModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        public EditModel(ResourceManager resourceManager)
         {
-            _context = context;
+            _resourceManager = resourceManager;
         }
 
         [BindProperty]
@@ -30,7 +30,7 @@ namespace FoxholeIntelboard.Pages.Resources
                 return NotFound();
             }
 
-            var resource =  await _context.Resources.FirstOrDefaultAsync(m => m.Id == id);
+            var resource = await _resourceManager.GetResourceByIdAsync(id);
             if (resource == null)
             {
                 return NotFound();
@@ -47,31 +47,19 @@ namespace FoxholeIntelboard.Pages.Resources
             {
                 return Page();
             }
-
-            _context.Attach(Resource).State = EntityState.Modified;
-
-            try
+            if (!await ResourceExists(Resource.Id))
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ResourceExists(Resource.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _resourceManager.EditResourceAsync(Resource);
+           
             return RedirectToPage("./Index");
         }
 
-        private bool ResourceExists(int id)
+        private async Task<bool> ResourceExists(int id)
         {
-            return _context.Resources.Any(e => e.Id == id);
+            var resources = await _resourceManager.GetResourcesAsync();
+            return resources.Any(e => e.Id == id);
         }
     }
 }

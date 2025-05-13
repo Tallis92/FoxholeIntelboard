@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FoxholeIntelboard.Models;
+using FoxholeIntelboard.DAL;
 
 namespace FoxholeIntelboard.Pages.Materials
 {
@@ -13,21 +14,23 @@ namespace FoxholeIntelboard.Pages.Materials
     {
 
 
-        public IndexModel()
-        {
+        private readonly MaterialManager _materialManager;
 
+        public IndexModel(MaterialManager materialManager)
+        {
+            _materialManager = materialManager;
         }
 
         public IList<Material> Material { get; set; }
 
         public async Task OnGetAsync()
         {
-            //Material = await Materials.ToListAsync();
+            Material = await _materialManager.GetMaterialsAsync();
         }
 
         public async Task<IActionResult> OnPostSeedMaterialsAsync()
         {
-            //await  SeedMaterialsAsync();
+            await _materialManager.SeedMaterialsAsync();
             return RedirectToPage();
         }
     }

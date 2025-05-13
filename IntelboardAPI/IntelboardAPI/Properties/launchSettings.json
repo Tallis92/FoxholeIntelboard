@@ -15,7 +15,8 @@
       },
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7088/;"
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7088/"
     },
     "IIS Express": {
       "commandName": "IISExpress",

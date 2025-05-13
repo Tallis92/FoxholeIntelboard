@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.Data;
+using FoxholeIntelboard.DAL;
 using FoxholeIntelboard.Models;
 
 namespace FoxholeIntelboard.Pages.Resources
 {
     public class DetailsModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
+        private readonly ResourceManager _resourceManager;
 
-        public DetailsModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        public DetailsModel(ResourceManager resourceManager)
         {
-            _context = context;
+            _resourceManager = resourceManager;
         }
 
         public Resource Resource { get; set; } = default!;
@@ -28,7 +28,7 @@ namespace FoxholeIntelboard.Pages.Resources
                 return NotFound();
             }
 
-            var resource = await _context.Resources.FirstOrDefaultAsync(m => m.Id == id);
+            var resource = await _resourceManager.GetResourceByIdAsync(id);
 
             if (resource is not null)
             {

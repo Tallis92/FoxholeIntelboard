@@ -22,17 +22,37 @@ namespace FoxholeIntelboard.DAL
                 string uri = "/api/Ammunition/";
                 var ammunitions = new List<Ammunition>();
 
-                HttpResponseMessage responseAmmunition = await client.GetAsync(uri);
+                HttpResponseMessage response = await client.GetAsync(uri);
 
-                if (responseAmmunition.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
-                    string responseString = await responseAmmunition.Content.ReadAsStringAsync();
+                    string responseString = await response.Content.ReadAsStringAsync();
                     ammunitions = JsonSerializer.Deserialize<List<Ammunition>>(responseString);
                 }
 
                 return ammunitions;
             }
         }
+        public async Task<Ammunition> GetAmmunitionByIdAsync(int? id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                string uri = $"/api/Ammunition/{id}";
+
+                HttpResponseMessage response = await client.GetAsync(uri);
+                var ammunition = new Ammunition();
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseString = await response.Content.ReadAsStringAsync();
+                    ammunition = JsonSerializer.Deserialize<Ammunition>(responseString);
+
+                    
+                }
+                return ammunition;
+            }
+        }
+
         public async Task CreateAmmunitionAsync(Ammunition ammunition)
         {
             using (var client = new HttpClient())
@@ -41,21 +61,20 @@ namespace FoxholeIntelboard.DAL
                 string uri = "/api/Ammunition/";
                 var json = JsonSerializer.Serialize(ammunition);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage responseAmmunition = await client.PostAsync(uri, content);
+                HttpResponseMessage response = await client.PostAsync(uri, content);
 
-                Console.WriteLine(responseAmmunition);
+                Console.WriteLine(response);
             }
-
         }
-        public async Task DeleteAmmunitionAsync(int id)
+        public async Task DeleteAmmunitionAsync(int? id)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = BaseAddress;
                 string uri = $"/api/Ammunition/{id}";
-                HttpResponseMessage responseAmmunition = await client.DeleteAsync(uri);
+                HttpResponseMessage response = await client.DeleteAsync(uri);
 
-                Console.WriteLine(responseAmmunition);
+                Console.WriteLine(response);
             }
 
         }
@@ -67,9 +86,9 @@ namespace FoxholeIntelboard.DAL
                 string uri = $"/api/Ammunition/{ammunition.Id}";
                 var json = JsonSerializer.Serialize(ammunition);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage responseAmmunition = await client.PutAsync(uri, content);
+                HttpResponseMessage response = await client.PutAsync(uri, content);
 
-                Console.WriteLine(responseAmmunition);
+                Console.WriteLine(response);
             }
 
         }

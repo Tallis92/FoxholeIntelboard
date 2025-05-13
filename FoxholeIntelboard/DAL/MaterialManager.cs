@@ -1,5 +1,6 @@
 ﻿using FoxholeIntelboard.Models;
 using Humanizer.Localisation;
+using System.Text;
 using System.Text.Json;
 namespace FoxholeIntelboard.DAL
 {
@@ -21,16 +22,75 @@ namespace FoxholeIntelboard.DAL
                 string uri = "/api/Material/";
                 var materials = new List<Material>();
 
-                HttpResponseMessage responseMaterial = await client.GetAsync(uri);
+                HttpResponseMessage response = await client.GetAsync(uri);
 
-                if (responseMaterial.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
-                    string responseString = await responseMaterial.Content.ReadAsStringAsync();
+                    string responseString = await response.Content.ReadAsStringAsync();
                     materials = JsonSerializer.Deserialize<List<Material>>(responseString);
                 }
 
                 return materials;
             }
+        }
+        public async Task<Material> GetMaterialByIdAsync(int? id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                string uri = $"/api/Material/{id}";
+
+                HttpResponseMessage response = await client.GetAsync(uri);
+                var material = new Material();
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseString = await response.Content.ReadAsStringAsync();
+                    material = JsonSerializer.Deserialize<Material>(responseString);
+
+
+                }
+                return material;
+            }
+        }
+
+        public async Task CreateMaterialsAsync(Material material)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                string uri = "/api/Material/";
+                var json = JsonSerializer.Serialize(material);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(uri, content);
+
+                Console.WriteLine(response);
+            }
+        }
+        public async Task DeleteMaterialAsync(int? id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                string uri = $"/api/Material/{id}";
+                HttpResponseMessage response = await client.DeleteAsync(uri);
+
+                Console.WriteLine(response);
+            }
+
+        }
+        public async Task EditMaterialAsync(Material material)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                string uri = $"/api/Material/{material.Id}";
+                var json = JsonSerializer.Serialize(material);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PutAsync(uri, content);
+
+                Console.WriteLine(response);
+            }
+
         }
 
         public async Task SeedMaterialsAsync()

@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.Data;
+using FoxholeIntelboard.DAL;
 using FoxholeIntelboard.Models;
 
 namespace FoxholeIntelboard.Pages.Materials
 {
     public class DeleteModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
+        private readonly MaterialManager _materialManager;
 
-        public DeleteModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        public DeleteModel(MaterialManager materialManager)
         {
-            _context = context;
+            _materialManager = materialManager;
         }
 
         [BindProperty]
@@ -29,7 +29,7 @@ namespace FoxholeIntelboard.Pages.Materials
                 return NotFound();
             }
 
-            var material = await _context.Materials.FirstOrDefaultAsync(m => m.Id == id);
+            var material = await _materialManager.GetMaterialByIdAsync(id);
 
             if (material is not null)
             {
@@ -48,12 +48,11 @@ namespace FoxholeIntelboard.Pages.Materials
                 return NotFound();
             }
 
-            var material = await _context.Materials.FindAsync(id);
+            var material = await _materialManager.GetMaterialByIdAsync(id);
             if (material != null)
             {
                 Material = material;
-                _context.Materials.Remove(Material);
-                await _context.SaveChangesAsync();
+                await _materialManager.DeleteMaterialAsync(Material.Id);
             }
 
             return RedirectToPage("./Index");

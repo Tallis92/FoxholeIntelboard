@@ -93,7 +93,7 @@ namespace IntelboardAPI.Services
                         CraftableItemId = parentMaterial.Id
                     };
 
-                    // Checks csv Title 'Type' to assign either a resourceId or materialIdand keep the other null.
+                    // Checks csv Title 'Type' to assign either a resourceId or materialId and keep the other null.
 
                     if (type == "Resource" && resourceLookup.TryGetValue(itemName, out var resource))
                     {

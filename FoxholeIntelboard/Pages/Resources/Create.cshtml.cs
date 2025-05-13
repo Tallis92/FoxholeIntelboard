@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using FoxholeIntelboard.Data;
+using FoxholeIntelboard.DAL;
 using FoxholeIntelboard.Models;
 
 namespace FoxholeIntelboard.Pages.Resources
 {
     public class CreateModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
+        private readonly ResourceManager _resourceManager;
 
-        public CreateModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        public CreateModel(ResourceManager resourceManager)
         {
-            _context = context;
+            _resourceManager = resourceManager;
         }
 
         public IActionResult OnGet()
@@ -36,8 +36,7 @@ namespace FoxholeIntelboard.Pages.Resources
                 return Page();
             }
 
-            _context.Resources.Add(Resource);
-            await _context.SaveChangesAsync();
+            await _resourceManager.CreateResourceAsync(Resource);
 
             return RedirectToPage("./Index");
         }

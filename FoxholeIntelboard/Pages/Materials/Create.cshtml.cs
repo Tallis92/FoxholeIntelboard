@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using FoxholeIntelboard.Data;
+using FoxholeIntelboard.DAL;
 using FoxholeIntelboard.Models;
 
 namespace FoxholeIntelboard.Pages.Materials
 {
     public class CreateModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
-        private readonly FoxholeIntelboard.Services.IResourceService _resourceService;
+        private readonly ResourceManager _resourceManager;
+        private readonly MaterialManager _materialManager;
 
-        public CreateModel(FoxholeIntelboard.Data.IntelboardDBContext context, Services.IResourceService resourceService)
+        public CreateModel(ResourceManager resourceManager, MaterialManager materialManager)
         {
-            _context = context;
-            _resourceService = resourceService;
+            _resourceManager = resourceManager;
+            _materialManager = materialManager;
         }
         [BindProperty]
         public Material Material { get; set; } = default!;
@@ -27,7 +27,7 @@ namespace FoxholeIntelboard.Pages.Materials
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Resources = await _resourceService.GetResourcesAsync();
+            Resources = await _resourceManager.GetResourcesAsync();
             return Page();
         }
 
@@ -49,10 +49,7 @@ namespace FoxholeIntelboard.Pages.Materials
                 cost.CraftableItem = Material;
             }
 
-            _context.Materials.Add(Material);
-          
-
-            await _context.SaveChangesAsync();
+            await _materialManager.CreateMaterialsAsync(Material);
 
             return RedirectToPage("./Index");
         }

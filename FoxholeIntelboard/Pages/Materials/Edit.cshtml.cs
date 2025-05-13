@@ -6,18 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.Data;
 using FoxholeIntelboard.Models;
+using FoxholeIntelboard.DAL;
 
 namespace FoxholeIntelboard.Pages.Materials
 {
     public class EditModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
+        private readonly MaterialManager _materialManager;
 
-        public EditModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        public EditModel(MaterialManager materialManager)
         {
-            _context = context;
+            _materialManager = materialManager;
         }
 
         [BindProperty]
@@ -30,7 +30,7 @@ namespace FoxholeIntelboard.Pages.Materials
                 return NotFound();
             }
 
-            var material =  await _context.Materials.FirstOrDefaultAsync(m => m.Id == id);
+            var material =  await _materialManager.GetMaterialByIdAsync(id);
             if (material == null)
             {
                 return NotFound();
@@ -47,31 +47,18 @@ namespace FoxholeIntelboard.Pages.Materials
             {
                 return Page();
             }
-
-            _context.Attach(Material).State = EntityState.Modified;
-
-            try
+            if (!await MaterialExists(Material.Id))
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MaterialExists(Material.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            await _materialManager.EditMaterialAsync(Material);
             return RedirectToPage("./Index");
         }
 
-        private bool MaterialExists(int id)
+        private async Task<bool> MaterialExists(int id)
         {
-            return _context.Materials.Any(e => e.Id == id);
+            var materials = await _materialManager.GetMaterialsAsync();
+            return materials.Any(e => e.Id == id);
         }
     }
 }

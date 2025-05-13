@@ -30,8 +30,7 @@ namespace FoxholeIntelboard.Pages.Ammunitions
                 return NotFound();
             }
 
-            var ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
-            var ammunition = ammunitions.FirstOrDefault(m => m.Id == id);
+            var ammunition = await _ammunitionManager.GetAmmunitionByIdAsync(id);
             if (ammunition == null)
             {
                 return NotFound();
@@ -54,7 +53,7 @@ namespace FoxholeIntelboard.Pages.Ammunitions
                 return NotFound();
             }
           
-            _ammunitionManager.EditAmmunitionAsync(Ammunition);
+            await _ammunitionManager.EditAmmunitionAsync(Ammunition);
 
 
             return RedirectToPage("./Index");

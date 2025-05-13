@@ -1,5 +1,6 @@
 ﻿using FoxholeIntelboard.Models;
 using Humanizer.Localisation;
+using System.Text;
 using System.Text.Json;
 namespace FoxholeIntelboard.DAL
 {
@@ -11,7 +12,9 @@ namespace FoxholeIntelboard.DAL
         {
             _httpClient = httpClient;
         }
+
         private static Uri BaseAddress = new Uri("https://localhost:7088/");
+
 
         public async Task<List<Resource>> GetResourcesAsync()
         {
@@ -31,6 +34,66 @@ namespace FoxholeIntelboard.DAL
 
                 return resources;
             }
+        }
+        public async Task<Resource> GetResourceByIdAsync(int? id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                string uri = $"/api/Resource/{id}";
+
+                HttpResponseMessage response = await client.GetAsync(uri);
+                var resource = new Resource();
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseString = await response.Content.ReadAsStringAsync();
+                    resource = JsonSerializer.Deserialize<Resource>(responseString);
+
+
+                }
+                return resource;
+            }
+        }
+
+        public async Task CreateResourceAsync(Resource resource)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                string uri = "/api/Resource/";
+                var json = JsonSerializer.Serialize(resource);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(uri, content);
+
+                Console.WriteLine(response);
+            }
+
+        }
+
+        public async Task DeleteResourceAsync(int? id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                string uri = $"/api/Resource/{id}";
+                HttpResponseMessage response = await client.DeleteAsync(uri);
+
+                Console.WriteLine(response);
+            }
+        }
+        public async Task EditResourceAsync(Resource resource)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                string uri = $"/api/Resource/{resource.Id}";
+                var json = JsonSerializer.Serialize(resource);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PutAsync(uri, content);
+
+                Console.WriteLine(response);
+            }
+
         }
 
         public async Task SeedResourcesAsync()

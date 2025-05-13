@@ -5,25 +5,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.Data;
 using FoxholeIntelboard.Models;
+using FoxholeIntelboard.DAL;
 
 namespace FoxholeIntelboard.Pages.Ammunitions
 {
     public class IndexModel : PageModel
     {
-        private readonly FoxholeIntelboard.Data.IntelboardDBContext _context;
+        private readonly AmmunitionManager _ammunitionManager;
 
-        public IndexModel(FoxholeIntelboard.Data.IntelboardDBContext context)
+        public IndexModel(AmmunitionManager ammunitionManger)
         {
-            _context = context;
+            _ammunitionManager = ammunitionManger;
         }
 
         public IList<Ammunition> Ammunition { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Ammunition = await _context.Ammunitions.ToListAsync();
+            Ammunition = await _ammunitionManager.GetAmmunitionsAsync();
         }
     }
 }
