@@ -58,4 +58,4 @@ jobs:
         path: ./build
         
     - name: Run tests
-      run: dotnet test ./FoxholeIntelboard.Tests.dll --no-build --logger "console;verbosity=detailed"
+      run: dotnet test ./FoxholeIntelboard/FoxholeIntelboard.sln --no-build --logger "console;verbosity=detailed"
