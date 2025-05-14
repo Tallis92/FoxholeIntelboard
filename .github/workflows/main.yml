@@ -1,18 +1,61 @@
 name: FoxholeIntelBoardBuild
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build-project:
     runs-on: ubuntu-latest
     steps:
-    - name: build repository
+    - name: Checkout repository
       uses: actions/checkout@v4.2.2
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4.3.1
       with:
-        dotnet-version: '9'
+        dotnet-version: '9.0.x'
 
-    - name: Build exproject
-      run: dotnet build ./FoxholeIntelboard/FoxholeIntelboard.sln
+    - name: Build project
+      run: dotnet publish ./FoxholeIntelboard/FoxholeIntelboard.sln --output ./build
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: Build-artifact
+        path: ./build
+
+  Test-OS:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Print system information
+        run: |
+          echo "Running on ${{ runner.os }}. This platform is working!"
+        
+  run-tests: 
+    runs-on: ubuntu-latest
+    needs: [build-project]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.2.2
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4.3.1
+      with: 
+        dotnet-version: '9.0.x'
+        
+    - name: Download artifact
+      uses: actions/download-artifact@v4.3.0
+      with:
+        name: Build-artifact
+        path: ./build
+        
+    - name: Run tests
+      run: dotnet test ./FoxholeIntelboard.Tests.dll --no-build --logger "console;verbosity=detailed"
