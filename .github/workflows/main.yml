@@ -2,8 +2,6 @@ name: FoxholeIntelBoardBuild
 
 on:
   push:
-    branches:
-      - main
 
 jobs:
   build-project:
