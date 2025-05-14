@@ -15,4 +15,4 @@ jobs:
         dotnet-version: '9'
 
     - name: Build exproject
-      run: dotnet build FoxholeIntelboard.sln
+      run: dotnet build src/FoxholeIntelboard.sln
