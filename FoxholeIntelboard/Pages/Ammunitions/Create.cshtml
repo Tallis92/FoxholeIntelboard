@@ -63,33 +63,58 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", async () => {
         const selectedCosts = document.getElementById("selectCosts");
         const materialCostsContainer = document.getElementById("materialCostsContainer");
-        const materials = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Materials));
+        let materials = [];
 
-        selectedCosts.addEventListener('change', function () {
+        // 1) fetch materials from your API endpoint
+        try {
+            const resp = await fetch("https://localhost:7088/api/Material");
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            materials = await resp.json();
+        } catch (err) {
+            console.error("Failed to load materials:", err);
+            return;
+        }
+
+        // 2) wire up your radio buttons
+        selectedCosts.addEventListener("change", () => {
             const selectedRadio = selectedCosts.querySelector('input[name="cost"]:checked');
             if (!selectedRadio) return;
 
-            const selectedValue = parseInt(selectedRadio.value);
+            const selectedValue = parseInt(selectedRadio.value, 10);
             materialCostsContainer.innerHTML = "";
 
             for (let i = 0; i < selectedValue; i++) {
-                const group = document.createElement("div");
-                group.classList.add("form-group");
-                group.innerHTML = `
-                    <div style="border: 1px solid grey; padding: 10px;">
-                        <label for="Ammunitions_ProductionCost_${i}__MaterialId">Material ${i + 1}</label>
-                        <select name="Ammunitions.ProductionCost[${i}].MaterialId" class="form-control">
-                            <option value="">-- Select Material --</option>
-                            ${materials.map(m => `<option value="${m.Id}">${m.Name}</option>`).join('')}
-                        </select>
-                        <label for="Ammunitions_ProductionCost_${i}__Amount">Amount</label>
-                        <input type="number" name="Ammunitions.ProductionCost[${i}].Amount" class="form-control" />
-                    </div><br/>
-                `;
-                materialCostsContainer.appendChild(group);
+                const div = document.createElement("div");
+                div.className = "form-group";
+                div.innerHTML = `
+              <div style="border: 1px solid grey; text-align: center; padding: 10px;">
+                <label for="Ammunitions_ProductionCost_${i}__MaterialId">
+                  Material ${i + 1}
+                </label>
+                <select
+                  name="Ammunitions.ProductionCost[${i}].MaterialId"
+                  class="form-control"
+                  style="background-color: #f8f9fa; text-align: center;"
+                >
+                  <option value="">-- Select Material --</option>
+                  ${materials.map(r => `<option value="${r.id}">${r.name}</option>`).join("")}
+                </select>
+
+                <label for="Ammunitions_ProductionCost_${i}__Amount">
+                  Amount
+                </label>
+                <input
+                  type="number"
+                  name="Ammunitions.ProductionCost[${i}].Amount"
+                  class="form-control"
+                />
+              </div>
+              <br/>
+            `;
+                materialCostsContainer.appendChild(div);
             }
         });
     });

@@ -1,6 +1,7 @@
 ﻿using FoxholeIntelboard.Models;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FoxholeIntelboard.DAL
 {
@@ -59,7 +60,13 @@ namespace FoxholeIntelboard.DAL
             {
                 client.BaseAddress = BaseAddress;
                 string uri = "/api/Ammunition/";
-                var json = JsonSerializer.Serialize(ammunition);
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                };
+                var json = JsonSerializer.Serialize(ammunition, options);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PostAsync(uri, content);
 
@@ -91,6 +98,24 @@ namespace FoxholeIntelboard.DAL
                 Console.WriteLine(response);
             }
 
+        }
+
+        public async Task SeedAmmunitionsAsync()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = BaseAddress;
+                string uri = "/api/Ammunition/Seed";
+
+                HttpResponseMessage response = await client.PostAsync(uri, null);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseString = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(responseString);
+                }
+
+            }
         }
     }
 }

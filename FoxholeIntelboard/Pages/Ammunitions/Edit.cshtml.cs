@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FoxholeIntelboard.Models;
 using FoxholeIntelboard.DAL;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace FoxholeIntelboard.Pages.Ammunitions
 {
@@ -22,6 +24,7 @@ namespace FoxholeIntelboard.Pages.Ammunitions
 
         [BindProperty]
         public Ammunition Ammunition { get; set; } = default!;
+        public List<SelectListItem> DamageTypeOptions { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -29,6 +32,13 @@ namespace FoxholeIntelboard.Pages.Ammunitions
             {
                 return NotFound();
             }
+            DamageTypeOptions = Enum.GetValues(typeof(DamageType))
+               .Cast<DamageType>()
+               .Select(d => new SelectListItem
+               {
+                   Value = d.ToString(),
+                   Text = GetEnumDescription(d)
+               }).ToList();
 
             var ammunition = await _ammunitionManager.GetAmmunitionByIdAsync(id);
             if (ammunition == null)
@@ -64,6 +74,13 @@ namespace FoxholeIntelboard.Pages.Ammunitions
 
             var ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
             return  ammunitions.Any(m => m.Id == id);
+        }
+
+        private string GetEnumDescription(Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attr = field?.GetCustomAttribute<DescriptionAttribute>();
+            return attr?.Description ?? value.ToString();
         }
     }
 }

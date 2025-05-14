@@ -67,7 +67,7 @@ namespace FoxholeIntelboard.Pages.Ammunitions
                 cost.CraftableItem = Ammunitions;
             }
 
-            _ammunitonManager.CreateAmmunitionAsync(Ammunitions);
+            await _ammunitonManager.CreateAmmunitionAsync(Ammunitions);
 
             return RedirectToPage("./Index");
         }

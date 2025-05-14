@@ -61,7 +61,8 @@ namespace FoxholeIntelboard.DAL
                 client.BaseAddress = BaseAddress;
                 string uri = "/api/Material/";
 
-                // Adds options to serialize the productionCosts and not cause any conflicts in posting the material
+                // Adds options to be able to serialize the productionCosts and not cause any Json serialization conflicts when trying to
+                // post into the API
                 var options = new JsonSerializerOptions
                 {
                     ReferenceHandler = ReferenceHandler.IgnoreCycles,

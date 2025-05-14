@@ -21,25 +21,6 @@ namespace IntelboardAPI.Services
 
         public List<string[]> CsvData { get; set; } = new();
 
-        public async Task<List<Resource>> GetResourcesAsync()
-        {
-            using (var client = new HttpClient())
-            {
-                List<Resource> resources = new List<Resource>();
-
-                client.BaseAddress = BaseAddress;
-                string uri = "/api/Resource/";
-                HttpResponseMessage responseProducts = await client.GetAsync(uri);
-
-                if (responseProducts.IsSuccessStatusCode)
-                {
-                    string responseString = await responseProducts.Content.ReadAsStringAsync();
-                    resources = JsonSerializer.Deserialize<List<Resource>>(responseString);
-                }
-                return resources;
-            }
-        }
-
         // Reads data from Resources.csv to check if the Resources table already contains each resource.
         // If it exist, ignore. If it does not, save resource to database-
         public async Task SeedResourcesAsync()

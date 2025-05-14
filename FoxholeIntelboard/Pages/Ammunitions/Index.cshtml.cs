@@ -25,5 +25,11 @@ namespace FoxholeIntelboard.Pages.Ammunitions
         {
             Ammunition = await _ammunitionManager.GetAmmunitionsAsync();
         }
+
+        public async Task<IActionResult> OnPostSeedAmmunitionsAsync()
+        {
+            await _ammunitionManager.SeedAmmunitionsAsync();
+            return RedirectToPage();
+        }
     }
 }

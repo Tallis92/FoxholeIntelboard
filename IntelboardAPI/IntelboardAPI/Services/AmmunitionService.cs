@@ -1,56 +1,55 @@
 ﻿using IntelboardAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using IntelboardAPI.Data;
 
 namespace IntelboardAPI.Services
 {
-    public class MaterialService : IMaterialService
+    public class AmmunitionService : IAmmunitionService
     {
+        private readonly IntelboardDbContext _context;
         private readonly IWebHostEnvironment _env;
-        private readonly Data.IntelboardDbContext _context;
-        public MaterialService(Data.IntelboardDbContext context, IWebHostEnvironment env)
+        public AmmunitionService(IntelboardDbContext context, IWebHostEnvironment env)
         {
             _context = context;
             _env = env;
         }
 
-
         // Loads and loops through csv file, checks for identical objects in the database and then saves a new material into the database.
         // Uses dictionary to look for matches in Materials table.
-        public async Task SeedMaterialsAsync()
+        public async Task SeedAmmunitionsAsync()
         {
-            var resourceLookup = await _context.Resources.ToDictionaryAsync(r => r.Name);
-            var materialNames = await _context.Materials.Select(m => m.Name).ToListAsync();
+            var materialLookup = await _context.Materials.ToDictionaryAsync(r => r.Name);
+            var ammunitionNames = await _context.Ammunitions.Select(m => m.Name).ToListAsync();
 
-            var materialFilePath = Path.Combine(_env.ContentRootPath, "Data\\CSV", "Materials.csv");
-            var costFilePath = Path.Combine(_env.ContentRootPath, "Data\\CSV", "MaterialCosts.csv");
-            var materialLookup = new Dictionary<string, Material>();
+            var ammunitionFilePath = Path.Combine(_env.ContentRootPath, "Data\\CSV", "Ammunitions.csv");
+            var costFilePath = Path.Combine(_env.ContentRootPath, "Data\\CSV", "AmmunitionCosts.csv");
+            var ammunitionLookup = new Dictionary<string, Ammunition>();
 
-            if (File.Exists(materialFilePath))
+            if (File.Exists(ammunitionFilePath))
             {
-                foreach (var line in File.ReadLines(materialFilePath).Skip(1))
+                foreach (var line in File.ReadLines(ammunitionFilePath).Skip(1))
                 {
                     var parts = line.Split(',');
                     string name = parts[0];
                     int crateAmount = int.Parse(parts[1]);
-                    bool tech = bool.Parse(parts[2]);
-                    bool large = bool.Parse(parts[3]);
-                    bool facility = bool.Parse(parts[4]);
+                    string description = parts[2];
+                    int damage = int.Parse(parts[3]);
 
-                    if (!materialNames.Contains(name))
+
+                    if (!ammunitionNames.Contains(name))
                     {
-                        var material = new Material
+                        var ammunition = new Ammunition
                         {
                             Name = name,
                             CrateAmount = crateAmount,
-                            TechMaterial = tech,
-                            LargeMaterial = large,
-                            FacilityMade = facility,
+                            Description = description,
+                            Damage = (DamageType)damage,
                             ProductionCost = new List<Cost>()
                         };
 
-                        materialLookup[name] = material;
-                        _context.Materials.Add(material);
-                        Console.WriteLine($"{name} added succesfully to materials list");
+                        ammunitionLookup[name] = ammunition;
+                        _context.Ammunitions.Add(ammunition);
+                        Console.WriteLine($"{name} added succesfully to ammunitions list");
                     }
                     else
                     {
@@ -58,35 +57,37 @@ namespace IntelboardAPI.Services
                     }
                 }
 
-                await _context.SaveChangesAsync(); 
+                await _context.SaveChangesAsync();
             }
 
-            // Reloads Materials table to give access to newly assigned Id's, then uses a dictionary with a Name key to check
-            // for a match. If a match is found, load the whole material object to gain access to the Id to be stored in craftableItem Table.
+            // Reloads Ammunitions table to give access to newly assigned Id's, then uses a dictionary with a Name key to check
+            // for a match. If a match is found, load the whole ammunition object to gain access to the Id to be stored in craftableItem Table.
             // Then creates corresponding Cost data.
+            var allAmmunitions = await _context.Ammunitions.ToListAsync();
+            var ammunitionByName = allAmmunitions.ToDictionary(m => m.Name);
+            var resourceLookup = await _context.Resources.ToDictionaryAsync(r => r.Name);
             var allMaterials = await _context.Materials.ToListAsync();
             var materialByName = allMaterials.ToDictionary(m => m.Name);
-
             if (File.Exists(costFilePath))
             {
                 foreach (var line in File.ReadLines(costFilePath).Skip(1))
                 {
                     var parts = line.Split(',');
                     int amount = int.Parse(parts[0]);
-                    string materialName = parts[1];
+                    string ammunitionName = parts[1];
                     string type = parts[2];
                     string itemName = parts[3];
 
-                    if (!materialByName.TryGetValue(materialName, out var parentMaterial))
+                    if (!ammunitionByName.TryGetValue(ammunitionName, out var parentAmmunition))
                     {
-                        Console.WriteLine($"No material found for cost target: {materialName}");
+                        Console.WriteLine($"No material found for cost target: {ammunitionName}");
                         continue;
                     }
 
                     var cost = new Cost
                     {
                         Amount = amount,
-                        CraftableItemId = parentMaterial.Id
+                        CraftableItemId = parentAmmunition.Id
                     };
 
                     // Checks csv Title 'Type' to assign either a resourceId or materialId and keep the other null.
@@ -104,7 +105,7 @@ namespace IntelboardAPI.Services
 
                     // Checks for identical costs in database to avoid duplicate entries. 
                     bool costExists = await _context.Costs.AnyAsync(c =>
-                        c.CraftableItemId == parentMaterial.Id &&
+                        c.CraftableItemId == parentAmmunition.Id &&
                         c.Amount == amount &&
                         ((c.Resource != null && c.Resource.Name == itemName) ||
                          (c.Material != null && c.Material.Name == itemName)));
@@ -124,6 +125,5 @@ namespace IntelboardAPI.Services
                 Console.WriteLine("Costs added and saved.");
             }
         }
-
     }
 }

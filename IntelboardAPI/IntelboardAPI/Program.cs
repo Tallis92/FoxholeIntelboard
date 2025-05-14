@@ -28,6 +28,7 @@ builder.Services.AddDbContext<IntelboardDbContext>(options =>
 
 builder.Services.AddScoped<IResourceService, ResourceService>();
 builder.Services.AddScoped<IMaterialService, MaterialService>();
+builder.Services.AddScoped<IAmmunitionService, AmmunitionService>();
 
 var app = builder.Build();
 
