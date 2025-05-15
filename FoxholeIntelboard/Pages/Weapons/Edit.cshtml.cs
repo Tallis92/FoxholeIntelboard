@@ -6,22 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.DAL;
+using IntelboardAPI.Data;
 using IntelboardAPI.Models;
 
-namespace FoxholeIntelboard.Pages.Resources
+namespace FoxholeIntelboard.Pages.Weapons
 {
     public class EditModel : PageModel
     {
-        private readonly ResourceManager _resourceManager;
+        private readonly IntelboardAPI.Data.IntelboardDbContext _context;
 
-        public EditModel(ResourceManager resourceManager)
+        public EditModel(IntelboardAPI.Data.IntelboardDbContext context)
         {
-            _resourceManager = resourceManager;
+            _context = context;
         }
 
         [BindProperty]
-        public Resource Resource { get; set; } = default!;
+        public Weapon Weapon { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,12 +30,12 @@ namespace FoxholeIntelboard.Pages.Resources
                 return NotFound();
             }
 
-            var resource = await _resourceManager.GetResourceByIdAsync(id);
-            if (resource == null)
+            var weapon =  await _context.Weapons.FirstOrDefaultAsync(m => m.Id == id);
+            if (weapon == null)
             {
                 return NotFound();
             }
-            Resource = resource;
+            Weapon = weapon;
             return Page();
         }
 
@@ -47,19 +47,31 @@ namespace FoxholeIntelboard.Pages.Resources
             {
                 return Page();
             }
-            if (!await ResourceExists(Resource.Id))
+
+            _context.Attach(Weapon).State = EntityState.Modified;
+
+            try
             {
-                return NotFound();
+                await _context.SaveChangesAsync();
             }
-            await _resourceManager.EditResourceAsync(Resource);
-           
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!WeaponExists(Weapon.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             return RedirectToPage("./Index");
         }
 
-        private async Task<bool> ResourceExists(int id)
+        private bool WeaponExists(int id)
         {
-            var resources = await _resourceManager.GetResourcesAsync();
-            return resources.Any(e => e.Id == id);
+            return _context.Weapons.Any(e => e.Id == id);
         }
     }
 }

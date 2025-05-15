@@ -16,6 +16,8 @@ namespace IntelboardAPI.Data
         public DbSet<Material> Materials { get; set; }
         public DbSet<Cost> Costs { get; set; }
         public DbSet<Resource> Resources { get; set; }
+        public DbSet<Weapon> Weapons { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

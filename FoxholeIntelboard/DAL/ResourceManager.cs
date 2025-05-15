@@ -1,4 +1,4 @@
-﻿using FoxholeIntelboard.Models;
+﻿using IntelboardAPI.Models;
 using Humanizer.Localisation;
 using System.Text;
 using System.Text.Json;

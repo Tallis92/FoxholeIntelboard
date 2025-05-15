@@ -1,17 +1,18 @@
-using FoxholeIntelboard.Models;
+using IntelboardAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using IntelboardAPI.Models;
 using System.Xml.Linq;
 
 namespace FoxholeIntelboard.Pages;
 
 public class IndexModel : PageModel
 {
-    public Models.Ammunition Ammo { get; set; }
+    public Ammunition Ammo { get; set; }
     
     public void OnGet()
     {
-        var ammo = new Models.Ammunition
+        var ammo = new Ammunition
         {
             Name = "7.62mm",
             Damage = DamageType.Kinetic, // Enum-värdet sätts här

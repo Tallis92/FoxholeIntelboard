@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using FoxholeIntelboard.DAL;
+using IntelboardAPI.Data;
 using IntelboardAPI.Models;
 
-namespace FoxholeIntelboard.Pages.Resources
+namespace FoxholeIntelboard.Pages.Weapons
 {
     public class CreateModel : PageModel
     {
-        private readonly ResourceManager _resourceManager;
+        private readonly IntelboardAPI.Data.IntelboardDbContext _context;
 
-        public CreateModel(ResourceManager resourceManager)
+        public CreateModel(IntelboardAPI.Data.IntelboardDbContext context)
         {
-            _resourceManager = resourceManager;
+            _context = context;
         }
 
         public IActionResult OnGet()
@@ -24,9 +24,8 @@ namespace FoxholeIntelboard.Pages.Resources
             return Page();
         }
 
-
         [BindProperty]
-        public Resource Resource { get; set; } = default!;
+        public Weapon Weapon { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -36,7 +35,8 @@ namespace FoxholeIntelboard.Pages.Resources
                 return Page();
             }
 
-            await _resourceManager.CreateResourceAsync(Resource);
+            _context.Weapons.Add(Weapon);
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

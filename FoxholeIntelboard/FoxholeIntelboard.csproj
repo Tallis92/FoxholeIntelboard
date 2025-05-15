@@ -20,4 +20,8 @@
     <Folder Include="Pages\Ammunitions\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IntelboardAPI\IntelboardAPI.csproj" />
+  </ItemGroup>
+
 </Project>

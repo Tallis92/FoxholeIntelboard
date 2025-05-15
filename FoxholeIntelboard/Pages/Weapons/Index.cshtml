@@ -1,0 +1,78 @@
+﻿@page
+@model FoxholeIntelboard.Pages.Weapons.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Weapon[0].FactionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weapon[0].CrateAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weapon[0].WeaponType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weapon[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weapon[0].AmmunitionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weapon[0].SpecialProperties)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weapon[0].IsTeched)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weapon[0].Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Weapon) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FactionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CrateAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WeaponType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AmmunitionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SpecialProperties)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsTeched)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

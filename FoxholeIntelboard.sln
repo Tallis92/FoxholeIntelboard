@@ -3,7 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoxholeIntelboard", "FoxholeIntelboard/FoxholeIntelboard.csproj", "{159E925A-0B0F-DE0A-E3E3-E6A6429A4F11}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoxholeIntelboard", "FoxholeIntelboard\FoxholeIntelboard.csproj", "{159E925A-0B0F-DE0A-E3E3-E6A6429A4F11}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DA29D7AA-E2B9-4811-9DC8-B19609EA01B1} = {DA29D7AA-E2B9-4811-9DC8-B19609EA01B1}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelboardAPI", "IntelboardAPI\IntelboardAPI.csproj", "{DA29D7AA-E2B9-4811-9DC8-B19609EA01B1}"
 EndProject

@@ -14,10 +14,12 @@ namespace IntelboardAPI.Models
         public CraftableItem? CraftableItem { get; set; }
         [JsonPropertyName("resourceId")]
         public int? ResourceId { get; set; }
+        [JsonIgnore]
         [JsonPropertyName("resource")]
         public Resource? Resource { get; set; }
         [JsonPropertyName("materialId")]
         public int? MaterialId { get; set; }
+        [JsonIgnore]
         [JsonPropertyName("material")]
         public Material? Material { get; set; }
     }

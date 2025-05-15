@@ -1,4 +1,4 @@
-﻿using FoxholeIntelboard.Models;
+﻿using IntelboardAPI.Models;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;

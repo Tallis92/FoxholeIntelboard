@@ -1,4 +1,4 @@
-﻿using FoxholeIntelboard.Models;
+﻿using IntelboardAPI.Models;
 using System.Text.Json.Serialization;
 
 namespace FoxholeIntelboard.DTO
