@@ -21,7 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntelboardAPI\IntelboardAPI.csproj" />
+  <ProjectReference Include="..\IntelboardAPI\IntelboardAPI.csproj">
+    <IncludeAssets>compile</IncludeAssets>
+    <PrivateAssets>all</PrivateAssets>
+  </ProjectReference>
   </ItemGroup>
+
 
 </Project>
