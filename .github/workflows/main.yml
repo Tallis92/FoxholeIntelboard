@@ -57,7 +57,9 @@ jobs:
       uses: actions/download-artifact@v4.3.0
       with:
         name: Build-artifact
-        path: ./build
+        path: |
+          ./build/IntelboardAPI
+          ./build/FoxholeIntelboard
         
     - name: Run tests for IntelboardAPI
       run: dotnet test ./IntelboardAPI/IntelboardAPI.csproj --no-build --logger "console;verbosity=detailed"
