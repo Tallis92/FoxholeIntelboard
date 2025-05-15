@@ -25,7 +25,9 @@ jobs:
       uses: actions/upload-artifact@v4.6.2
       with:
         name: Build-artifact
-        path: ./build
+        path: |
+          ./build/IntelboardAPI
+          ./build/FoxholeIntelboard
 
   Test-OS:
     runs-on: ${{ matrix.os }}
