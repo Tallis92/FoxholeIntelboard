@@ -60,7 +60,7 @@ jobs:
         path: ./build
         
     - name: Run tests for IntelboardAPI
-      run: dotnet test ./IntelboardAPI/IntelboardAPI.csproj --no-build --logger "console;verbosity=detailed"
+      run: dotnet test ./FoxholeIntelboard/IntelboardAPI/IntelboardAPI.csproj --no-build --logger "console;verbosity=detailed"
 
     - name: Run tests for FoxholeIntelboard
-      run: dotnet test ./FoxholeIntelboard/FoxholeIntelboard.csproj --no-build --logger "console;verbosity=detailed"
+      run: dotnet test ./FoxholeIntelboard/FoxholeIntelboard/FoxholeIntelboard.csproj --no-build --logger "console;verbosity=detailed"
