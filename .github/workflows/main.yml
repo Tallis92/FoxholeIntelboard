@@ -16,10 +16,10 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Publish IntelboardAPI
-      run: dotnet publish ./FoxholeIntelboard/IntelboardAPI/IntelboardAPI.csproj --output ./build/IntelboardAPI
+      run: dotnet publish ./IntelboardAPI/IntelboardAPI.csproj --output ./build/IntelboardAPI
 
     - name: Publish FoxholeIntelboard
-      run: dotnet publish ./FoxholeIntelboard/FoxholeIntelboard/FoxholeIntelboard.csproj --output ./build/FoxholeIntelboard
+      run: dotnet publish ./FoxholeIntelboard/FoxholeIntelboard.csproj --output ./build/FoxholeIntelboard
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4.6.2
@@ -60,7 +60,7 @@ jobs:
         path: ./build
         
     - name: Run tests for IntelboardAPI
-      run: dotnet test ./FoxholeIntelboard/IntelboardAPI/IntelboardAPI.csproj --no-build --logger "console;verbosity=detailed"
+      run: dotnet test ./IntelboardAPI/IntelboardAPI.csproj --no-build --logger "console;verbosity=detailed"
 
     - name: Run tests for FoxholeIntelboard
-      run: dotnet test ./FoxholeIntelboard/FoxholeIntelboard/FoxholeIntelboard.csproj --no-build --logger "console;verbosity=detailed"
+      run: dotnet test ./FoxholeIntelboard/FoxholeIntelboard.csproj --no-build --logger "console;verbosity=detailed"
