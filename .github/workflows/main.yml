@@ -16,7 +16,7 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Build project
-      run: dotnet publish ./FoxholeIntelboard/FoxholeIntelboard.sln --output ./build
+      run: dotnet publish ./FoxholeIntelboard.sln --output ./build
     - name: Upload artifact
       uses: actions/upload-artifact@v4.6.2
       with:
@@ -56,4 +56,4 @@ jobs:
         path: ./build
         
     - name: Run tests
-      run: dotnet test ./FoxholeIntelboard/FoxholeIntelboard.sln --no-build --logger "console;verbosity=detailed"
+      run: dotnet test ./FoxholeIntelboard.sln --no-build --logger "console;verbosity=detailed"
