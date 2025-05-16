@@ -10,47 +10,64 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+<form method="post">
+    <button asp-page-handler="SeedWeapons" type="submit">Seed database for weapons</button>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Weapon[0].FactionId)
+                @Html.DisplayNameFor(model => model.Weapons[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weapon[0].CrateAmount)
+                Faction
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weapon[0].WeaponType)
+                @Html.DisplayNameFor(model => model.Weapons[0].CrateAmount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weapon[0].Description)
+                @Html.DisplayNameFor(model => model.Weapons[0].WeaponType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weapon[0].AmmunitionId)
+                @Html.DisplayNameFor(model => model.Weapons[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weapon[0].SpecialProperties)
+                @Html.DisplayNameFor(model => model.Weapons[0].AmmunitionId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weapon[0].IsTeched)
+                @Html.DisplayNameFor(model => model.Weapons[0].SpecialProperties)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Weapon[0].Name)
+                @Html.DisplayNameFor(model => model.Weapons[0].IsTeched)
             </th>
+           
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Weapon) {
+@foreach (var item in Model.Weapons) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FactionId)
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                    @if(item.FactionId == 0)
+                    {
+                        <p>Warden</p>
+                    }
+                    else
+                    {
+                        <p>Colonial</p>
+                    }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CrateAmount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.WeaponType)
+                    @{
+                        var weaponType = item.WeaponType.ToString().Replace("_", " ");                   
+                    }
+                @Html.DisplayFor(modelItem => weaponType)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
@@ -64,9 +81,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IsTeched)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
+           
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |

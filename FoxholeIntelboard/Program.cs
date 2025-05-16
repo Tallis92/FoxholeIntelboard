@@ -10,6 +10,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<AmmunitionManager>();
 builder.Services.AddScoped<MaterialManager>();
 builder.Services.AddScoped<ResourceManager>();
+builder.Services.AddScoped<WeaponManager>();
 builder.Services.AddDbContext<IntelboardDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

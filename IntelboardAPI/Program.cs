@@ -9,10 +9,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-          .WithOrigins("https://localhost:7096")  // your Razor-Pages app origin
-          .AllowAnyHeader()                        // allow all headers (e.g. Authorization, Content-Type)
-          .AllowAnyMethod()                        // allow GET, POST, PUT, DELETE, etc.
-          .AllowCredentials();                     // if you need cookies/auth
+          .WithOrigins("https://localhost:7096")  
+          .AllowAnyHeader()                        
+          .AllowAnyMethod()                        
+          .AllowCredentials();                  
     });
 });
 
@@ -29,11 +29,11 @@ builder.Services.AddDbContext<IntelboardDbContext>(options =>
 builder.Services.AddScoped<IResourceService, ResourceService>();
 builder.Services.AddScoped<IMaterialService, MaterialService>();
 builder.Services.AddScoped<IAmmunitionService, AmmunitionService>();
+builder.Services.AddScoped<IWeaponService, WeaponService>();
 
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

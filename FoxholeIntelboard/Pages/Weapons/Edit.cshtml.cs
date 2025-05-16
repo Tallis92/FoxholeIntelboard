@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FoxholeIntelboard.DAL;
+using IntelboardAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Data;
-using IntelboardAPI.Models;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace FoxholeIntelboard.Pages.Weapons
 {
     public class EditModel : PageModel
     {
-        private readonly IntelboardAPI.Data.IntelboardDbContext _context;
+        private readonly WeaponManager _weaponManager;
 
-        public EditModel(IntelboardAPI.Data.IntelboardDbContext context)
+        public EditModel(WeaponManager weaponManager)
         {
-            _context = context;
+            _weaponManager = weaponManager;
         }
 
         [BindProperty]
         public Weapon Weapon { get; set; } = default!;
+        public List<SelectListItem> WeaponTypeOptions { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,12 +28,21 @@ namespace FoxholeIntelboard.Pages.Weapons
                 return NotFound();
             }
 
-            var weapon =  await _context.Weapons.FirstOrDefaultAsync(m => m.Id == id);
+            var weapon = await _weaponManager.GetWeaponByIdAsync(id);
             if (weapon == null)
             {
                 return NotFound();
             }
             Weapon = weapon;
+
+            WeaponTypeOptions = Enum.GetValues(typeof(WeaponType))
+               .Cast<WeaponType>()
+               .Select(d => new SelectListItem
+               {
+                   Value = d.ToString(),
+                   Text = GetEnumDescription(d)
+               }).ToList();
+
             return Page();
         }
 
@@ -48,30 +55,27 @@ namespace FoxholeIntelboard.Pages.Weapons
                 return Page();
             }
 
-            _context.Attach(Weapon).State = EntityState.Modified;
+            if (!await WeaponExistsAsync(Weapon.Id))
+            {
+                return NotFound();
+            }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!WeaponExists(Weapon.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _weaponManager.EditWeaponAsync(Weapon);
 
             return RedirectToPage("./Index");
         }
 
-        private bool WeaponExists(int id)
+        private async Task<bool> WeaponExistsAsync(int id)
         {
-            return _context.Weapons.Any(e => e.Id == id);
+            var weapons = await _weaponManager.GetWeaponsAsync();
+            return weapons.Any(e => e.Id == id);
+        }
+
+        private string GetEnumDescription(Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attr = field?.GetCustomAttribute<DescriptionAttribute>();
+            return attr?.Description ?? value.ToString();
         }
     }
 }

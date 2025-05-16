@@ -5,25 +5,31 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Data;
 using IntelboardAPI.Models;
+using FoxholeIntelboard.DAL;
 
 namespace FoxholeIntelboard.Pages.Weapons
 {
     public class IndexModel : PageModel
     {
-        private readonly IntelboardAPI.Data.IntelboardDbContext _context;
+        private readonly WeaponManager _weaponManager;
 
-        public IndexModel(IntelboardAPI.Data.IntelboardDbContext context)
+        public IndexModel(WeaponManager weaponManager)
         {
-            _context = context;
+           _weaponManager = weaponManager;
         }
 
-        public IList<Weapon> Weapon { get;set; } = default!;
+        public IList<Weapon> Weapons { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Weapon = await _context.Weapons.ToListAsync();
+            Weapons = await _weaponManager.GetWeaponsAsync();
+        }
+
+        public async Task<IActionResult> OnPostSeedWeaponsAsync()
+        {
+            await _weaponManager.SeedWeaponsAsync();
+            return RedirectToPage();
         }
     }
 }
