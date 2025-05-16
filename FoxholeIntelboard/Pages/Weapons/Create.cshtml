@@ -14,8 +14,13 @@
     <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Weapon.Name" class="control-label"></label>
+                <input asp-for="Weapon.Name" class="form-control" />
+                <span asp-validation-for="Weapon.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Weapon.FactionId" class="control-label"></label>
-                <input asp-for="Weapon.FactionId" class="form-control" />
+                <input asp-for="Weapon.FactionId" class="form-control" min="0" max="1"/>
                 <span asp-validation-for="Weapon.FactionId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,8 +29,10 @@
                 <span asp-validation-for="Weapon.CrateAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Weapon.WeaponType" class="control-label"></label>
-                <select asp-for="Weapon.WeaponType" class="form-control"></select>
+                <label asp-for="Weapon.WeaponType" class="control-label">Weapon Type</label>
+                <select asp-for="Weapon.WeaponType" asp-items="Model.WeaponTypeOptions" class="form-control">
+                    <option value="">-- Select Weapon Type --</option>
+                </select>
                 <span asp-validation-for="Weapon.WeaponType" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -38,21 +45,45 @@
                 <input asp-for="Weapon.AmmunitionId" class="form-control" />
                 <span asp-validation-for="Weapon.AmmunitionId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+           @*  <div class="form-group">
                 <label asp-for="Weapon.SpecialProperties" class="control-label"></label>
                 <input asp-for="Weapon.SpecialProperties" class="form-control" />
                 <span asp-validation-for="Weapon.SpecialProperties" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Weapon.IsTeched" /> @Html.DisplayNameFor(model => model.Weapon.IsTeched)
                 </label>
             </div>
-            <div class="form-group">
-                <label asp-for="Weapon.Name" class="control-label"></label>
-                <input asp-for="Weapon.Name" class="form-control" />
-                <span asp-validation-for="Weapon.Name" class="text-danger"></span>
+
+
+            <p>Choose amount of materials required:</p>
+            <input type="hidden" name="SelectedCost" id="SelectedCost" />
+
+            <div id="selectCosts" style="display: flex; gap: 10px;">
+                <input type="radio" name="cost" value="1"> 1 Material
+                <input type="radio" name="cost" value="2"> 2 Materials
+                <input type="radio" name="cost" value="3"> 3 Materials
             </div>
+
+            <h2>Material Cost</h2>
+            <br />
+            <div id="materialCostsContainer"></div>
+
+            <p>Choose amount of Special Properties:</p>
+            <input type="hidden" name="SelectedProperty" id="SelectedProperty" />
+
+            <div id="selectProperties" style="display: flex; gap: 10px;">
+                <input type="radio" name="property" value="1"> 1 Property
+                <input type="radio" name="property" value="2"> 2 Properties
+                <input type="radio" name="property" value="3"> 3 Properties
+            </div>
+          
+            <h2>Special Property</h2>
+            <br />
+            <div id="specialPropertiesContainer"></div>
+
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -64,6 +95,86 @@
     <a asp-page="Index">Back to List</a>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const selectedCosts = document.getElementById("selectCosts");
+        const materialCostsContainer = document.getElementById("materialCostsContainer");
+        let materials = [];
+
+        try {
+            const resp = await fetch("https://localhost:7088/api/Material");
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            materials = await resp.json();
+        } catch (err) {
+            console.error("Failed to load materials:", err);
+            return;
+        }
+
+        selectedCosts.addEventListener("change", () => {
+            const selectedRadio = selectedCosts.querySelector('input[name="cost"]:checked');
+            if (!selectedRadio) return;
+
+            const selectedValue = parseInt(selectedRadio.value, 10);
+            materialCostsContainer.innerHTML = "";
+
+            for (let i = 0; i < selectedValue; i++) {
+                const div = document.createElement("div");
+                div.className = "form-group";
+                div.innerHTML = `
+              <div style="border: 1px solid grey; text-align: center; padding: 10px;">
+                <label for="Weapon_ProductionCost_${i}__MaterialId">
+                  Material ${i + 1}
+                </label>
+                <select
+                  name="Weapon.ProductionCost[${i}].MaterialId"
+                  class="form-control"
+                  style="background-color: #f8f9fa; text-align: center;"
+                >
+                  <option value="">-- Select Material --</option>
+                  ${materials.map(r => `<option value="${r.id}">${r.name}</option>`).join("")}
+                </select>
+
+                <label for="Weapon_ProductionCost_${i}__Amount">
+                  Amount
+                </label>
+                <input
+                  type="number"
+                  name="Weapon.ProductionCost[${i}].Amount"
+                  class="form-control"
+                />
+              </div>
+              <br/>
+            `;
+                materialCostsContainer.appendChild(div);
+            }
+        });
+        const selectedProperties = document.getElementById("selectProperties");
+        const specialPropertiesContainer = document.getElementById("specialPropertiesContainer");
+
+        const specialProperties = @Html.Raw(Json.Serialize(Model.SpecialPropertiesOptions));
+
+        selectedProperties.addEventListener("change", () => {
+            const selectedRadio = selectedProperties.querySelector('input[name="property"]:checked');
+            if (!selectedRadio) return;
+
+            const selectedValue = parseInt(selectedRadio.value, 10);
+            specialPropertiesContainer.innerHTML = "";
+
+            for (let i = 0; i < selectedValue; i++) {
+                const div = document.createElement("div");
+                div.className = "form-group";
+                div.innerHTML = `
+                    <label for="Weapon_SpecialProperties_${i}">Special Property ${i + 1}</label>
+                    <select name="Weapon.SpecialProperties[${i}]" class="form-control">
+                        <option value="">-- Select Property --</option>
+                        ${specialProperties.map(p => `<option value="${p.value}">${p.text}</option>`).join("")}
+                    </select>
+                `;
+                specialPropertiesContainer.appendChild(div);
+            }
+        });
+    });
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

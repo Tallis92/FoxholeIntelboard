@@ -69,6 +69,9 @@ namespace FoxholeIntelboard.DAL
                 var json = JsonSerializer.Serialize(weapon, options);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PostAsync(uri, content);
+                var body = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Status: {response.StatusCode}");
+                Console.WriteLine($"Response body: {body}");
 
                 Console.WriteLine(response);
             }

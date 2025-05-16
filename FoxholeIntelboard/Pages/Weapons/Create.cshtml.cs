@@ -1,44 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FoxholeIntelboard.DAL;
+using IntelboardAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using IntelboardAPI.Data;
-using IntelboardAPI.Models;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace FoxholeIntelboard.Pages.Weapons
 {
     public class CreateModel : PageModel
     {
-        private readonly IntelboardAPI.Data.IntelboardDbContext _context;
+        private readonly MaterialManager _materialManager;
+        private readonly WeaponManager _weaponManager;
 
-        public CreateModel(IntelboardAPI.Data.IntelboardDbContext context)
+        public CreateModel(WeaponManager weaponManager, MaterialManager materialManager)
         {
-            _context = context;
+            _weaponManager = weaponManager;
+            _materialManager = materialManager;
         }
-
-        public IActionResult OnGet()
-        {
-            return Page();
-        }
-
         [BindProperty]
         public Weapon Weapon { get; set; } = default!;
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
+        [BindProperty]
+        public List<Material> Materials { get; set; } = default!;
+
+        public List<SelectListItem> WeaponTypeOptions { get; set; } = new();
+        public List<SelectListItem> SpecialPropertiesOptions { get; set; } = new();
+
+        public async Task<IActionResult> OnGet()
+        {
+            Materials = await _materialManager.GetMaterialsAsync();
+            WeaponTypeOptions = Enum.GetValues(typeof(WeaponType))
+                .Cast<WeaponType>()
+                .Select(d => new SelectListItem
+                {
+                    Value = d.ToString(),
+                    Text = GetEnumDescription(d)
+                }).ToList();
+
+            SpecialPropertiesOptions = Enum.GetValues(typeof(SpecialProperties))
+                .Cast<SpecialProperties>()
+                .Select(p => new SelectListItem
+                {
+                    Value = p.ToString(),
+                    Text = GetEnumDescription(p)
+                }).ToList();
+            return Page();
+        }
+
+
+
         public async Task<IActionResult> OnPostAsync()
         {
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Weapons.Add(Weapon);
-            await _context.SaveChangesAsync();
-
+            await _weaponManager.CreateWeaponAsync(Weapon);
             return RedirectToPage("./Index");
+        }
+
+        private string GetEnumDescription(Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attr = field?.GetCustomAttribute<DescriptionAttribute>();
+            return attr?.Description ?? value.ToString();
         }
     }
 }

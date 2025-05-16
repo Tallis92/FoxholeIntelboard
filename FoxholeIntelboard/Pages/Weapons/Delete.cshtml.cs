@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Data;
+using FoxholeIntelboard.DAL;
 using IntelboardAPI.Models;
 
 namespace FoxholeIntelboard.Pages.Weapons
 {
     public class DeleteModel : PageModel
     {
-        private readonly IntelboardAPI.Data.IntelboardDbContext _context;
+        private readonly WeaponManager _weaponManager;
 
-        public DeleteModel(IntelboardAPI.Data.IntelboardDbContext context)
+        public DeleteModel(WeaponManager weaponManager)
         {
-            _context = context;
+            _weaponManager = weaponManager;
         }
 
         [BindProperty]
@@ -29,7 +29,7 @@ namespace FoxholeIntelboard.Pages.Weapons
                 return NotFound();
             }
 
-            var weapon = await _context.Weapons.FirstOrDefaultAsync(m => m.Id == id);
+            var weapon = await _weaponManager.GetWeaponByIdAsync(id);
 
             if (weapon is not null)
             {
@@ -48,12 +48,11 @@ namespace FoxholeIntelboard.Pages.Weapons
                 return NotFound();
             }
 
-            var weapon = await _context.Weapons.FindAsync(id);
+            var weapon = await _weaponManager.GetWeaponByIdAsync(id);
             if (weapon != null)
             {
                 Weapon = weapon;
-                _context.Weapons.Remove(Weapon);
-                await _context.SaveChangesAsync();
+                await _weaponManager.DeleteWeaponAsync(id);
             }
 
             return RedirectToPage("./Index");

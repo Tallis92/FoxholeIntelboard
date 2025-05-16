@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Data;
+using FoxholeIntelboard.DAL;
 using IntelboardAPI.Models;
 
 namespace FoxholeIntelboard.Pages.Weapons
 {
     public class DetailsModel : PageModel
     {
-        private readonly IntelboardAPI.Data.IntelboardDbContext _context;
+        private readonly WeaponManager _weaponManager;
 
-        public DetailsModel(IntelboardAPI.Data.IntelboardDbContext context)
+        public DetailsModel(WeaponManager weaponManager)
         {
-            _context = context;
+            _weaponManager = weaponManager;
         }
 
         public Weapon Weapon { get; set; } = default!;
@@ -28,7 +28,7 @@ namespace FoxholeIntelboard.Pages.Weapons
                 return NotFound();
             }
 
-            var weapon = await _context.Weapons.FirstOrDefaultAsync(m => m.Id == id);
+            var weapon = await _weaponManager.GetWeaponByIdAsync(id);
 
             if (weapon is not null)
             {

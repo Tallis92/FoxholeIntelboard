@@ -14,8 +14,8 @@ namespace IntelboardAPI.Services
             _env = env;
         }
 
-        // Loads and loops through csv file, checks for identical objects in the database and then saves a new material into the database.
-        // Uses dictionary to look for matches in Materials table.
+        // Loads and loops through csv file, checks for identical objects in the database and then saves a new weapon into the database.
+        // Uses dictionary to look for matches in Weapons table.
         public async Task SeedWeaponsAsync()
         {
             var materialLookup = await _context.Materials.ToDictionaryAsync(r => r.Name);
@@ -37,7 +37,6 @@ namespace IntelboardAPI.Services
                     int weaponType = int.Parse(parts[4]);
                     int ammunitionId = int.Parse(parts[5]);
                     var specialProperties = parts[6].Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
-                    bool isTeched = false;
 
                     if (!weaponNames.Contains(name))
                     {
@@ -50,7 +49,6 @@ namespace IntelboardAPI.Services
                             WeaponType = (WeaponType)weaponType,
                             AmmunitionId = ammunitionId,
                             SpecialProperties = specialProperties,
-                            IsTeched = isTeched,
                             ProductionCost = new List<Cost>()
                         };
 
@@ -68,7 +66,7 @@ namespace IntelboardAPI.Services
             }
 
             // Reloads Weapons table to give access to newly assigned Id's, then uses a dictionary with a Name key to check
-            // for a match. If a match is found, load the whole ammunition object to gain access to the Id to be stored in craftableItem Table.
+            // for a match. If a match is found, load the whole weapon object to gain access to the Id to be stored in craftableItem Table.
             // Then creates corresponding Cost data.
             var allWeapons = await _context.Weapons.ToListAsync();
             var weaponByName = allWeapons.ToDictionary(m => m.Name);
