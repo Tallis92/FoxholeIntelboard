@@ -68,3 +68,4 @@ jobs:
 
     - name: Run tests for FoxholeIntelboard
       run: dotnet test ./FoxholeIntelboard/FoxholeIntelboard.csproj --no-build --logger "console;verbosity=detailed"
+
