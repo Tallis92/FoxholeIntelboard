@@ -46,21 +46,22 @@ namespace FoxholeIntelboard.Pages.Ammunitions
         {
             if (!ModelState.IsValid)
             {
-                if (Ammunitions.ProductionCost == null || !Ammunitions.ProductionCost.Any())
-                {
-                    Ammunitions.ProductionCost = new List<Cost> { new Cost() };
-                }
-
-                DamageTypeOptions = Enum.GetValues(typeof(DamageType))
-                    .Cast<DamageType>()
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.ToString(),
-                        Text = GetEnumDescription(d)
-                    }).ToList();
-
                 return Page();
             }
+
+            if (Ammunitions.ProductionCost == null || !Ammunitions.ProductionCost.Any())
+            {
+                ModelState.AddModelError("", "At least one production cost is required.");
+                return Page();
+            }
+
+            DamageTypeOptions = Enum.GetValues(typeof(DamageType))
+                .Cast<DamageType>()
+                .Select(d => new SelectListItem
+                {
+                    Value = d.ToString(),
+                    Text = GetEnumDescription(d)
+                }).ToList();
 
             foreach (var cost in Ammunitions.ProductionCost)
             {

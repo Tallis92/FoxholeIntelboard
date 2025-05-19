@@ -12,110 +12,94 @@ namespace FoxholeIntelboard.DAL
         public AmmunitionManager(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri("https://localhost:7088/");
+
         }
-        private static Uri BaseAddress = new Uri("https://localhost:7088/");
 
         public async Task<List<Ammunition>> GetAmmunitionsAsync()
         {
-            using (var client = new HttpClient())
+
+            string uri = "/api/Ammunition/";
+            var ammunitions = new List<Ammunition>();
+
+            HttpResponseMessage response = await _httpClient.GetAsync(uri);
+
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = BaseAddress;
-                string uri = "/api/Ammunition/";
-                var ammunitions = new List<Ammunition>();
-
-                HttpResponseMessage response = await client.GetAsync(uri);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseString = await response.Content.ReadAsStringAsync();
-                    ammunitions = JsonSerializer.Deserialize<List<Ammunition>>(responseString);
-                }
-
-                return ammunitions;
+                string responseString = await response.Content.ReadAsStringAsync();
+                ammunitions = JsonSerializer.Deserialize<List<Ammunition>>(responseString);
             }
+            else
+            {
+                Console.WriteLine($"Error getting ammunition: {response.StatusCode} {response.Content}");
+            }
+
+            return ammunitions;
+
         }
         public async Task<Ammunition> GetAmmunitionByIdAsync(int? id)
         {
-            using (var client = new HttpClient())
+            string uri = $"/api/Ammunition/{id}";
+
+            HttpResponseMessage response = await _httpClient.GetAsync(uri);
+            var ammunition = new Ammunition();
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = BaseAddress;
-                string uri = $"/api/Ammunition/{id}";
-
-                HttpResponseMessage response = await client.GetAsync(uri);
-                var ammunition = new Ammunition();
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseString = await response.Content.ReadAsStringAsync();
-                    ammunition = JsonSerializer.Deserialize<Ammunition>(responseString);
-
-                    
-                }
-                return ammunition;
+                string responseString = await response.Content.ReadAsStringAsync();
+                ammunition = JsonSerializer.Deserialize<Ammunition>(responseString);
             }
+            else
+            {
+                Console.WriteLine($"Error getting ammunition: {response.StatusCode} {response.Content}");
+            }
+            return ammunition;
+
         }
 
         public async Task CreateAmmunitionAsync(Ammunition ammunition)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
-                string uri = "/api/Ammunition/";
-                var options = new JsonSerializerOptions
-                {
-                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    WriteIndented = true
-                };
-                var json = JsonSerializer.Serialize(ammunition, options);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(uri, content);
 
-                Console.WriteLine(response);
-            }
+            string uri = "/api/Ammunition/";
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+            var json = JsonSerializer.Serialize(ammunition, options);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync(uri, content);
+
+            Console.WriteLine(response.IsSuccessStatusCode ? "Ammunition created successfully." : $"Error creating ammunition: {response.StatusCode} {response.Content}");
+
         }
         public async Task DeleteAmmunitionAsync(int? id)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
-                string uri = $"/api/Ammunition/{id}";
-                HttpResponseMessage response = await client.DeleteAsync(uri);
 
-                Console.WriteLine(response);
-            }
+            string uri = $"/api/Ammunition/{id}";
+            HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
 
+            Console.WriteLine(response.IsSuccessStatusCode ? "Ammunition deleted successfully." : $"Error deleting ammunition: {response.StatusCode} {response.Content}" );
         }
         public async Task EditAmmunitionAsync(Ammunition ammunition)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
-                string uri = $"/api/Ammunition/{ammunition.Id}";
-                var json = JsonSerializer.Serialize(ammunition);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PutAsync(uri, content);
+            string uri = $"/api/Ammunition/{ammunition.Id}";
+            var json = JsonSerializer.Serialize(ammunition);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
 
-                Console.WriteLine(response);
-            }
+            Console.WriteLine(response.IsSuccessStatusCode ? "Ammunition updated successfully." : $"Error updated ammunition: {response.StatusCode} {response.Content}");
 
         }
 
         public async Task SeedAmmunitionsAsync()
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
-                string uri = "/api/Ammunition/Seed";
+            string uri = "/api/Ammunition/Seed";
 
-                HttpResponseMessage response = await client.PostAsync(uri, null);
+            HttpResponseMessage response = await _httpClient.PostAsync(uri, null);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseString = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(responseString);
-                }
+            Console.WriteLine(response.IsSuccessStatusCode ? "Ammunition seeded successfully." : $"Error seeding ammunition: {response.StatusCode} {response.Content}");
 
-            }
         }
     }
 }

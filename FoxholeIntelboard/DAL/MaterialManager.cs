@@ -1,4 +1,5 @@
-﻿using IntelboardAPI.Models;
+﻿using Azure;
+using IntelboardAPI.Models;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -25,6 +26,10 @@ namespace FoxholeIntelboard.DAL
                 string responseString = await response.Content.ReadAsStringAsync();
                 materials = JsonSerializer.Deserialize<List<Material>>(responseString);
             }
+            else
+            {
+                Console.WriteLine($"Error getting materials: {response.StatusCode} {response.Content}");
+            }
 
             return materials;
         }
@@ -39,8 +44,10 @@ namespace FoxholeIntelboard.DAL
             {
                 string responseString = await response.Content.ReadAsStringAsync();
                 material = JsonSerializer.Deserialize<Material>(responseString);
-
-
+            }
+            else
+            {
+                Console.WriteLine($"Error getting material: {response.StatusCode} {response.Content}");
             }
             return material;
         }
@@ -62,13 +69,9 @@ namespace FoxholeIntelboard.DAL
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PostAsync(uri, content);
-            if (!response.IsSuccessStatusCode)
-            {
-                string responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Status: {response.StatusCode}");
-                Console.WriteLine($"Response Body: {responseBody}");
-            }
-            Console.WriteLine(response);
+
+            Console.WriteLine(response.IsSuccessStatusCode ? "Material created successfully." : $"Error creating material: {response.StatusCode} {response.Content}");
+
 
         }
         public async Task DeleteMaterialAsync(int? id)
@@ -77,7 +80,7 @@ namespace FoxholeIntelboard.DAL
             string uri = $"/api/Material/{id}";
             HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
 
-            Console.WriteLine(response);
+            Console.WriteLine(response.IsSuccessStatusCode ? "Material deleted successfully." : $"Error deleting material: {response.StatusCode} {response.Content}");
         }
         public async Task EditMaterialAsync(Material material)
         {
@@ -86,7 +89,7 @@ namespace FoxholeIntelboard.DAL
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
 
-            Console.WriteLine(response);
+            Console.WriteLine(response.IsSuccessStatusCode ? "Material updated successfully." : $"Error updating material: {response.StatusCode} {response.Content}");
 
         }
 
@@ -94,13 +97,10 @@ namespace FoxholeIntelboard.DAL
         {
             string uri = "/api/Material/Seed";
 
-            HttpResponseMessage responseResource = await _httpClient.PostAsync(uri, null);
+            HttpResponseMessage response = await _httpClient.PostAsync(uri, null);
 
-            if (responseResource.IsSuccessStatusCode)
-            {
-                string responseString = await responseResource.Content.ReadAsStringAsync();
-                Console.WriteLine(responseString);
-            }
+            Console.WriteLine(response.IsSuccessStatusCode ? "Materials seeded successfully." : $"Error seeding materials: {response.StatusCode} {response.Content}");
+
         }
     }
 }
