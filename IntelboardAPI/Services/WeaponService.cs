@@ -36,7 +36,7 @@ namespace IntelboardAPI.Services
                     string description = parts[3];
                     int weaponType = int.Parse(parts[4]);
                     int ammunitionId = int.Parse(parts[5]);
-                    var specialProperties = parts[6].Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
+                    var weaponProperties = parts[6].Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
 
                     if (!weaponNames.Contains(name))
                     {
@@ -48,7 +48,7 @@ namespace IntelboardAPI.Services
                             Description = description,
                             WeaponType = (WeaponType)weaponType,
                             AmmunitionId = ammunitionId,
-                            SpecialProperties = specialProperties,
+                            SpecialProperties = (WeaponProperties)weaponProperties,
                             ProductionCost = new List<Cost>()
                         };
 

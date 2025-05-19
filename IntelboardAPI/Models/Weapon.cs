@@ -31,7 +31,7 @@ public enum WeaponType
     Submachine_Gun,
 }
 
-public enum SpecialProperties
+public enum WeaponProperties
 {
     [Display(Name = "Warden Attachments")]
     [Description("Bayonette & Ospray grenade launcher equipable")]
@@ -60,9 +60,11 @@ namespace IntelboardAPI.Models
         [JsonPropertyName("ammunitionId")] //This is the ammunition type the weapon uses
         public int AmmunitionId { get; set; }
         [JsonPropertyName("specialProperties")]
-        public List<string> SpecialProperties { get; set; } = new();
+        public List<WeaponProperties> SpecialProperties { get; set; } = new();
         [JsonPropertyName("isTeched")]
         public bool IsTeched { get; set; } = false;
+        [JsonPropertyName("categoriId")]
+        public int CategoriId { get; set; }
 
         public string GetWeaponType()
         {

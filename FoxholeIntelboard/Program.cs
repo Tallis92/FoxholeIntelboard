@@ -12,7 +12,7 @@ builder.Services.AddScoped<MaterialManager>();
 builder.Services.AddScoped<ResourceManager>();
 builder.Services.AddScoped<WeaponManager>();
 builder.Services.AddDbContext<IntelboardDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
 
 
 var app = builder.Build();

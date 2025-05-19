@@ -21,8 +21,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
 builder.Services.AddDbContext<IntelboardDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
 
@@ -30,7 +28,6 @@ builder.Services.AddScoped<IResourceService, ResourceService>();
 builder.Services.AddScoped<IMaterialService, MaterialService>();
 builder.Services.AddScoped<IAmmunitionService, AmmunitionService>();
 builder.Services.AddScoped<IWeaponService, WeaponService>();
-
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");

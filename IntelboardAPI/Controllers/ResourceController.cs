@@ -83,6 +83,7 @@ namespace IntelboardAPI.Controllers
         public async Task<IActionResult> SeedResourcesAsync()
         {
             await _resourceService.SeedResourcesAsync();
+            await _resourceService.SeedCategoriesAsync();
             return Ok("Status kod 200");
         }
 

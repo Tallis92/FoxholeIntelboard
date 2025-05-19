@@ -1,6 +1,6 @@
-﻿Name,CrateAmount,Description,Damage
-7.62 mm,40,Standard rifle ammo,0
-7.92 mm,30,Standard assault rifle ammo,0
-12.4 mm,20,Standard machinegun ammo,0
-30 mm,30,Low explosive ammo,1
-40 mm,20,Explosive ammo,1
+﻿Name,CategoryId,CrateAmount,Description,Damage,SpecialProperties
+7.62 mm,1,40,Standard ammunition for rifles,0,
+7.92 mm,1,30,Standard ammunition for Storm rifles and armoured car,0,
+12.4 mm,1,20,Standard ammunition for Machine Guns,1,
+30 mm,2,20,Standard explosive shells for vehicles and infantry weapons,2,Can penetrate
+40 mm,2,20,Standard payload for light tanks,2,
