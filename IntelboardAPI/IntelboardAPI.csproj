@@ -11,6 +11,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DAL\**" />
+    <Compile Remove="DTO\**" />
+    <Content Remove="DAL\**" />
+    <Content Remove="DTO\**" />
+    <EmbeddedResource Remove="DAL\**" />
+    <EmbeddedResource Remove="DTO\**" />
+    <None Remove="DAL\**" />
+    <None Remove="DTO\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
@@ -21,11 +32,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DAL\" />
-    <Folder Include="DTO\" />
   </ItemGroup>
 
 </Project>

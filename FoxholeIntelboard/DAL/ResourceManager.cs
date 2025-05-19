@@ -1,5 +1,5 @@
-﻿using IntelboardAPI.Models;
-using Humanizer.Localisation;
+﻿using Azure;
+using IntelboardAPI.Models;
 using System.Text;
 using System.Text.Json;
 namespace FoxholeIntelboard.DAL
@@ -11,108 +11,83 @@ namespace FoxholeIntelboard.DAL
         public ResourceManager(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri("https://localhost:7088/");
+
         }
-
-        private static Uri BaseAddress = new Uri("https://localhost:7088/");
-
 
         public async Task<List<Resource>> GetResourcesAsync()
         {
-            using (var client = new HttpClient())
+            string uri = "/api/Resource/";
+            var resources = new List<Resource>();
+
+            HttpResponseMessage responseResource = await _httpClient.GetAsync(uri);
+
+            if (responseResource.IsSuccessStatusCode)
             {
-                client.BaseAddress = BaseAddress;
-                string uri = "/api/Resource/";
-                var resources = new List<Resource>();
-
-                HttpResponseMessage responseResource = await client.GetAsync(uri);
-
-                if (responseResource.IsSuccessStatusCode)
-                {
-                    string responseString = await responseResource.Content.ReadAsStringAsync();
-                    resources = JsonSerializer.Deserialize<List<Resource>>(responseString);
-                }
-
-                return resources;
+                string responseString = await responseResource.Content.ReadAsStringAsync();
+                resources = JsonSerializer.Deserialize<List<Resource>>(responseString);
             }
+            else
+            {
+                Console.WriteLine($"Error getting resources: {responseResource.StatusCode} {responseResource.Content}");
+            }
+
+            return resources;
         }
         public async Task<Resource> GetResourceByIdAsync(int? id)
         {
-            using (var client = new HttpClient())
+            string uri = $"/api/Resource/{id}";
+
+            HttpResponseMessage response = await _httpClient.GetAsync(uri);
+            var resource = new Resource();
+            if (response.IsSuccessStatusCode)
             {
-                client.BaseAddress = BaseAddress;
-                string uri = $"/api/Resource/{id}";
-
-                HttpResponseMessage response = await client.GetAsync(uri);
-                var resource = new Resource();
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseString = await response.Content.ReadAsStringAsync();
-                    resource = JsonSerializer.Deserialize<Resource>(responseString);
-
-
-                }
-                return resource;
+                string responseString = await response.Content.ReadAsStringAsync();
+                resource = JsonSerializer.Deserialize<Resource>(responseString);
             }
+            else
+            {
+                Console.WriteLine($"Error getting resource: {response.StatusCode} {response.Content}");
+            }
+            return resource;
         }
 
         public async Task CreateResourceAsync(Resource resource)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
-                string uri = "/api/Resource/";
-                var json = JsonSerializer.Serialize(resource);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(uri, content);
+            string uri = "/api/Resource/";
+            var json = JsonSerializer.Serialize(resource);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync(uri, content);
 
-                Console.WriteLine(response);
-            }
-
+            Console.WriteLine(response.IsSuccessStatusCode ? "Resource created successfully." : $"Error creating resource: {response.StatusCode} {response.Content}");
         }
 
         public async Task DeleteResourceAsync(int? id)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
-                string uri = $"/api/Resource/{id}";
-                HttpResponseMessage response = await client.DeleteAsync(uri);
+            string uri = $"/api/Resource/{id}";
+            HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
 
-                Console.WriteLine(response);
-            }
+            Console.WriteLine(response.IsSuccessStatusCode ? "Resource deleted successfully." : $"Error deleting resource: {response.StatusCode} {response.Content}");
         }
         public async Task EditResourceAsync(Resource resource)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
-                string uri = $"/api/Resource/{resource.Id}";
-                var json = JsonSerializer.Serialize(resource);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PutAsync(uri, content);
+            string uri = $"/api/Resource/{resource.Id}";
+            var json = JsonSerializer.Serialize(resource);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
 
-                Console.WriteLine(response);
-            }
-
+            Console.WriteLine(response.IsSuccessStatusCode ? "Resource updated successfully." : $"Error updating resource: {response.StatusCode} {response.Content}");
         }
 
         public async Task SeedResourcesAsync()
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = BaseAddress;
-                string uri = "/api/Resource/Seed";
-                var resources = new List<Resource>();
+            string uri = "/api/Resource/Seed";
+            var resources = new List<Resource>();
 
-                HttpResponseMessage responseResource = await client.PostAsync(uri, null);
+            HttpResponseMessage response = await _httpClient.PostAsync(uri, null);
 
-                if (responseResource.IsSuccessStatusCode)
-                {
-                    string responseString = await responseResource.Content.ReadAsStringAsync();
-                    Console.WriteLine(responseString);
-                }
+            Console.WriteLine(response.IsSuccessStatusCode ? "Resources seeded successfully." : $"Error seeding resources: {response.StatusCode} {response.Content}");
 
-            }
         }
     }
 }

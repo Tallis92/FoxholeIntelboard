@@ -58,6 +58,17 @@ namespace FoxholeIntelboard.Pages.Weapons
                 return Page();
             }
 
+            if (Weapon.ProductionCost == null || !Weapon.ProductionCost.Any())
+            {
+                ModelState.AddModelError("", "At least one production cost is required.");
+                return Page();
+            }
+            if (Weapon.WeaponType == null)
+            {
+                ModelState.AddModelError("", "A weapon typ must be selected.");
+                return Page();
+            }
+
             await _weaponManager.CreateWeaponAsync(Weapon);
             return RedirectToPage("./Index");
         }

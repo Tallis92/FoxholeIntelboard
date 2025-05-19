@@ -36,13 +36,17 @@ namespace FoxholeIntelboard.Pages.Materials
 
             if (!ModelState.IsValid)
             {
-                if (Material.ProductionCost == null || !Material.ProductionCost.Any())
-                {
-                    Material.ProductionCost = new List<Cost> { new Cost() };
-                }
 
                 return Page();
             }
+
+            if (Material.ProductionCost == null || !Material.ProductionCost.Any())
+            {
+                ModelState.AddModelError("", "At least one production cost is required.");
+                return Page();
+            }
+
+
 
             foreach (var cost in Material.ProductionCost)
             {
