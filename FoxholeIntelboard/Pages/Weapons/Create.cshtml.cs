@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace FoxholeIntelboard.Pages.Weapons
@@ -25,7 +26,7 @@ namespace FoxholeIntelboard.Pages.Weapons
         public List<Material> Materials { get; set; } = default!;
 
         public List<SelectListItem> WeaponTypeOptions { get; set; } = new();
-        public List<SelectListItem> SpecialPropertiesOptions { get; set; } = new();
+        public List<SelectListItem> WeaponPropertiesOptions { get; set; } = new();
 
         public async Task<IActionResult> OnGet()
         {
@@ -38,12 +39,12 @@ namespace FoxholeIntelboard.Pages.Weapons
                     Text = GetEnumDescription(d)
                 }).ToList();
 
-            SpecialPropertiesOptions = Enum.GetValues(typeof(SpecialProperties))
-                .Cast<SpecialProperties>()
+            WeaponPropertiesOptions = Enum.GetValues(typeof(WeaponProperties))
+                .Cast<WeaponProperties>()
                 .Select(p => new SelectListItem
                 {
                     Value = p.ToString(),
-                    Text = GetEnumDescription(p)
+                    Text = GetName(p)
                 }).ToList();
             return Page();
         }
@@ -78,6 +79,15 @@ namespace FoxholeIntelboard.Pages.Weapons
             var field = value.GetType().GetField(value.ToString());
             var attr = field?.GetCustomAttribute<DescriptionAttribute>();
             return attr?.Description ?? value.ToString();
+        }
+
+        public static string GetName(Enum value)
+        {
+            return value.GetType()
+                        .GetMember(value.ToString())
+                        .FirstOrDefault()?
+                        .GetCustomAttribute<DisplayAttribute>()?
+                        .Name ?? value.ToString();
         }
     }
 }

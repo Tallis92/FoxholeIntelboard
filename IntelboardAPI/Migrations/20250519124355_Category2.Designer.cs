@@ -3,6 +3,7 @@ using IntelboardAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntelboardAPI.Migrations
 {
     [DbContext(typeof(IntelboardDbContext))]
-    partial class IntelboardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250519124355_Category2")]
+    partial class Category2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,12 +127,7 @@ namespace IntelboardAPI.Migrations
                 {
                     b.HasBaseType("IntelboardAPI.Models.CraftableItem");
 
-                    b.PrimitiveCollection<string>("AmmoProperties")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "ammoProperties");
-
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("CategoriId")
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "categoriId");
 
@@ -137,13 +135,18 @@ namespace IntelboardAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "crateAmount");
 
-                    b.Property<int>("DamageType")
+                    b.Property<int>("Damage")
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "damage");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)")
                         .HasAnnotation("Relational:JsonPropertyName", "description");
+
+                    b.PrimitiveCollection<string>("SpecialProperties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasAnnotation("Relational:JsonPropertyName", "specialProperties");
 
                     b.ToTable("Ammunitions", (string)null);
                 });
@@ -181,7 +184,7 @@ namespace IntelboardAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "ammunitionId");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("CategoriId")
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "categoriId");
 
@@ -201,10 +204,10 @@ namespace IntelboardAPI.Migrations
                         .HasColumnType("bit")
                         .HasAnnotation("Relational:JsonPropertyName", "isTeched");
 
-                    b.PrimitiveCollection<string>("WeaponProperties")
+                    b.PrimitiveCollection<string>("SpecialProperties")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "weaponProperties");
+                        .HasAnnotation("Relational:JsonPropertyName", "specialProperties");
 
                     b.Property<int>("WeaponType")
                         .HasColumnType("int")

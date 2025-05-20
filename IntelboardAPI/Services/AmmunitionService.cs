@@ -31,9 +31,13 @@ namespace IntelboardAPI.Services
                 {
                     var parts = line.Split(',');
                     string name = parts[0];
-                    int crateAmount = int.Parse(parts[1]);
-                    string description = parts[2];
-                    int damage = int.Parse(parts[3]);
+                    int categoryId = int.Parse(parts[1]);
+                    int crateAmount = int.Parse(parts[2]);
+                    string description = parts[3];
+                    var damagetype = (DamageType)int.Parse(parts[4]);
+                    List<AmmoProperties> ammoProperties = parts[5].Split(';', StringSplitOptions.RemoveEmptyEntries)
+                                                               .Select(p => (AmmoProperties)int.Parse(p))
+                                                               .ToList();
 
 
                     if (!ammunitionNames.Contains(name))
@@ -41,9 +45,12 @@ namespace IntelboardAPI.Services
                         var ammunition = new Ammunition
                         {
                             Name = name,
+
                             CrateAmount = crateAmount,
+                            CategoryId = categoryId,
                             Description = description,
-                            Damage = (DamageType)damage,
+                            DamageType = damagetype,
+                            AmmoProperties = ammoProperties,
                             ProductionCost = new List<Cost>()
                         };
 

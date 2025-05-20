@@ -22,10 +22,7 @@ namespace IntelboardAPI.Controllers
         [HttpGet]
         public async Task<List<Resource>> GetResourcesAsync()
         {
-            var resources = await _context.Resources.ToListAsync();
-
-            return resources;
-
+            return await _context.Resources.ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -83,6 +80,7 @@ namespace IntelboardAPI.Controllers
         public async Task<IActionResult> SeedResourcesAsync()
         {
             await _resourceService.SeedResourcesAsync();
+            await _resourceService.SeedCategoriesAsync();
             return Ok("Status kod 200");
         }
 
