@@ -31,12 +31,13 @@ namespace IntelboardAPI.Services
                 {
                     var parts = line.Split(',');
                     string name = parts[0];
-                    int factionId = int.Parse(parts[1]);
-                    int crateAmount = int.Parse(parts[2]);
-                    string description = parts[3];
-                    var weaponType = (WeaponType)int.Parse(parts[4]);
-                    int ammunitionId = int.Parse(parts[5]);
-                    List<WeaponProperties> weaponProperties = parts[6].Split(';', StringSplitOptions.RemoveEmptyEntries)
+                    int categoryId = int.Parse(parts[1]);
+                    int factionId = int.Parse(parts[2]);
+                    int crateAmount = int.Parse(parts[3]);
+                    string description = parts[4];
+                    var weaponType = (WeaponType)int.Parse(parts[5]);
+                    int ammunitionId = int.Parse(parts[6]);
+                    List<WeaponProperties> weaponProperties = parts[7].Split(';', StringSplitOptions.RemoveEmptyEntries)
                                                                 .Select(p => (WeaponProperties)int.Parse(p))
                                                                 .ToList();
 
@@ -45,6 +46,7 @@ namespace IntelboardAPI.Services
                         var weapon = new Weapon
                         {
                             Name = name,
+                            CategoryId = categoryId,
                             FactionId = factionId,
                             CrateAmount = crateAmount,
                             Description = description,

@@ -31,24 +31,24 @@ namespace IntelboardAPI.Models
 
     public enum AmmoProperties
     {
-        [Display(Name = "Suppressesion")]
+        [Display(Name = "AT-Suppressesion")]
         [Description("Suppresses enemy vehicles")]
-        Suppression,
+        AT_Suppression,
         [Display(Name = "Armour Piercing")]
         [Description("Can penetrate armoured vehicles")]
-        ArmourPiercing,
+        Armour_Piercing,
         [Display(Name = "Higher Penetration")]
         [Description("Higher chance to penetrate armoured vehicles at direct angles(To the sides/rear of the target) and at close range")]
-        HigherPenetration,
+        Higher_Penetration,
         [Display(Name = "Destroy Structures")]
         [Description("Can ruin Structures that have been severely damaged by artillery")]
-        DestroyStructures,
+        Destroy_Structures,
         [Display(Name = "Reduced Trenches")]
         [Description("Reduced damage against Trenches")]
-        ReducedTrenches,
+        Reduced_Trenches,
         [Display(Name = "Increased Structures")]
         [Description("Increased damage against Field Structures")]
-        IncreasedStructures,
+        Increased_Damage_To_Structures,
     }
 
     public class Ammunition : CraftableItem

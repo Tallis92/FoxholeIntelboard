@@ -20,6 +20,9 @@ public enum WeaponType
     [Display(Name = "Pistol")]
     [Description("Secondary weapon")]
     Pistol,
+    [Display(Name = "Revolver")]
+    [Description("Powerful secondary weapon")]
+    Revolver,
     [Display(Name = "Shotgun")]
     [Description("Powerful and close range weapon")]
     Shotgun,
@@ -29,6 +32,18 @@ public enum WeaponType
     [Display(Name = "Submachine Gun")]
     [Description("Automatic small arm")]
     Submachine_Gun,
+    [Display(Name = "Light Machine Gun")]
+    [Description("Automatic weapon with low damage")]
+    Light_Machine_Gun,
+    [Display(Name = "Machine Gun")]
+    [Description("Automatic weapon with high damage")]
+    Machine_Gun,
+    [Display(Name = "Mounted Anti-Tank Rifle")]
+    [Description("Mounted weapon with high damage")]
+    Mounted_Anti_Tank_Rifle,
+    [Display(Name = "Mounted Infrantry Support Gun")]
+    [Description("Mounted weapon with high damage")]
+    Mounted_Infrantry_Support_Gun,
 }
 
 public enum WeaponProperties
@@ -37,12 +52,38 @@ public enum WeaponProperties
     [Description("Bayonette & Ospray grenade launcher equipable")]
     WardenAttachments,
     [Display(Name = "Colonial Attachments")]
-    [Description("Bayonette equipable")]
+    [Description("Allows buckhorn CCQ-18 (Bayonet) attatchment")]
     ColonialAttachments,
-    [Display(Name = "Damage -15%")]
-    [Description("This weapon deals -15% damage per shot")]
-    Damage15Percent,
-
+    [Display(Name = "Damage -25%")]
+    [Description("Equipped with a low velocity barrel that deals 25% less damage per shot")]
+    DamageReduction25,
+    [Display(Name = "Damage -36%")]
+    [Description("Equipped with a low velocity barrel that deals 36% less damage per shot")]
+    DamageReduction36,
+    [Display(Name = "Damage +20%")]
+    [Description("Equipped with a high velocity barrel that deals 20% etxra damage per shot")]
+    DamageIncrease20,
+    [Display(Name = "Suppressesion")]
+    [Description("Suppresseion causes enemies to lose stability")]
+    Suppression,
+    [Display(Name = "AT-Suppressesion")]
+    [Description("Suppresses enemy vehicles")]
+    AT_Suppression,
+    [Display(Name = "Gunner")]
+    [Description("Allows the use of a gunner to fire the weapon")]
+    Gunner,
+    [Display(Name = "Armour Shredder")]
+    [Description("Deals 200% damage to vehicle armour")]
+    Armour_Shedder,
+    [Display(Name = "Mountable")]
+    [Description("Can be attached to certain vehicles and tripods")]
+    Mountable,
+    [Display(Name = "Armour Piercing")]
+    [Description("Can penetrate armoured vehicles")]
+    Armour_Piercing,
+    [Display(Name = "Higher Penetration")]
+    [Description("Higher chance to penetrate armoured vehicles at direct angles(To the sides/rear of the target) and at close range")]
+    Higher_Penetration,
 }
 
 namespace IntelboardAPI.Models
@@ -64,7 +105,7 @@ namespace IntelboardAPI.Models
         [JsonPropertyName("isTeched")]
         public bool IsTeched { get; set; } = false;
         [JsonPropertyName("categoriId")]
-        public int CategoriId { get; set; }
+        public int CategoryId { get; set; }
 
         public string GetWeaponType()
         {
