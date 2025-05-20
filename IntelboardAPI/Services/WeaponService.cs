@@ -1,6 +1,6 @@
-﻿using IntelboardAPI.Models;
+﻿using IntelboardAPI.Data;
+using IntelboardAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Data;
 
 namespace IntelboardAPI.Services
 {
@@ -48,7 +48,9 @@ namespace IntelboardAPI.Services
                             Description = description,
                             WeaponType = (WeaponType)weaponType,
                             AmmunitionId = ammunitionId,
-                            SpecialProperties = (WeaponProperties)weaponProperties,
+                            WeaponProperties = weaponProperties
+                                                .Select(p => Enum.Parse<WeaponProperties>(p.Trim(), ignoreCase: true))
+                                                .ToList(),
                             ProductionCost = new List<Cost>()
                         };
 
