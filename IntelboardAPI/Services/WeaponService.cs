@@ -34,9 +34,11 @@ namespace IntelboardAPI.Services
                     int factionId = int.Parse(parts[1]);
                     int crateAmount = int.Parse(parts[2]);
                     string description = parts[3];
-                    int weaponType = int.Parse(parts[4]);
+                    var weaponType = (WeaponType)int.Parse(parts[4]);
                     int ammunitionId = int.Parse(parts[5]);
-                    var weaponProperties = parts[6].Split(';', StringSplitOptions.RemoveEmptyEntries).ToList();
+                    List<WeaponProperties> weaponProperties = parts[6].Split(';', StringSplitOptions.RemoveEmptyEntries)
+                                                                .Select(p => (WeaponProperties)int.Parse(p))
+                                                                .ToList();
 
                     if (!weaponNames.Contains(name))
                     {
@@ -46,11 +48,9 @@ namespace IntelboardAPI.Services
                             FactionId = factionId,
                             CrateAmount = crateAmount,
                             Description = description,
-                            WeaponType = (WeaponType)weaponType,
+                            WeaponType = weaponType,
                             AmmunitionId = ammunitionId,
-                            WeaponProperties = weaponProperties
-                                                .Select(p => Enum.Parse<WeaponProperties>(p.Trim(), ignoreCase: true))
-                                                .ToList(),
+                            WeaponProperties = weaponProperties,                                          
                             ProductionCost = new List<Cost>()
                         };
 

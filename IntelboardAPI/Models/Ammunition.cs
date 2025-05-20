@@ -1,4 +1,4 @@
-﻿using Microsoft.OpenApi.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text.Json.Serialization;
@@ -31,13 +31,13 @@ namespace IntelboardAPI.Models
 
     public enum AmmoProperties
     {
-        [Display("Warden Attachments")]
-        [Description("Bayonette & Ospray grenade launcher equipable")]
-        WardenAttachments,
-        [Display("Colonial Attachments")]
+        [Display(Name = "Armor Piercing")]
+        [Description("Bye bye armor!")]
+        ArmorPiercing,
+        [Display(Name = "Colonial Attachments")]
         [Description("Bayonette equipable")]
         ColonialAttachments,
-        [Display("Damage -15%")]
+        [Display(Name = "Damage -15%")]
         [Description("This weapon deals -15% damage per shot")]
         Damage15Percent,
     }
@@ -50,23 +50,18 @@ namespace IntelboardAPI.Models
         public int CrateAmount { get; set; }
 
         [JsonPropertyName("damage")]
-        public DamageType Damage { get; set; }
-        [JsonPropertyName("specialProperties")]
-        public List<AmmoProperties> SpecialProperties { get; set; }
+        public DamageType DamageType { get; set; }
+        [JsonPropertyName("ammoProperties")]
+        public List<AmmoProperties> AmmoProperties { get; set; }
         [JsonPropertyName("categoriId")]
         public int CategoriId { get; set; }
 
         public string GetDamageDescription()
         {
-            var damage = Damage.GetType().GetField(Damage.ToString());
+            var damage = DamageType.GetType().GetField(DamageType.ToString());
             var attribute = damage?.GetCustomAttribute<DescriptionAttribute>();
-            return attribute?.Description ?? Damage.ToString();
+            return attribute?.Description ?? DamageType.ToString();
         }
 
-        public string GetDisplayName(this Enum value)
-        {
-            var member = value.GetType().GetMember(value.ToString()).FirstOrDefault();
-            return member?.GetCustomAttribute<DisplayAttribute>()?.Name ?? value.ToString();
-        }
     }
 }

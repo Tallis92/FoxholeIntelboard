@@ -33,11 +33,11 @@
                 <span asp-validation-for="Ammunition.CrateAmount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Ammunition.Damage">Damage Type</label>
-                <select asp-for="Ammunition.Damage" asp-items="Model.DamageTypeOptions" class="form-control">
+                <label asp-for="Ammunition.DamageType">Damage Type</label>
+                <select asp-for="Ammunition.DamageType" asp-items="Model.DamageTypeOptions" class="form-control">
                     <option value="">-- Select Damage Type --</option>
                 </select>
-                <span asp-validation-for="Ammunition.Damage" class="text-danger"></span>
+                <span asp-validation-for="Ammunition.DamageType" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

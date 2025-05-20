@@ -22,9 +22,10 @@ namespace IntelboardAPI.Controllers
         [HttpGet]
         public async Task<List<Weapon>> GetWeapons()
         {
-            {
-                return await _context.Weapons.ToListAsync();
-            }
+            
+            return await _context.Weapons.ToListAsync();
+
+            
         }
 
         [HttpGet("{id}")]

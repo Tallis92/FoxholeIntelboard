@@ -1,4 +1,4 @@
-﻿Name,CategoryId,CrateAmount,Description,Damage,SpecialProperties
+﻿Name,CategoryId,CrateAmount,Description,Damage,AmmoProperties
 7.62 mm,1,40,Standard ammunition for rifles,0,
 7.92 mm,1,30,Standard ammunition for Storm rifles and armoured car,0,
 12.4 mm,1,20,Standard ammunition for Machine Guns,1,

@@ -59,8 +59,8 @@ namespace IntelboardAPI.Models
         public string? Description { get; set; }
         [JsonPropertyName("ammunitionId")] //This is the ammunition type the weapon uses
         public int AmmunitionId { get; set; }
-        [JsonPropertyName("specialProperties")]
-        public List<WeaponProperties> SpecialProperties { get; set; } = new();
+        [JsonPropertyName("weaponProperties")]
+        public List<WeaponProperties> WeaponProperties { get; set; } = new();
         [JsonPropertyName("isTeched")]
         public bool IsTeched { get; set; } = false;
         [JsonPropertyName("categoriId")]
