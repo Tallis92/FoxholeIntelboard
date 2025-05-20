@@ -1,8 +1,15 @@
 ﻿Amount,AmmunitionName,Type,ItemName
 80,7.62 mm,Material,Basic Materials
 120,7.92 mm,Material,Basic Materials
+40,8 mm,Material,Basic Materials
+80,9 mm,Material,Basic Materials
+40,.44,Material,Basic Materials
+80,Buckshot,Material,Basic Materials
 100,12.4 mm,Material,Basic Materials
-60,30 mm,Material,Explosive Powder
+40,30 mm,Material,Explosive Powder
 80,30 mm,Material,Basic Materials
-120,40 mm,Material,Basic Materials
-140,40 mm,Material,Explosive Powder
+100,20 mm,Material,Basic Materials
+160,40 mm,Material,Basic Materials
+240,40 mm,Material,Explosive Powder
+120,120 mm,Material,Basic Materials
+10,120 mm,Material,Heavy Explosive Powder

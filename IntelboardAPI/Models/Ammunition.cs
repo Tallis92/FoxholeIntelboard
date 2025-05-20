@@ -31,15 +31,24 @@ namespace IntelboardAPI.Models
 
     public enum AmmoProperties
     {
-        [Display(Name = "Armor Piercing")]
-        [Description("Bye bye armor!")]
-        ArmorPiercing,
-        [Display(Name = "Colonial Attachments")]
-        [Description("Bayonette equipable")]
-        ColonialAttachments,
-        [Display(Name = "Damage -15%")]
-        [Description("This weapon deals -15% damage per shot")]
-        Damage15Percent,
+        [Display(Name = "Suppressesion")]
+        [Description("Suppresses enemy vehicles")]
+        Suppression,
+        [Display(Name = "Armour Piercing")]
+        [Description("Can penetrate armoured vehicles")]
+        ArmourPiercing,
+        [Display(Name = "Higher Penetration")]
+        [Description("Higher chance to penetrate armoured vehicles at direct angles(To the sides/rear of the target) and at close range")]
+        HigherPenetration,
+        [Display(Name = "Destroy Structures")]
+        [Description("Can ruin Structures that have been severely damaged by artillery")]
+        DestroyStructures,
+        [Display(Name = "Reduced Trenches")]
+        [Description("Reduced damage against Trenches")]
+        ReducedTrenches,
+        [Display(Name = "Increased Structures")]
+        [Description("Increased damage against Field Structures")]
+        IncreasedStructures,
     }
 
     public class Ammunition : CraftableItem
@@ -54,7 +63,7 @@ namespace IntelboardAPI.Models
         [JsonPropertyName("ammoProperties")]
         public List<AmmoProperties> AmmoProperties { get; set; }
         [JsonPropertyName("categoriId")]
-        public int CategoriId { get; set; }
+        public int CategoryId { get; set; }
 
         public string GetDamageDescription()
         {
