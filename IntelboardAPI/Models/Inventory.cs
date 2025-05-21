@@ -1,18 +1,28 @@
-﻿namespace IntelboardAPI.Models
+﻿using Azure.Core.Serialization;
+using System.Text.Json.Serialization;
+
+namespace IntelboardAPI.Models
 {
     public class Inventory
     {
-        public Guid InventoryId { get; set; }
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; }
+        [JsonPropertyName("name")]
         public string Name { get; set; }
-        public List<CratedItem> CratedItem { get; set; } = new();
+        [JsonPropertyName("cratedItems")]
+        public List<CratedItem> CratedItems{ get; set; } = new();
         // public UserId UserId { get; set; }
 
     }
     public class CratedItem
     {
+        [JsonPropertyName("id")]
         public int Id { get; set; }
+        [JsonPropertyName("craftableItem")]
         public CraftableItem CraftableItem { get; set; }
+        [JsonPropertyName("amount")]
         public int Amount { get; set; }
+        [JsonPropertyName("description")]
         public string  Description { get; set; }
 
         // EF Core kräver alltid en parameterlös konstruktor (offentlig eller skyddad) för att kunna skapa objekt från databasen.

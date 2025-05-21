@@ -30,7 +30,7 @@ namespace FoxholeIntelboard.Pages.Lists
                 return NotFound();
             }
 
-            var inventory =  await _context.Inventories.FirstOrDefaultAsync(m => m.InventoryId == id);
+            var inventory =  await _context.Inventories.FirstOrDefaultAsync(m => m.Id == id);
             if (inventory == null)
             {
                 return NotFound();
@@ -56,7 +56,7 @@ namespace FoxholeIntelboard.Pages.Lists
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!InventoryExists(Inventory.InventoryId))
+                if (!InventoryExists(Inventory.Id))
                 {
                     return NotFound();
                 }
@@ -71,7 +71,7 @@ namespace FoxholeIntelboard.Pages.Lists
 
         private bool InventoryExists(Guid id)
         {
-            return _context.Inventories.Any(e => e.InventoryId == id);
+            return _context.Inventories.Any(e => e.Id == id);
         }
     }
 }

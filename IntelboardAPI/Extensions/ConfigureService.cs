@@ -36,6 +36,7 @@ namespace IntelboardAPI.Extensions
             builder.Services.AddScoped<IMaterialService, MaterialService>();
             builder.Services.AddScoped<IAmmunitionService, AmmunitionService>();
             builder.Services.AddScoped<IWeaponService, WeaponService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
         }
     }

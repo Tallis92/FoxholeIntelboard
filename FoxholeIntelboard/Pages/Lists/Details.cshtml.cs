@@ -28,7 +28,7 @@ namespace FoxholeIntelboard.Pages.Lists
                 return NotFound();
             }
 
-            var inventory = await _context.Inventories.FirstOrDefaultAsync(m => m.InventoryId == id);
+            var inventory = await _context.Inventories.FirstOrDefaultAsync(m => m.Id == id);
 
             if (inventory is not null)
             {

@@ -28,21 +28,26 @@
                     foreach (var item in Model.Ammunitions.Where(i => i.CategoryId == category.Id))
                     {
                         <p> @item.Name</p>
+                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name')">+</button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id)">-</button>
+                        
                     }
                     foreach (var item in Model.Weapons.Where(i => i.CategoryId == category.Id))
                     {
                         <p> @item.Name</p>
                     }
                 }
-                @foreach (var materials in Model.Materials)
+                @foreach (var item in Model.Materials)
                 {
                     <div class="material">
-                        <h4>@materials.Name</h4>
+                        <h4>@item.Name</h4>
                     </div>
                 }
-
             </div>
-)
+
+            <h4>Your List</h4>
+            <ul id="listDisplay"></ul>
+            <input type="hidden" name="SelectedItems" id="SelectedItems" />
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -55,6 +60,71 @@
     <a asp-page="Index">Back to List</a>
 </div>
 
+<script>
+    const list = [];
+
+    function addToList(id, name) {
+        const existing = list.find(c => c.id === id);
+        if (existing) {
+            existing.amount++;
+        } else {
+            list.push({ id, name, amount: 1 });
+        }
+
+        updateListUI();
+    }
+
+    function removeFromList(id){
+        const index = list.findIndex(c => c.id === id);
+        if (index !== -1) {
+            list[index].amount--;
+
+            if (list[index].amount <= 0) {
+                list.splice(index, 1);
+            }
+        }
+
+        updateListUI();
+    }
+
+    function updateListUI() {
+        const display = document.getElementById("listDisplay");
+        display.innerHTML = "";
+
+        list.forEach(item => {
+            const li = document.createElement("li");
+
+            const label = document.createElement("span");
+            label.textContent = `${item.name}: `;
+
+            const input = document.createElement("input");
+            input.type = "number";
+            input.min = 1;
+            input.value = item.amount;
+            input.onchange = () => {
+                const val = parseInt(input.value, 10); // Uses Radix 10 to force the script to only read it as integers.
+
+                if (isNaN(val)) {
+                    input.value = item.amount; 
+                    return;
+                }
+                if (val <= 0) {
+                    const index = list.findIndex(i => i.id === item.id);
+                    list.splice(index, 1);
+                } else {
+                    item.amount = val;
+                }
+                updateListUI();
+            };
+
+            li.appendChild(label);
+            li.appendChild(input);
+            display.appendChild(li);
+        });
+
+        document.getElementById("SelectedItems").value = JSON.stringify(list);
+    }
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

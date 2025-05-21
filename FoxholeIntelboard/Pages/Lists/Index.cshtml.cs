@@ -17,22 +17,24 @@ namespace FoxholeIntelboard.Pages.Lists
         private readonly MaterialManager _materialManager;
         private readonly ResourceManager _resourceManager;
         private readonly WeaponManager _weaponManager;
-        private readonly IntelboardDbContext _context;
-
+        private readonly CategoryManager _categoryManager;
+        private readonly InventoryManager _inventoryManager;
+        public IndexModel(AmmunitionManager ammunitionManager, IntelboardDbContext context, MaterialManager materialManager, 
+            ResourceManager resourceManager, WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager)
+        {
+            _ammunitionManager = ammunitionManager;
+            _materialManager = materialManager;
+            _resourceManager = resourceManager;
+            _weaponManager = weaponManager;
+            _categoryManager = categoryManager;
+            _inventoryManager = inventoryManager;
+        }
         public IList<Ammunition> Ammunitions { get; set; }
         public IList<Material> Materials { get; set; }
         public IList<Resource> Resources { get; set; }
         public IList<Weapon> Weapons { get; set; }
         public IList<Category> Categories { get; set; }
         public List<Inventory> Inventories { get; set; } = new List<Inventory>();
-        public IndexModel(AmmunitionManager ammunitionManager, IntelboardDbContext context, MaterialManager materialManager, ResourceManager resourceManager, WeaponManager weaponManager)
-        {
-            _ammunitionManager = ammunitionManager;
-            _context = context;
-            _materialManager = materialManager;
-            _resourceManager = resourceManager;
-            _weaponManager = weaponManager;
-        }
 
         public async Task OnGetAsync()
         {
@@ -40,7 +42,8 @@ namespace FoxholeIntelboard.Pages.Lists
             Resources = await _resourceManager.GetResourcesAsync();
             Materials = await _materialManager.GetMaterialsAsync();
             Weapons = await _weaponManager.GetWeaponsAsync();
-            Categories = await _resourceManager.GetCategoriesAsync();
+            Categories = await _categoryManager.GetCategoriesAsync();
+            Inventories = await _inventoryManager.GetInventoriesAsync();
         }
 
     }

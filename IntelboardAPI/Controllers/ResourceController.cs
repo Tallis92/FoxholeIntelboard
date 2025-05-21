@@ -82,16 +82,6 @@ namespace IntelboardAPI.Controllers
             await _resourceService.SeedResourcesAsync();
             return Ok("Status kod 200");
         }
-        [HttpPost("SeedCategories")]
-        public async Task<IActionResult> SeedCategoriesAsync()
-        {
-            await _resourceService.SeedCategoriesAsync();
-            return Ok("Status kod 200");
-        }
-        [HttpGet("GetCategories")]
-        public async Task<IList<Category>> GetCategoriesAsync()
-        {
-            return await _context.Categories.ToListAsync();
-        }
+        
     }
 }

@@ -12,12 +12,15 @@ namespace FoxholeIntelboard.Pages
         private readonly MaterialManager _materialManager;
         private readonly ResourceManager _resourceManager;
         private readonly WeaponManager _weaponManager;
-        public AdminModel(AmmunitionManager ammunitionManager, MaterialManager materialManager, ResourceManager resourceManager, WeaponManager weaponManager)
+        private readonly CategoryManager _categoryManager;
+        public AdminModel(AmmunitionManager ammunitionManager, MaterialManager materialManager, ResourceManager resourceManager, 
+            WeaponManager weaponManager, CategoryManager categoryManager)
         {
             _ammunitionManager = ammunitionManager;
             _materialManager = materialManager;
             _resourceManager = resourceManager;
             _weaponManager = weaponManager;
+            _categoryManager = categoryManager;
         }
         public void OnGet()
         {
@@ -25,7 +28,7 @@ namespace FoxholeIntelboard.Pages
 
         public async Task OnPostSeedDatabaseAsync()
         {
-            await _resourceManager.SeedCategoriesAsync();
+            await _categoryManager.SeedCategoriesAsync();
             Console.WriteLine("Finished saving Categories successfully");
             await _resourceManager.SeedResourcesAsync();
             Console.WriteLine("Finished saving Resources successfully!");
