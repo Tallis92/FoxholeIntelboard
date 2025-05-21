@@ -25,6 +25,8 @@ namespace FoxholeIntelboard.Pages
 
         public async Task OnPostSeedDatabaseAsync()
         {
+            await _resourceManager.SeedCategoriesAsync();
+            Console.WriteLine("Finished saving Categories successfully");
             await _resourceManager.SeedResourcesAsync();
             Console.WriteLine("Finished saving Resources successfully!");
             await _materialManager.SeedMaterialsAsync();

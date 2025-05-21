@@ -82,12 +82,37 @@ namespace FoxholeIntelboard.DAL
         public async Task SeedResourcesAsync()
         {
             string uri = "/api/Resource/Seed";
-            var resources = new List<Resource>();
-
             HttpResponseMessage response = await _httpClient.PostAsync(uri, null);
 
             Console.WriteLine(response.IsSuccessStatusCode ? "Resources seeded successfully." : $"Error seeding resources: {response.StatusCode} {response.Content}");
 
+        }
+        public async Task<List<Category>> GetCategoriesAsync()
+        {
+            string uri = "/api/Resources/GetCategories";
+            var categories = new List<Category>();
+
+            HttpResponseMessage response = await _httpClient.GetAsync(uri);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseString = await response.Content.ReadAsStringAsync();
+                categories = JsonSerializer.Deserialize<List<Category>>(responseString);
+            }
+            else
+            {
+                Console.WriteLine($"Error getting resources: {response.StatusCode} {response.Content}");
+            }
+
+            return categories;
+        }
+        public async Task SeedCategoriesAsync()
+        {
+            string uri = "/api/Resource/SeedCategories";
+
+            HttpResponseMessage response = await _httpClient.PostAsync(uri, null);
+
+            Console.WriteLine(response.IsSuccessStatusCode ? "Categories seeded successfully." : $"Error seeding categories: {response.StatusCode} {response.Content}");
         }
     }
 }
