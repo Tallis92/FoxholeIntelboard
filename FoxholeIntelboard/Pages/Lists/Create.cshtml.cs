@@ -1,10 +1,12 @@
 ﻿using FoxholeIntelboard.DAL;
+using IntelboardAPI.DTO;
 using IntelboardAPI.Data;
 using IntelboardAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FoxholeIntelboard.Pages.Lists
 {
@@ -54,10 +56,14 @@ namespace FoxholeIntelboard.Pages.Lists
             {
                 return Page();
             }
-            var items = JsonSerializer.Deserialize<List<CratedItemInput>>(SelectedItems);
-            Inventory.CratedItems = new List<CratedItem>();
+            var inputs = JsonSerializer.Deserialize<List<CratedItemInput>>(SelectedItems);
+            var dto = new InventoryDto
+            {
+                Name = Inventory.Name,
+                CratedItems = new List<CratedItemDto>()
+            };
 
-            foreach (var input in items)
+            foreach (var input in inputs)
             {
                 CraftableItem? item = await _ammunitionManager.GetAmmunitionByIdAsync(input.Id);
                 if (item == null){
@@ -67,25 +73,30 @@ namespace FoxholeIntelboard.Pages.Lists
                 if (item == null){
                     item = await _materialManager.GetMaterialByIdAsync(input.Id);
                 }
-
-                Inventory.CratedItems.Add(new CratedItem
+                if (item == null) continue;
+                dto.CratedItems.Add(new CratedItemDto
                 {
-                    CraftableItem = item,
+                    CraftableItemId = item.Id,
                     Amount = input.Amount,
                     Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport."
                 });
             }
 
-            await _inventoryManager.CreateInventoryAsync(Inventory);
+
+            await _inventoryManager.CreateInventoryAsync(dto);
          
 
             return RedirectToPage("./Index");
         }
         public class CratedItemInput
         {
+            [JsonPropertyName("id")]
             public int Id { get; set; }
+            [JsonPropertyName("name")]
             public string Name { get; set; }
+            [JsonPropertyName("amount")]
             public int Amount { get; set; }
         }
+       
     }
 }

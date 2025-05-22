@@ -1,4 +1,5 @@
 ﻿using IntelboardAPI.Models;
+using IntelboardAPI.DTO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -34,7 +35,7 @@ namespace FoxholeIntelboard.DAL
             return inventories;
         }
 
-        public async Task CreateInventoryAsync(Inventory inventory)
+        public async Task CreateInventoryAsync(InventoryDto inventory)
         {
             string uri = "/api/Inventory/";
             var options = new JsonSerializerOptions
