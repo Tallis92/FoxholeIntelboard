@@ -19,6 +19,7 @@ namespace IntelboardAPI.Data
         public DbSet<Weapon> Weapons { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<CratedItem> CratedItems { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

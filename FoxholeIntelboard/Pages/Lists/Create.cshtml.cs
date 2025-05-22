@@ -66,28 +66,43 @@ namespace FoxholeIntelboard.Pages.Lists
             foreach (var input in inputs)
             {
                 CraftableItem? item = await _ammunitionManager.GetAmmunitionByIdAsync(input.Id);
-                if (item == null){
+                if (item == null)
                     item = await _weaponManager.GetWeaponByIdAsync(input.Id);
+                if (item == null)
+                    item = await _materialManager.GetMaterialByIdAsync(input.Id);
+
+                // Validation: Only add if item exists
+                if (item == null)
+                {
+                    ModelState.AddModelError(string.Empty, $"Item with ID {input.Id} does not exist.");
+                    continue;
                 }
 
-                if (item == null){
-                    item = await _materialManager.GetMaterialByIdAsync(input.Id);
-                }
-                if (item == null) continue;
                 dto.CratedItems.Add(new CratedItemDto
                 {
-                    CraftableItemId = item.Id,
+                    Id = item.Id,
                     Amount = input.Amount,
                     Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport."
                 });
             }
 
+            if (!ModelState.IsValid)
+            {
+                // Return to page and show errors
+                return Page();
+            }
 
             await _inventoryManager.CreateInventoryAsync(dto);
-         
-
             return RedirectToPage("./Index");
         }
+
+        public async Task SeedDataAsync()
+        {
+            await _ammunitionManager.SeedAmmunitionsAsync();
+            await _materialManager.SeedMaterialsAsync();
+            await _weaponManager.SeedWeaponsAsync();
+        }
+
         public class CratedItemInput
         {
             [JsonPropertyName("id")]

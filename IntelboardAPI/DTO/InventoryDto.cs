@@ -8,6 +8,7 @@
 
     public class CratedItemDto
     {
+        public int Id { get; set; }
         public int CraftableItemId { get; set; }
         public int Amount { get; set; }
         public string Description { get; set; }

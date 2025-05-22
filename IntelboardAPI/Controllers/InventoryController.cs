@@ -1,8 +1,8 @@
 ﻿using IntelboardAPI.Data;
-using Microsoft.AspNetCore.Mvc;
-using IntelboardAPI.Models;
-using Microsoft.EntityFrameworkCore;
 using IntelboardAPI.DTO;
+using IntelboardAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace IntelboardAPI.Controllers
 {
@@ -17,10 +17,27 @@ namespace IntelboardAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IList<Inventory>> GetInventoriesAsync()
+        public async Task<IList<InventoryDto>> GetInventoriesAsync()
         {
-            return await _context.Inventories.ToListAsync();
+            var inventories = await _context.Inventories
+                .Include(i => i.CratedItems)
+                .ToListAsync();
+
+            var inventoryDtos = inventories.Select(inventory => new InventoryDto
+            {
+                Name = inventory.Name,
+                CratedItems = inventory.CratedItems.Select(item => new CratedItemDto
+                {
+                    Description = item.Description,
+                    Amount = item.Amount,
+                    CraftableItemId = item.Id 
+                }).ToList()
+            }).ToList();
+
+            return inventoryDtos;
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> CreateInventoryAsync([FromBody] InventoryDto inventory)
@@ -29,15 +46,26 @@ namespace IntelboardAPI.Controllers
             {
                 return BadRequest();
             }
-            List<CratedItem> cratedItems = new List<CratedItem>();
-            foreach(var item in inventory.CratedItems)
+            var cratedItems = new List<CratedItem>();
+
+            foreach (var item in inventory.CratedItems)
             {
-                cratedItems = item;
+                var craftableItem = await _context.CraftableItems.FirstOrDefaultAsync(i => i.Id == item.Id);
+
+
+                var cratedItem = new CratedItem
+                {
+                    Description = item.Description,
+                    Amount = item.Amount,
+                    CraftableItem = craftableItem
+                };
+                cratedItems.Add(cratedItem);
             }
-            Inventory newInventory = new Inventory
+
+            var newInventory = new Inventory
             {
                 Name = inventory.Name,
-                CratedItems = inventory.CratedItems
+                CratedItems = cratedItems
             };
             await _context.Inventories.AddAsync(newInventory);
             await _context.SaveChangesAsync();
