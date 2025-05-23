@@ -39,8 +39,6 @@ namespace IntelboardAPI.Controllers
             return inventoryDtos;
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> CreateInventoryAsync([FromBody] InventoryDto inventory)
         {
@@ -52,7 +50,7 @@ namespace IntelboardAPI.Controllers
 
             foreach (var item in inventory.CratedItems)
             {
-                var craftableItem = await _context.CraftableItems.FirstOrDefaultAsync(i => i.Id == item.Id);
+                var craftableItem = await _context.CraftableItems.FirstOrDefaultAsync(i => i.Id == item.CraftableItemId);
 
 
                 var cratedItem = new CratedItem

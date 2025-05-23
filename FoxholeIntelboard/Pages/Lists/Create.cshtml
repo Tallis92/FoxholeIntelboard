@@ -35,12 +35,16 @@
                     foreach (var item in Model.Weapons.Where(i => i.CategoryId == category.Id))
                     {
                         <p> @item.Name</p>
+                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name')">+</button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id)">-</button>
                     }
                 }
                 @foreach (var item in Model.Materials)
                 {
                     <div class="material">
                         <h4>@item.Name</h4>
+                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name')">+</button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id)">-</button>
                     </div>
                 }
             </div>
