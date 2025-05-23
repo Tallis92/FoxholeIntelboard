@@ -65,11 +65,27 @@ namespace FoxholeIntelboard.Pages.Lists
 
             foreach (var input in inputs)
             {
-                CraftableItem? item = await _ammunitionManager.GetAmmunitionByIdAsync(input.Id);
-                if (item == null)
-                    item = await _weaponManager.GetWeaponByIdAsync(input.Id);
-                if (item == null)
-                    item = await _materialManager.GetMaterialByIdAsync(input.Id);
+                CraftableItem? item = null;
+                switch (input.Type)
+                {
+                    case "Ammunition":
+                        item = await _ammunitionManager.GetAmmunitionByIdAsync(input.Id);
+                        break;
+                    case "Weapon":
+                        item = await _weaponManager.GetWeaponByIdAsync(input.Id);
+                        break;
+                    case "Material":
+                        item = await _materialManager.GetMaterialByIdAsync(input.Id);
+                        break;
+                    default:
+                        ModelState.AddModelError(string.Empty, $"No item with ID {input.Id} was found.");
+                        break;
+                }
+                //CraftableItem? item = await _ammunitionManager.GetAmmunitionByIdAsync(input.Id);
+                //if (item == null)
+                //    item = await _weaponManager.GetWeaponByIdAsync(input.Id);
+                //if (item == null)
+                //    item = await _materialManager.GetMaterialByIdAsync(input.Id);
 
                 // Validation: Only add if item exists
                 if (item == null)
@@ -81,7 +97,6 @@ namespace FoxholeIntelboard.Pages.Lists
                 dto.CratedItems.Add(new CratedItemDto
                 {
                     CraftableItemId= item.Id,
-                    Id = item.Id,
                     Amount = input.Amount,
                     Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport."
                 });
@@ -112,6 +127,8 @@ namespace FoxholeIntelboard.Pages.Lists
             public string Name { get; set; }
             [JsonPropertyName("amount")]
             public int Amount { get; set; }
+            [JsonPropertyName("type")]
+            public string Type { get; set; }
         }
        
     }

@@ -28,14 +28,14 @@
                     foreach (var item in Model.Ammunitions.Where(i => i.CategoryId == category.Id))
                     {
                         <p> @item.Name</p>
-                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name')">+</button>
+                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name', 'Ammunition')">+</button>
                         <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id)">-</button>
                         
                     }
                     foreach (var item in Model.Weapons.Where(i => i.CategoryId == category.Id))
                     {
                         <p> @item.Name</p>
-                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name')">+</button>
+                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name', 'Weapon')">+</button>
                         <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id)">-</button>
                     }
                 }
@@ -43,7 +43,7 @@
                 {
                     <div class="material">
                         <h4>@item.Name</h4>
-                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name')">+</button>
+                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
                         <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id)">-</button>
                     </div>
                 }
@@ -67,19 +67,19 @@
 <script>
     const list = [];
 
-    function addToList(id, name) {
-        const existing = list.find(c => c.id === id);
+    function addToList(id, name, type) {
+        const existing = list.find(c => c.id === id && c.type === type)
         if (existing) {
             existing.amount++;
         } else {
-            list.push({ id, name, amount: 1 });
+            list.push({ id, name, type, amount: 1 });
         }
 
         updateListUI();
     }
 
-    function removeFromList(id){
-        const index = list.findIndex(c => c.id === id);
+    function removeFromList(id, type){
+        const index = list.findIndex(c => c.id === id && c.type === type)
         if (index !== -1) {
             list[index].amount--;
 
