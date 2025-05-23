@@ -15,17 +15,17 @@ namespace FoxholeIntelboard.DAL
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri("https://localhost:7088/");
         }
-        public async Task<List<Inventory>> GetInventoriesAsync()
+        public async Task<List<InventoryDto>> GetInventoriesAsync()
         {
             string uri = "/api/Inventory/";
-            var inventories = new List<Inventory>();
+            var inventories = new List<InventoryDto>();
 
             HttpResponseMessage response = await _httpClient.GetAsync(uri);
 
             if (response.IsSuccessStatusCode)
             {
                 string responseString = await response.Content.ReadAsStringAsync();
-                inventories = JsonSerializer.Deserialize<List<Inventory>>(responseString);
+                inventories = JsonSerializer.Deserialize<List<InventoryDto>>(responseString);
             }
             else
             {

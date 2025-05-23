@@ -20,17 +20,19 @@ namespace IntelboardAPI.Controllers
         public async Task<IList<InventoryDto>> GetInventoriesAsync()
         {
             var inventories = await _context.Inventories
-                .Include(i => i.CratedItems)
+                .Include(i => i.CratedItems).ThenInclude(c => c.CraftableItem)
                 .ToListAsync();
 
             var inventoryDtos = inventories.Select(inventory => new InventoryDto
             {
+                InventoryId = inventory.Id,
                 Name = inventory.Name,
                 CratedItems = inventory.CratedItems.Select(item => new CratedItemDto
                 {
                     Description = item.Description,
                     Amount = item.Amount,
-                    CraftableItemId = item.Id 
+                    CraftableItemId = item.CraftableItem.Id
+                    
                 }).ToList()
             }).ToList();
 

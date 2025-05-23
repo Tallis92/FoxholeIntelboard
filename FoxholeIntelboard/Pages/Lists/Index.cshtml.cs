@@ -1,5 +1,6 @@
 ﻿using FoxholeIntelboard.DAL;
 using IntelboardAPI.Data;
+using IntelboardAPI.DTO;
 using IntelboardAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace FoxholeIntelboard.Pages.Lists
 {
@@ -19,7 +21,8 @@ namespace FoxholeIntelboard.Pages.Lists
         private readonly WeaponManager _weaponManager;
         private readonly CategoryManager _categoryManager;
         private readonly InventoryManager _inventoryManager;
-        public IndexModel(AmmunitionManager ammunitionManager, IntelboardDbContext context, MaterialManager materialManager, 
+        private readonly IntelboardDbContext _context;
+        public IndexModel(AmmunitionManager ammunitionManager, IntelboardDbContext context, MaterialManager materialManager,
             ResourceManager resourceManager, WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager)
         {
             _ammunitionManager = ammunitionManager;
@@ -28,13 +31,15 @@ namespace FoxholeIntelboard.Pages.Lists
             _weaponManager = weaponManager;
             _categoryManager = categoryManager;
             _inventoryManager = inventoryManager;
+            _context = context;
         }
         public IList<Ammunition> Ammunitions { get; set; }
         public IList<Material> Materials { get; set; }
         public IList<Resource> Resources { get; set; }
         public IList<Weapon> Weapons { get; set; }
         public IList<Category> Categories { get; set; }
-        public List<Inventory> Inventories { get; set; } = new List<Inventory>();
+        public List<InventoryDto> Inventories { get; set; } = new List<InventoryDto>();
+        public List<CraftableItem> CraftableItems { get; set; } = new List<CraftableItem>();
 
         public async Task OnGetAsync()
         {
@@ -44,6 +49,8 @@ namespace FoxholeIntelboard.Pages.Lists
             Weapons = await _weaponManager.GetWeaponsAsync();
             Categories = await _categoryManager.GetCategoriesAsync();
             Inventories = await _inventoryManager.GetInventoriesAsync();
+            CraftableItems = await _context.CraftableItems.ToListAsync();
+            
         }
 
     }
