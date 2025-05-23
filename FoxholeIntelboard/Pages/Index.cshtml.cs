@@ -42,9 +42,6 @@ public class IndexModel : PageModel
     }
 
 
-    //public async Task<IActionResult> OnPostAsync()
-    //{
-        
-    //}
+   
 
 }

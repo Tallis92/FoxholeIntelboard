@@ -56,7 +56,9 @@ namespace FoxholeIntelboard.Pages.Lists
             {
                 return Page();
             }
+
             var inputs = JsonSerializer.Deserialize<List<CratedItemInput>>(SelectedItems);
+
             var dto = new InventoryDto
             {
                 Name = Inventory.Name,
@@ -65,6 +67,8 @@ namespace FoxholeIntelboard.Pages.Lists
 
             foreach (var input in inputs)
             {
+                // Uses switch case to determine what type of object input is to select wich manager to get the item from.
+                // This avoids missmatches with Id's from different tables.
                 CraftableItem? item = null;
                 switch (input.Type)
                 {
@@ -81,11 +85,6 @@ namespace FoxholeIntelboard.Pages.Lists
                         ModelState.AddModelError(string.Empty, $"No item with ID {input.Id} was found.");
                         break;
                 }
-                //CraftableItem? item = await _ammunitionManager.GetAmmunitionByIdAsync(input.Id);
-                //if (item == null)
-                //    item = await _weaponManager.GetWeaponByIdAsync(input.Id);
-                //if (item == null)
-                //    item = await _materialManager.GetMaterialByIdAsync(input.Id);
 
                 // Validation: Only add if item exists
                 if (item == null)
@@ -104,19 +103,11 @@ namespace FoxholeIntelboard.Pages.Lists
 
             if (!ModelState.IsValid)
             {
-                // Return to page and show errors
                 return Page();
             }
 
             await _inventoryManager.CreateInventoryAsync(dto);
             return RedirectToPage("./Index");
-        }
-
-        public async Task SeedDataAsync()
-        {
-            await _ammunitionManager.SeedAmmunitionsAsync();
-            await _materialManager.SeedMaterialsAsync();
-            await _weaponManager.SeedWeaponsAsync();
         }
 
         public class CratedItemInput
