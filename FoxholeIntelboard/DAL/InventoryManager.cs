@@ -9,10 +9,16 @@ namespace FoxholeIntelboard.DAL
     public class InventoryManager
     {
         private readonly HttpClient _httpClient;
+        private readonly AmmunitionManager _ammunitionManager;
+        private readonly WeaponManager _weaponManager;
+        private readonly MaterialManager _materialManager;
 
-        public InventoryManager(HttpClient httpClient)
+        public InventoryManager(HttpClient httpClient, AmmunitionManager ammunitionManager, WeaponManager weaponManager, MaterialManager materialManager)
         {
             _httpClient = httpClient;
+            _ammunitionManager = ammunitionManager;
+            _weaponManager = weaponManager;
+            _materialManager = materialManager;
             _httpClient.BaseAddress = new Uri("https://localhost:7088/");
         }
         public async Task<List<InventoryDto>> GetInventoriesAsync()
@@ -90,6 +96,30 @@ namespace FoxholeIntelboard.DAL
 
             Console.WriteLine(response.IsSuccessStatusCode ? "Inventory updated successfully." : $"Error updated inventory: {response.StatusCode} {response.Content}");
 
+        }
+
+        // Uses switch case to determine what type of object input is to select wich manager to get the item from.
+        // This avoids missmatches with Id's from different tables.
+        public async Task<CraftableItem?> getInputItemAsync(CratedItemInput input)
+        {
+            CraftableItem? item = null;
+            switch (input.Type)
+            {
+                case "Ammunition":
+                    item = await _ammunitionManager.GetAmmunitionByIdAsync(input.Id);
+                    break;
+                case "Weapon":
+                    item = await _weaponManager.GetWeaponByIdAsync(input.Id);
+                    break;
+                case "Material":
+                    item = await _materialManager.GetMaterialByIdAsync(input.Id);
+                    break;
+                default:
+
+                    item = null;
+                    break;
+            }
+            return item;
         }
     }
 }

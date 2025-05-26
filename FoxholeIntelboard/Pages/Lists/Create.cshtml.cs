@@ -66,25 +66,8 @@ namespace FoxholeIntelboard.Pages.Lists
             };
 
             foreach (var input in inputs)
-            {
-                // Uses switch case to determine what type of object input is to select wich manager to get the item from.
-                // This avoids missmatches with Id's from different tables.
-                CraftableItem? item = null;
-                switch (input.Type)
-                {
-                    case "Ammunition":
-                        item = await _ammunitionManager.GetAmmunitionByIdAsync(input.Id);
-                        break;
-                    case "Weapon":
-                        item = await _weaponManager.GetWeaponByIdAsync(input.Id);
-                        break;
-                    case "Material":
-                        item = await _materialManager.GetMaterialByIdAsync(input.Id);
-                        break;
-                    default:
-                        ModelState.AddModelError(string.Empty, $"No item with ID {input.Id} was found.");
-                        break;
-                }
+            {             
+                CraftableItem? item = await _inventoryManager.getInputItemAsync(input);
 
                 // Validation: Only add if item exists
                 if (item == null)

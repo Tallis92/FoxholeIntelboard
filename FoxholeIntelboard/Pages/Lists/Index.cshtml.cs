@@ -21,9 +21,10 @@ namespace FoxholeIntelboard.Pages.Lists
         private readonly WeaponManager _weaponManager;
         private readonly CategoryManager _categoryManager;
         private readonly InventoryManager _inventoryManager;
-        private readonly IntelboardDbContext _context;
+        private readonly CraftableItemManager _craftableItemManager;
         public IndexModel(AmmunitionManager ammunitionManager, IntelboardDbContext context, MaterialManager materialManager,
-            ResourceManager resourceManager, WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager)
+            ResourceManager resourceManager, WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager,
+            CraftableItemManager craftableItemManager)
         {
             _ammunitionManager = ammunitionManager;
             _materialManager = materialManager;
@@ -31,7 +32,7 @@ namespace FoxholeIntelboard.Pages.Lists
             _weaponManager = weaponManager;
             _categoryManager = categoryManager;
             _inventoryManager = inventoryManager;
-            _context = context;
+            _craftableItemManager = craftableItemManager;
         }
         public IList<Ammunition> Ammunitions { get; set; }
         public IList<Material> Materials { get; set; }
@@ -39,7 +40,7 @@ namespace FoxholeIntelboard.Pages.Lists
         public IList<Weapon> Weapons { get; set; }
         public IList<Category> Categories { get; set; }
         public List<InventoryDto> Inventories { get; set; } = new List<InventoryDto>();
-        public List<CraftableItem> CraftableItems { get; set; } = new List<CraftableItem>();
+        public List<CraftableItemDto> CraftableItems { get; set; } = new List<CraftableItemDto>();
 
         public async Task OnGetAsync()
         {
@@ -49,7 +50,7 @@ namespace FoxholeIntelboard.Pages.Lists
             Weapons = await _weaponManager.GetWeaponsAsync();
             Categories = await _categoryManager.GetCategoriesAsync();
             Inventories = await _inventoryManager.GetInventoriesAsync();
-            CraftableItems = await _context.CraftableItems.ToListAsync();
+            CraftableItems = await _craftableItemManager.GetCraftableItemsAsync();
             
         }
 
