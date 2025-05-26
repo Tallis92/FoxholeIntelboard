@@ -12,13 +12,9 @@
 
   <ItemGroup>
     <Compile Remove="DAL\**" />
-    <Compile Remove="DTO\**" />
     <Content Remove="DAL\**" />
-    <Content Remove="DTO\**" />
     <EmbeddedResource Remove="DAL\**" />
-    <EmbeddedResource Remove="DTO\**" />
     <None Remove="DAL\**" />
-    <None Remove="DTO\**" />
   </ItemGroup>
 
   <ItemGroup>

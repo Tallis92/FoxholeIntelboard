@@ -1,0 +1,100 @@
+﻿@page
+@model FoxholeIntelboard.Pages.Lists.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<style>
+    .accordion-btn {
+        all: unset;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+        font-weight: bold;
+    }
+
+    .panel-row {
+        display: none;
+        background-color: #f9f9f9;
+    }
+
+    .panel-row.open {
+        display: table-row;
+    }
+
+    .panel-content a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .panel-content a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Inventories[0].Name)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@for (int i = 0; i < Model.Inventories.Count; i++)
+{
+    var item = Model.Inventories[i];
+    <tr>
+        <td>
+            <button class="accordion-btn" data-index="@i">
+                @item.Name
+            </button>
+        </td>
+        <td>
+            <a asp-page="./Edit" asp-route-id="@item.InventoryId">Edit</a> |
+            <a asp-page="./Details" asp-route-id="@item.InventoryId">Details</a> |
+            <a asp-page="./Delete" asp-route-id="@item.InventoryId">Delete</a>
+        </td>
+    </tr>
+    <tr class="panel-row" id="panel-@i">
+        <td colspan="2" class="panel-content">
+            <ul>
+                @foreach (var crate in item.CratedItems)
+                {
+                    var cratedItem = Model.CraftableItems.FirstOrDefault(c => c.Id == crate.CraftableItemId);
+                    if (cratedItem != null)
+                    {
+                        <li>
+                            <a asp-page="/Ammunitions/Details" asp-route-id="@cratedItem.Id">
+                                @crate.Amount x @cratedItem.Name
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        </td>
+    </tr>
+}
+
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll(".accordion-btn");
+
+        buttons.forEach(btn => {
+            btn.addEventListener("click", function (e) {
+                e.stopPropagation(); // för säkerhets skull
+                const index = this.getAttribute("data-index");
+                const panel = document.getElementById("panel-" + index);
+                panel.classList.toggle("open");
+            });
+        });
+    });
+</script>

@@ -2,7 +2,7 @@
 using IntelboardAPI.Models;
 using System.Text;
 using System.Text.Json;
-namespace FoxholeIntelboard.DAL
+namespace IntelboardAPI.DAL
 {
     public class ResourceManager
     {
@@ -82,11 +82,12 @@ namespace FoxholeIntelboard.DAL
         public async Task SeedResourcesAsync()
         {
             string uri = "/api/Resource/Seed";
+            var resources = new List<Resource>();
+
             HttpResponseMessage response = await _httpClient.PostAsync(uri, null);
 
             Console.WriteLine(response.IsSuccessStatusCode ? "Resources seeded successfully." : $"Error seeding resources: {response.StatusCode} {response.Content}");
 
         }
-       
     }
 }

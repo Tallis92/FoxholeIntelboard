@@ -1,9 +1,7 @@
-﻿using IntelboardAPI.Models;
-namespace IntelboardAPI.Services;
+﻿namespace IntelboardAPI.Services;
 
 public interface IResourceService
-    {
-       Task SeedResourcesAsync();
-       Task SeedCategoriesAsync();
+{
+    Task SeedResourcesAsync();
 }
 

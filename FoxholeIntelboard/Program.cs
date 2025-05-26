@@ -11,6 +11,8 @@ builder.Services.AddScoped<AmmunitionManager>();
 builder.Services.AddScoped<MaterialManager>();
 builder.Services.AddScoped<ResourceManager>();
 builder.Services.AddScoped<WeaponManager>();
+builder.Services.AddScoped<CategoryManager>();
+builder.Services.AddScoped<InventoryManager>();
 builder.Services.AddDbContext<IntelboardDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
 
@@ -32,6 +34,19 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+
+// Seed data at startup
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var ammunitionManager = services.GetRequiredService<AmmunitionManager>();
+    var materialManager = services.GetRequiredService<MaterialManager>();
+    var weaponManager = services.GetRequiredService<WeaponManager>();
+
+    await ammunitionManager.SeedAmmunitionsAsync();
+    await materialManager.SeedMaterialsAsync();
+    await weaponManager.SeedWeaponsAsync();
+}
 
 app.Run();
 

@@ -4,6 +4,7 @@ using IntelboardAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntelboardAPI.Migrations
 {
     [DbContext(typeof(IntelboardDbContext))]
-    partial class IntelboardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250521081500_Inventory")]
+    partial class Inventory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,15 +29,13 @@ namespace IntelboardAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "name");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -106,22 +107,19 @@ namespace IntelboardAPI.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Amount")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "amount");
+                        .HasColumnType("int");
 
                     b.Property<int>("CraftableItemId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "description");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("InventoryId")
                         .HasColumnType("uniqueidentifier");
@@ -132,24 +130,20 @@ namespace IntelboardAPI.Migrations
 
                     b.HasIndex("InventoryId");
 
-                    b.ToTable("CratedItems");
-
-                    b.HasAnnotation("Relational:JsonPropertyName", "cratedItems");
+                    b.ToTable("CratedItem");
                 });
 
             modelBuilder.Entity("IntelboardAPI.Models.Inventory", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("InventoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasAnnotation("Relational:JsonPropertyName", "id");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "name");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("InventoryId");
 
                     b.ToTable("Inventories");
                 });
@@ -302,7 +296,7 @@ namespace IntelboardAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("IntelboardAPI.Models.Inventory", null)
-                        .WithMany("CratedItems")
+                        .WithMany("CratedItem")
                         .HasForeignKey("InventoryId");
 
                     b.Navigation("CraftableItem");
@@ -342,7 +336,7 @@ namespace IntelboardAPI.Migrations
 
             modelBuilder.Entity("IntelboardAPI.Models.Inventory", b =>
                 {
-                    b.Navigation("CratedItems");
+                    b.Navigation("CratedItem");
                 });
 #pragma warning restore 612, 618
         }
