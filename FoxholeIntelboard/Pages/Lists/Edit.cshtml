@@ -75,8 +75,6 @@
 
     function addToList(id, name, type) {
         const existing = list.find(c => c.id === id && c.type === type);
-        console.log("Input Id: " + id);
-        console.log('Existing Id: ' + existing.id);
         if (existing) {
             existing.amount++;
         } else {
