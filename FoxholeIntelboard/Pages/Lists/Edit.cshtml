@@ -13,6 +13,7 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Inventory.Id" />
             <div class="form-group">
                 <label asp-for="Inventory.Name" class="control-label"></label>
                 <input asp-for="Inventory.Name" class="form-control" />
@@ -63,21 +64,23 @@
 </div>
 
 @{
-    var itemsJson = Model.Inventory.CratedItems != null
-        ? System.Text.Json.JsonSerializer.Serialize(Model.Inventory.CratedItems)
+    var itemsJson = Model.CratedItems != null
+        ? System.Text.Json.JsonSerializer.Serialize(Model.CratedItems)
         : "[]";
 }
 <script>
     const list = @Html.Raw(itemsJson); // list blir JS-array direkt
-    console.log(list);
     // Initiera listan från servern (modelldata)
-    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Inventory.CratedItems))
+    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CratedItems))
 
     function addToList(id, name, type) {
         const existing = list.find(c => c.id === id && c.type === type);
+        console.log("Input Id: " + id);
+        console.log('Existing Id: ' + existing.id);
         if (existing) {
             existing.amount++;
         } else {
+           
             list.push({ id, name, type, amount: 1 });
         }
         updateListUI();
@@ -102,8 +105,13 @@
             const li = document.createElement("li");
 
             const label = document.createElement("span");
-            label.textContent = `${item.name}: `;
-
+            if (item.craftableItem == null) {
+                label.textContent = `${item.name}`;
+            }
+            else {
+                label.textContent = `${item.craftableItem.name}: `;
+            }
+            
             const input = document.createElement("input");
             input.type = "number";
             input.min = 1;

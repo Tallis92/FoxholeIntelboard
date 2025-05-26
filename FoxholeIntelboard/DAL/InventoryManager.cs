@@ -80,5 +80,16 @@ namespace FoxholeIntelboard.DAL
             }
             return inventory;
         }
+
+        public async Task EditInventoryAsync(InventoryDto inventory)
+        {
+            string uri = $"/api/Inventory/{inventory.InventoryId}";
+            var json = JsonSerializer.Serialize(inventory);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
+
+            Console.WriteLine(response.IsSuccessStatusCode ? "Inventory updated successfully." : $"Error updated inventory: {response.StatusCode} {response.Content}");
+
+        }
     }
 }

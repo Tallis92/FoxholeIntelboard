@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace FoxholeIntelboard.Pages.Lists
@@ -45,8 +46,8 @@ namespace FoxholeIntelboard.Pages.Lists
         public Inventory Inventory { get; set; }
         [BindProperty]
         public string SelectedItems { get; set; }
-  
-        public IList<InventoryDto> inventoryDtos { get; set; } 
+
+        public List<CratedItemInput> CratedItems { get; set; } = new List<CratedItemInput>();
 
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -56,13 +57,6 @@ namespace FoxholeIntelboard.Pages.Lists
             {
                 return NotFound();
             }
-
-            Ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
-            Resources = await _resourceManager.GetResourcesAsync();
-            Materials = await _materialManager.GetMaterialsAsync();
-            Weapons = await _weaponManager.GetWeaponsAsync();
-            Categories = await _categoryManager.GetCategoriesAsync();
-
             var inventory = await _context.Inventories
                 .Include(i => i.CratedItems)
                     .ThenInclude(ci => ci.CraftableItem) // <-- Den här lägger till namn etc.
@@ -72,6 +66,36 @@ namespace FoxholeIntelboard.Pages.Lists
                 return NotFound();
             }
             Inventory = inventory;
+            Ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
+            Resources = await _resourceManager.GetResourcesAsync();
+            Materials = await _materialManager.GetMaterialsAsync();
+            Weapons = await _weaponManager.GetWeaponsAsync();
+            Categories = await _categoryManager.GetCategoriesAsync();
+            foreach (var item in inventory.CratedItems)
+            {
+                CratedItemInput selectItem = new CratedItemInput();
+                selectItem.Id = item.CraftableItem.Id;
+                selectItem.Name = item.CraftableItem.Name;
+                selectItem.Amount = item.Amount;
+                switch (item.CraftableItem)
+                {
+                    case Ammunition ammo:
+                        selectItem.Type = "Ammunition";
+                        break;
+                    case Weapon weapon:
+                        selectItem.Type = "Weapon";
+                        break;
+                    case Material material:
+                        selectItem.Type = "Material";
+                        break;
+                    default:
+                        Console.WriteLine("Itemtype could not be found");
+                        break;
+                }
+                CratedItems.Add(selectItem);
+            }
+            JsonSerializer.Serialize<List<CratedItemInput>>(CratedItems);
+           
             return Page();
         }
 
@@ -83,31 +107,64 @@ namespace FoxholeIntelboard.Pages.Lists
             {
                 return Page();
             }
-
-            _context.Attach(Inventory).State = EntityState.Modified;
-
-            try
+            var inputs = JsonSerializer.Deserialize<List<CratedItemInput>>(SelectedItems);
+            var dto = new InventoryDto
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
+                InventoryId = Inventory.Id,
+                Name = Inventory.Name,
+                CratedItems = new List<CratedItemDto>()
+            };
+
+            foreach (var input in inputs)
             {
-                if (!InventoryExists(Inventory.Id))
+                // Uses switch case to determine what type of object input is to select wich manager to get the item from.
+                // This avoids missmatches with Id's from different tables.
+                CraftableItem? item = null;
+                switch (input.Type)
                 {
-                    return NotFound();
+                    case "Ammunition":
+                        item = await _ammunitionManager.GetAmmunitionByIdAsync(input.Id);
+                        break;
+                    case "Weapon":
+                        item = await _weaponManager.GetWeaponByIdAsync(input.Id);
+                        break;
+                    case "Material":
+                        item = await _materialManager.GetMaterialByIdAsync(input.Id);
+                        break;
+                    default:
+                        ModelState.AddModelError(string.Empty, $"No item with ID {input.Id} was found.");
+                        break;
                 }
-                else
+
+                // Validation: Only add if item exists
+                if (item == null)
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, $"Item with ID {input.Id} does not exist.");
+                    continue;
                 }
+
+                dto.CratedItems.Add(new CratedItemDto
+                {
+                    CraftableItemId = item.Id,
+                    Amount = input.Amount,
+                    Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport."
+                });
             }
+            if (!await InventoryExistsAsync(Inventory.Id))
+            {
+                return NotFound();
+            }
+
+            await _inventoryManager.EditInventoryAsync(dto);
+
 
             return RedirectToPage("./Index");
         }
 
-        private bool InventoryExists(Guid id)
+        private async Task<bool> InventoryExistsAsync(Guid id)
         {
-            return _context.Inventories.Any(e => e.Id == id);
+            var inventories = await _inventoryManager.GetInventoriesAsync();
+            return inventories.Any(e => e.InventoryId == id);
         }
     }
 }

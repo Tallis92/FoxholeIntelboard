@@ -24,4 +24,16 @@ namespace IntelboardAPI.DTO
         [JsonPropertyName("description")]
         public string Description { get; set; }
     }
+
+    public class CratedItemInput
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+        [JsonPropertyName("amount")]
+        public int Amount { get; set; }
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+    }
 }
