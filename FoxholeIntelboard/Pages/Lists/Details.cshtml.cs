@@ -7,19 +7,24 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using IntelboardAPI.Data;
 using IntelboardAPI.Models;
+using FoxholeIntelboard.DAL;
+using IntelboardAPI.DTO;
 
 namespace FoxholeIntelboard.Pages.Lists
 {
     public class DetailsModel : PageModel
     {
-        private readonly IntelboardAPI.Data.IntelboardDbContext _context;
+        private readonly InventoryManager _inventoryManager;
+        private readonly CraftableItemManager _craftableItemManager;
 
-        public DetailsModel(IntelboardAPI.Data.IntelboardDbContext context)
+        public DetailsModel(InventoryManager inventoryManager, CraftableItemManager craftableItemManager)
         {
-            _context = context;
+            _inventoryManager = inventoryManager;
+            _craftableItemManager = craftableItemManager;
         }
 
-        public Inventory Inventory { get; set; } = default!;
+        public InventoryDto Inventory { get; set; } = default!;
+        public IList<CraftableItemDto> CraftableItems { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -28,11 +33,13 @@ namespace FoxholeIntelboard.Pages.Lists
                 return NotFound();
             }
 
-            var inventory = await _context.Inventories.FirstOrDefaultAsync(m => m.Id == id);
+            var inventory = await _inventoryManager.GetInventoryByIdAsync(id);
+            var craftableItems = await _craftableItemManager.GetCraftableItemsAsync();
 
-            if (inventory is not null)
+            if (inventory is not null && craftableItems is not null)
             {
                 Inventory = inventory;
+                CraftableItems = craftableItems;
 
                 return Page();
             }

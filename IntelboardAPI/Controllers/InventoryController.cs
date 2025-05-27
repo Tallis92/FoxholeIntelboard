@@ -39,16 +39,38 @@ namespace IntelboardAPI.Controllers
 
             return inventoryDtos;
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Inventory>> GetInventoryByIdAsync(Guid id)
+        public async Task<ActionResult<InventoryDto>> GetInventoryByIdAsync(Guid id)
         {
-            var list = await _context.Inventories.FindAsync(id);
-            if (list == null)
+            var inventory = await _context.Inventories
+                .Include(i => i.CratedItems)
+                    .ThenInclude(ci => ci.CraftableItem)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (inventory == null)
             {
                 return NotFound();
             }
-            return Ok(list);
+
+            var dto = new InventoryDto
+            {
+                InventoryId = inventory.Id,
+                Name = inventory.Name,
+                CratedItems = inventory.CratedItems.Select(ci => new CratedItemDto
+                {
+                    Id = ci.Id,
+                    CraftableItemId = ci.CraftableItem.Id,
+                    Amount = ci.Amount,
+                    Description = ci.Description
+
+                  
+                }).ToList()
+            };
+
+            return Ok(dto);
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInventoryAsync(Guid id)
         {

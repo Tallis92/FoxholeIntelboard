@@ -66,11 +66,11 @@
             <ul>
                 @foreach (var crate in item.CratedItems)
                 {
-                    var cratedItem = Model.CraftableItems.FirstOrDefault(c => c.Id == crate.CraftableItemId);
+                    var cratedItem = Model.CraftableItems.FirstOrDefault(c => c.CraftableItemId == crate.CraftableItemId);
                     if (cratedItem != null)
                     {
                         <li>
-                            <a asp-page="/Ammunitions/Details" asp-route-id="@cratedItem.Id">
+                            <a asp-page="/Ammunitions/Details" asp-route-id="@cratedItem.CraftableItemId">
                                 @crate.Amount x @cratedItem.Name
                             </a>
                         </li>

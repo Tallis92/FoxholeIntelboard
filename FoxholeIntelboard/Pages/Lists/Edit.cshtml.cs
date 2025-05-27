@@ -57,20 +57,24 @@ namespace FoxholeIntelboard.Pages.Lists
             {
                 return NotFound();
             }
+
             var inventory = await _context.Inventories
                 .Include(i => i.CratedItems)
-                    .ThenInclude(ci => ci.CraftableItem) // <-- Den här lägger till namn etc.
+                    .ThenInclude(ci => ci.CraftableItem)
                 .FirstOrDefaultAsync(i => i.Id == id);
+
             if (inventory == null)
             {
                 return NotFound();
             }
+
             Inventory = inventory;
             Ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
             Resources = await _resourceManager.GetResourcesAsync();
             Materials = await _materialManager.GetMaterialsAsync();
             Weapons = await _weaponManager.GetWeaponsAsync();
             Categories = await _categoryManager.GetCategoriesAsync();
+
             foreach (var item in inventory.CratedItems)
             {
                 CratedItemInput selectItem = new CratedItemInput();
@@ -99,8 +103,6 @@ namespace FoxholeIntelboard.Pages.Lists
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -108,6 +110,7 @@ namespace FoxholeIntelboard.Pages.Lists
                 return Page();
             }
             var inputs = JsonSerializer.Deserialize<List<CratedItemInput>>(SelectedItems);
+
             var dto = new InventoryDto
             {
                 InventoryId = Inventory.Id,
@@ -116,26 +119,9 @@ namespace FoxholeIntelboard.Pages.Lists
             };
 
             foreach (var input in inputs)
-            {
-                // Uses switch case to determine what type of object input is to select wich manager to get the item from.
-                // This avoids missmatches with Id's from different tables.
-                CraftableItem? item = null;
-                switch (input.Type)
-                {
-                    case "Ammunition":
-                        item = await _ammunitionManager.GetAmmunitionByIdAsync(input.Id);
-                        break;
-                    case "Weapon":
-                        item = await _weaponManager.GetWeaponByIdAsync(input.Id);
-                        break;
-                    case "Material":
-                        item = await _materialManager.GetMaterialByIdAsync(input.Id);
-                        break;
-                    default:
-                        ModelState.AddModelError(string.Empty, $"No item with ID {input.Id} was found.");
-                        break;
-                }
-
+            {    
+                CraftableItem? item = await _inventoryManager.getInputItemAsync(input);
+               
                 // Validation: Only add if item exists
                 if (item == null)
                 {

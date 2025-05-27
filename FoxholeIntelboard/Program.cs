@@ -2,7 +2,7 @@ using FoxholeIntelboard.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Services + Dependency Injection
+//Services + Dependency Injection
 builder.BuildServices();
 
 var app = builder.Build();
