@@ -2,20 +2,12 @@ using IntelboardAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Services + Dependency Injection
 builder.AddServices();
 
 var app = builder.Build();
 
-app.UseCors("AllowFrontend");
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
+// Middleware
+app.ConfigureApiPipeline();
 
 app.Run();
