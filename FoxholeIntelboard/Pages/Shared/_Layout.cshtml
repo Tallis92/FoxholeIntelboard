@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
+
+@{
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+                   ?? IntelboardAPI.Models.DemoUser.Role;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -28,6 +35,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Lists/Index">List management</a>
                         </li>
+                            @if(demoRole == "Admin")
+                            {
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" id="adminMenu" data-bs-toggle="dropdown" aria-expanded="false">
                                     Admin
@@ -46,7 +55,21 @@
                                     <form id="seedDatabase" method="post" asp-page="/Admin" asp-page-handler="SeedDatabase"></form>
                                 </ul>
                             </div>
+                            }
+                            
                         </li>
+                        @*This is for demo purposes only! Will be removed and replaced for actual users in the future!*@
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="roleMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                Role: @demoRole
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="roleMenu">
+                                <li class="dropdown-item" onclick="setRole('Admin')">Admin</li>
+                                <li class="dropdown-item" onclick="setRole('User')">User</li>
+                                <li class="dropdown-item" onclick="setRole('Reader')">Reader</li>
+                            </ul>
+                        </div>
+                       
                     </ul>
                 </div>
             </div>
@@ -67,9 +90,29 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+            function setRole(role) {
+                   fetch('https://localhost:7088/api/user/demo-role',  {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(role)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log('Role set to:', data.role);
+            document.cookie = `demoRole=${data.role}; path=/`;
+            location.reload();
+        })
+        .catch(err => console.error('Error setting role:', err));
 
+        console.log(role)
+        }
+        
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
    
-   
+
 </body>
 </html>
