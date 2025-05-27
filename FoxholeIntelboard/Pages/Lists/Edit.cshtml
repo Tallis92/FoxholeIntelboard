@@ -5,86 +5,116 @@
     ViewData["Title"] = "Edit";
 }
 
+// --- Rubriker och form början ---
 <h1>Edit</h1>
 
 <h4>Inventory</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+
+<div class="d-flex flex-row">
+    <!-- Formulär kolumn -->
+    <div class="col-md-8">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input type="hidden" asp-for="Inventory.Id" />
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="Inventory.Name" class="control-label"></label>
                 <input asp-for="Inventory.Name" class="form-control" />
                 <span asp-validation-for="Inventory.Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <!-- Kategorier som dropdowns -->
+            <div class="d-flex flex-wrap gap-3 mb-4">
                 @foreach (var category in Model.Categories)
                 {
-                    <div class="category">
-                        <h4>@category.Name</h4>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            @category.Name
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach (var item in Model.Ammunitions.Where(i => i.CategoryId == category.Id))
+                            {
+                                <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                    <span>@item.Name</span>
+                                    <span>
+                                        <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Ammunition')">+</button>
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Ammunition')">-</button>
+                                    </span>
+                                </li>
+                            }
+                            @foreach (var item in Model.Weapons.Where(i => i.CategoryId == category.Id))
+                            {
+                                <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                    <span>@item.Name</span>
+                                    <span>
+                                        <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Weapon')">+</button>
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Weapon')">-</button>
+                                    </span>
+                                </li>
+                            }
+                        </ul>
                     </div>
-                    foreach (var item in Model.Ammunitions.Where(i => i.CategoryId == category.Id))
-                    {
-                        <p>@item.Name</p>
-                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name', 'Ammunition')">+</button>
-                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Ammunition')">-</button>
-                    }
-                    foreach (var item in Model.Weapons.Where(i => i.CategoryId == category.Id))
-                    {
-                        <p>@item.Name</p>
-                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name', 'Weapon')">+</button>
-                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Weapon')">-</button>
-                    }
                 }
-                @foreach (var item in Model.Materials)
-                {
-                    <div class="material">
-                        <h4>@item.Name</h4>
-                        <button type="button" class="btn btn-sm btn-success" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
-                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Material')">-</button>
-                    </div>
-                }
+
+                <!-- Materials dropdown -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                        Supplies
+                    </button>
+                    <ul class="dropdown-menu">
+                        @foreach (var item in Model.Materials)
+                        {
+                            <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                <span>@item.Name</span>
+                                <span>
+                                    <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Material')">-</button>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
 
-            <h4>Your List</h4>
-            <ul id="listDisplay"></ul>
+            <!-- Hidden field som håller listan i JSON -->
             <input type="hidden" name="SelectedItems" id="SelectedItems" />
 
-            <div class="form-group">
+            <div class="form-group mt-4">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+
+        <div class="mt-3">
+            <a asp-page="Index">Back to List</a>
+        </div>
+    </div>
+
+    <!-- Din lista i sidospalten -->
+    <div id="your-list" class="position-sticky top-0 ms-4 p-3 bg-light border rounded shadow" style="min-width: 300px; height: fit-content;">
+        <h5>Your List</h5>
+        <ul id="listDisplay" class="list-group"></ul>
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
 
-@{
-    var itemsJson = Model.CratedItems != null
-        ? System.Text.Json.JsonSerializer.Serialize(Model.CratedItems)
-        : "[]";
-}
 <script>
-    const list = @Html.Raw(itemsJson); // list blir JS-array direkt
-    // Initiera listan från servern (modelldata)
-    @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CratedItems))
+var selectedItemsJson = ViewData["SelectedItemsJson"] ?? "[]";
+var selectedItems = @Html.Raw(ViewData["SelectedItemsJson"]);
+    console.log(selectedItems);
 
     function addToList(id, name, type) {
         const existing = list.find(c => c.id === id && c.type === type);
         if (existing) {
             existing.amount++;
         } else {
-           
             list.push({ id, name, type, amount: 1 });
         }
         updateListUI();
     }
 
-    function removeFromList(id, type){
+    function removeFromList(id, type) {
         const index = list.findIndex(c => c.id === id && c.type === type);
         if (index !== -1) {
             list[index].amount--;
@@ -101,30 +131,24 @@
 
         list.forEach(item => {
             const li = document.createElement("li");
+            li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
 
             const label = document.createElement("span");
-            if (item.craftableItem == null) {
-                label.textContent = `${item.name}`;
-            }
-            else {
-                label.textContent = `${item.craftableItem.name}: `;
-            }
-            
+            label.textContent = item.name;
+
             const input = document.createElement("input");
             input.type = "number";
             input.min = 1;
             input.value = item.amount;
+            input.classList.add("form-control", "form-control-sm");
+            input.style.width = "70px";
+
             input.onchange = () => {
                 const val = parseInt(input.value, 10);
-
-                if (isNaN(val)) {
-                    input.value = item.amount;
-                    return;
-                }
-                if (val <= 0) {
-                    const index = list.findIndex(i => i.id === item.id && i.type === item.type);
-                    if (index !== -1) {
-                        list.splice(index, 1);
+                if (isNaN(val) || val <= 0) {
+                    const idx = list.findIndex(i => i.id === item.id && i.type === item.type);
+                    if (idx !== -1) {
+                        list.splice(idx, 1);
                     }
                 } else {
                     item.amount = val;
@@ -137,16 +161,19 @@
             display.appendChild(li);
         });
 
-        // Uppdatera den dolda inputen med JSON-string av listan
+        // Uppdatera dold input med JSON-sträng av listan
         document.getElementById("SelectedItems").value = JSON.stringify(list);
     }
 
-    // Kör UI-uppdatering direkt vid sidladdning för att visa sparade värden
+    // Stoppa dropdown från att stängas vid klick inuti menyn
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.addEventListener('click', e => e.stopPropagation());
+    });
+
+    // Kör UI-uppdatering direkt vid sidladdning för att visa initiala data
     updateListUI();
 </script>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
