@@ -7,20 +7,22 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using IntelboardAPI.Data;
 using IntelboardAPI.Models;
+using FoxholeIntelboard.DAL;
+using IntelboardAPI.DTO;
 
 namespace FoxholeIntelboard.Pages.Lists
 {
     public class DeleteModel : PageModel
     {
-        private readonly IntelboardAPI.Data.IntelboardDbContext _context;
+        private readonly InventoryManager _inventoryManager;
 
-        public DeleteModel(IntelboardAPI.Data.IntelboardDbContext context)
+        public DeleteModel(InventoryManager inventoryManager)
         {
-            _context = context;
+            _inventoryManager = inventoryManager;
         }
 
         [BindProperty]
-        public Inventory Inventory { get; set; } = default!;
+        public InventoryDto Inventory { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
@@ -29,7 +31,7 @@ namespace FoxholeIntelboard.Pages.Lists
                 return NotFound();
             }
 
-            var inventory = await _context.Inventories.FirstOrDefaultAsync(m => m.Id == id);
+            var inventory = await _inventoryManager.GetInventoryByIdAsync(id);
 
             if (inventory is not null)
             {
@@ -48,13 +50,7 @@ namespace FoxholeIntelboard.Pages.Lists
                 return NotFound();
             }
 
-            var inventory = await _context.Inventories.FindAsync(id);
-            if (inventory != null)
-            {
-                Inventory = inventory;
-                _context.Inventories.Remove(Inventory);
-                await _context.SaveChangesAsync();
-            }
+            await _inventoryManager.DeleteInventoryAsync(id);
 
             return RedirectToPage("./Index");
         }

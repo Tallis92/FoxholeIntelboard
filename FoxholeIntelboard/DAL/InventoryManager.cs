@@ -51,5 +51,45 @@ namespace FoxholeIntelboard.DAL
             Console.WriteLine(response.IsSuccessStatusCode ? "Inventory created successfully." : $"Error creating inventory: {response.StatusCode} {response.Content}");
 
         }
+        public async Task DeleteInventoryAsync(Guid? id)
+        {
+            string uri = $"/api/Inventory/{id}";
+            HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Inventory deleted successfully.");
+            }
+            else
+            {
+                Console.WriteLine($"Error deleting inventory: {response.StatusCode} {response.Content}");
+            }
+        }
+        public async Task<InventoryDto> GetInventoryByIdAsync(Guid? id)
+        {
+            string uri = $"/api/Inventory/{id}";
+            InventoryDto inventory = null;
+            HttpResponseMessage response = await _httpClient.GetAsync(uri);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseString = await response.Content.ReadAsStringAsync();
+                inventory = JsonSerializer.Deserialize<InventoryDto>(responseString);
+            }
+            else
+            {
+                Console.WriteLine($"Error getting inventory by ID: {response.StatusCode} {response.Content}");
+            }
+            return inventory;
+        }
+
+        public async Task EditInventoryAsync(InventoryDto inventory)
+        {
+            string uri = $"/api/Inventory/{inventory.InventoryId}";
+            var json = JsonSerializer.Serialize(inventory);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
+
+            Console.WriteLine(response.IsSuccessStatusCode ? "Inventory updated successfully." : $"Error updated inventory: {response.StatusCode} {response.Content}");
+
+        }
     }
 }
