@@ -100,9 +100,7 @@
 
 
 <script>
-var selectedItemsJson = ViewData["SelectedItemsJson"] ?? "[]";
-var selectedItems = @Html.Raw(ViewData["SelectedItemsJson"]);
-    console.log(selectedItems);
+    const list = @Html.Raw(Json.Serialize(Model.CratedItems ?? new List<IntelboardAPI.DTO.CratedItemInput>()));
 
     function addToList(id, name, type) {
         const existing = list.find(c => c.id === id && c.type === type);
