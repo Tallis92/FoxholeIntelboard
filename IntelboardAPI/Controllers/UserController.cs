@@ -54,5 +54,18 @@ namespace IntelboardAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok(existingUser);
         }
+
+        // This is only for demo purposes, will be removed and remade for actual users in the future
+        [HttpPost("demo-role")]
+        public IActionResult SetDemoRole([FromBody] string newRole)
+        {
+            DemoUser.Role = newRole;
+            return Ok(new { success = true, role = newRole });
+        }
+
+        public class RoleRequest
+        {
+            public string Role { get; set; }
+        }
     }
 }
