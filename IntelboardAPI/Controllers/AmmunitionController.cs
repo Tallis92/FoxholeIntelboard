@@ -1,6 +1,7 @@
 ﻿using IntelboardAPI.Data;
 using IntelboardAPI.Models;
 using IntelboardAPI.Services;
+using IntelboardAPI.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,12 +20,12 @@ namespace IntelboardAPI.Controllers
             _service = service;
         }
 
-        [HttpGet] 
+        [HttpGet]
         public async Task<List<Ammunition>> GetAmmunitions()
         {
-            
-             return await _context.Ammunitions.ToListAsync();
-            
+            var ammunitions = await _context.Ammunitions.ToListAsync();
+            return ammunitions;
+          
         }
 
         [HttpGet("{id}")]

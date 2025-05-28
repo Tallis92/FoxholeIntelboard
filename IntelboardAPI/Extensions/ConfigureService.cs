@@ -9,9 +9,14 @@ namespace IntelboardAPI.Extensions
         public static void AddServices(this WebApplicationBuilder builder)
         {
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+             .AddJsonOptions(options =>
+             {
+                 options.JsonSerializerOptions.WriteIndented = true; // optional
+             });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
 
             // CORS policy to allow requests from the frontend
             builder.Services.AddCors(options =>

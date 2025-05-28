@@ -1,4 +1,5 @@
 ﻿using IntelboardAPI.Models;
+using IntelboardAPI.DTO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -27,6 +28,8 @@ namespace FoxholeIntelboard.DAL
             if (response.IsSuccessStatusCode)
             {
                 string responseString = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("RESPONSE:");
+                Console.WriteLine(responseString);
                 ammunitions = JsonSerializer.Deserialize<List<Ammunition>>(responseString);
             }
             else
@@ -35,8 +38,8 @@ namespace FoxholeIntelboard.DAL
             }
 
             return ammunitions;
-
         }
+
         public async Task<Ammunition> GetAmmunitionByIdAsync(int? id)
         {
             string uri = $"/api/Ammunition/{id}";

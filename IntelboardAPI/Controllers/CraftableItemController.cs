@@ -38,8 +38,7 @@ namespace IntelboardAPI.Controllers
                         MaterialId = cost.MaterialId
                     };
                     currentCraftable.ProductionCost.Add(costDto);
-                }
-                //currentCraftable.ProductionCost = costs.Where(c => c.CraftableItemId == item.Id).Select(c => c.CraftableItem == item.ProductionCost).ToList();
+                }       
                 craftablesDto.Add(currentCraftable);
             }
             return craftablesDto;
