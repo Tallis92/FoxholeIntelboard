@@ -87,6 +87,21 @@
             <a asp-page="Index">Back to List</a>
         </div>
     </div>
+    <!-- Fixed Box: Your List -->
+    <div id="your-list" class="position-sticky top-0 ms-4 p-3 bg-light border rounded shadow" style="min-width: 300px; height: fit-content;">
+        <h5>Your List</h5>
+        <ul id="listDisplay" class="list-group"></ul>
+        <div>
+            <h5>Total cost:</h5>
+            @foreach (var item in Model.CraftableItems)
+            {
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>@item.CraftableItemId</span>
+                    <span>@item.ProductionCost[0].Amount</span>
+                </div>
+            }
+        </div>
+    </div>
 
     <!-- Fixed Box: Your List -->
     <div id="your-list" class="position-sticky top-0 ms-4 p-3 bg-light border rounded shadow" style="min-width: 300px; height: fit-content;">

@@ -13,6 +13,6 @@ Console.WriteLine("Build is starting...");
 app.ConfigurePipeline();
 
 // Seed database
-await app.SeedDatabaseAsync();
+//await app.SeedDatabaseAsync();
 
 app.Run();

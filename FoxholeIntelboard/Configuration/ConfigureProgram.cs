@@ -19,7 +19,6 @@ namespace FoxholeIntelboard.Configuration
             builder.Services.AddScoped<InventoryManager>();
             builder.Services.AddScoped<CraftableItemManager>();
             builder.Services.AddHttpContextAccessor();
-
             builder.Services.AddDbContext<IntelboardDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
         }

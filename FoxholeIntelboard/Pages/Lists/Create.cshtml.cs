@@ -18,9 +18,10 @@ namespace FoxholeIntelboard.Pages.Lists
         private readonly WeaponManager _weaponManager;
         private readonly CategoryManager _categoryManager;
         private readonly InventoryManager _inventoryManager;
+        private readonly CraftableItemManager _craftableItemManager;
 
         public CreateModel(AmmunitionManager ammunitionManager, MaterialManager materialManager,
-            ResourceManager resourceManager, WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager)
+            ResourceManager resourceManager, WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager, CraftableItemManager craftableItemManager)
         {
             _ammunitionManager = ammunitionManager;
             _materialManager = materialManager;
@@ -28,14 +29,16 @@ namespace FoxholeIntelboard.Pages.Lists
             _weaponManager = weaponManager;
             _categoryManager = categoryManager;
             _inventoryManager = inventoryManager;
+            _craftableItemManager = craftableItemManager;
         }
 
+        public List <CratedItemInput> CratedItemInputs { get; set; } = new List<CratedItemInput>();
         public IList<Ammunition> Ammunitions { get; set; }
         public IList<Material> Materials { get; set; }
         public IList<Resource> Resources { get; set; }
         public IList<Weapon> Weapons { get; set; }
         public IList<Category> Categories { get; set; }
-        public IList<CraftableItem> CraftableItems { get; set; }
+        public IList<CraftableItemDto> CraftableItems { get; set; }
         [BindProperty]
         public Inventory Inventory { get; set; }
         [BindProperty]
@@ -48,6 +51,7 @@ namespace FoxholeIntelboard.Pages.Lists
             Materials = await _materialManager.GetMaterialsAsync();
             Weapons = await _weaponManager.GetWeaponsAsync();
             Categories = await _categoryManager.GetCategoriesAsync();
+            CraftableItems = await _craftableItemManager.GetCraftableItemsAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -58,6 +62,7 @@ namespace FoxholeIntelboard.Pages.Lists
             }
 
             var inputs = JsonSerializer.Deserialize<List<CratedItemInput>>(SelectedItems);
+            CratedItemInputs = inputs; 
 
             var dto = new InventoryDto
             {
