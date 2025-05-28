@@ -52,6 +52,7 @@ namespace FoxholeIntelboard.Pages.Lists
             Weapons = await _weaponManager.GetWeaponsAsync();
             Categories = await _categoryManager.GetCategoriesAsync();
             CraftableItems = await _craftableItemManager.GetCraftableItemsAsync();
+            
         }
 
         public async Task<IActionResult> OnPostAsync()

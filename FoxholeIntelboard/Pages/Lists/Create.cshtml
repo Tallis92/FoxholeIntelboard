@@ -102,7 +102,9 @@
 @section Scripts { 
     @{
         <script>
-            window.productionCosts = @Html.Raw(Json.Serialize(Model.CraftableItems.Select(ci => ci.ProductionCost).ToList()));
+            window.productionCosts = @Html.Raw(Json.Serialize(Model.CraftableItems.ToList()));
+            window.resources = @Html.Raw(Json.Serialize(Model.Resources.Select(r => new { id = r.Id, name = r.Name })));
+            window.materials = @Html.Raw(Json.Serialize(Model.Materials.Select(m => new { id = m.Id, name = m.Name })));
         </script>
         <script src="~/js/inventory.js"></script>
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

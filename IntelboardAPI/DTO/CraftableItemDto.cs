@@ -13,6 +13,9 @@ namespace IntelboardAPI.DTO
 
         [JsonPropertyName("productionCost")]
         public List<CostDto> ProductionCost { get; set; } = new();
+
+        [JsonPropertyName("crateAmount")]
+        public int CrateAmount { get; set; }
     }
     public class CostDto
     {
@@ -25,6 +28,8 @@ namespace IntelboardAPI.DTO
         public int? ResourceId { get; set; }
         [JsonPropertyName("materialId")]
         public int? MaterialId { get; set; }
+        [JsonPropertyName("componentName")]
+        public string ComponentName { get; set; }
        
     }
 }

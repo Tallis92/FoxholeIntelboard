@@ -1,8 +1,8 @@
 ﻿using IntelboardAPI.Data;
+using IntelboardAPI.DTO;
 using IntelboardAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.DTO;
 
 namespace IntelboardAPI.Controllers
 {
@@ -23,11 +23,31 @@ namespace IntelboardAPI.Controllers
 
             List<CraftableItemDto> craftablesDto = new List<CraftableItemDto>();
             var craftables = await _context.CraftableItems.ToListAsync();
-            foreach(var item in craftables)
+            foreach (var item in craftables)
             {
-                CraftableItemDto currentCraftable = new CraftableItemDto();
-                currentCraftable.CraftableItemId = item.Id;
-                currentCraftable.Name = item.Name;
+                CraftableItemDto currentCraftable = new CraftableItemDto
+                {
+                    CraftableItemId = item.Id,
+                    Name = item.Name
+                };
+
+                // Determine CrateAmount from subclass
+                switch (item)
+                {
+                    case Weapon weapon:
+                        currentCraftable.CrateAmount = weapon.CrateAmount;
+                        break;
+                    case Material material:
+                        currentCraftable.CrateAmount = material.CrateAmount;
+                        break;
+                    case Ammunition ammo:
+                        currentCraftable.CrateAmount = ammo.CrateAmount;
+                        break;
+                    default:
+                        currentCraftable.CrateAmount = 0;
+                        break;
+                }
+
                 foreach (var cost in costs.Where(c => c.CraftableItemId == item.Id))
                 {
                     CostDto costDto = new CostDto
@@ -39,7 +59,7 @@ namespace IntelboardAPI.Controllers
                     };
                     currentCraftable.ProductionCost.Add(costDto);
                 }
-                //currentCraftable.ProductionCost = costs.Where(c => c.CraftableItemId == item.Id).Select(c => c.CraftableItem == item.ProductionCost).ToList();
+
                 craftablesDto.Add(currentCraftable);
             }
             return craftablesDto;

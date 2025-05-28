@@ -1,6 +1,9 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
     const list = [];
     const productionCosts = window.productionCosts || [];
+    const flatProductionCosts = productionCosts.flat();
+    const resources = window.resources || [];  // ← added
+    const materials = window.materials || [];  // ← added
 
     function addToList(id, name, type) {
         const existing = list.find(c => c.id === id && c.type === type);
@@ -45,8 +48,8 @@
                 const val = parseInt(input.value, 10);
                 if (isNaN(val)) return input.value = item.amount;
                 if (val <= 0) {
-                    const index = list.findIndex(i => i.id === item.id && i.type === item.type);
-                    list.splice(index, 1);
+                    const idx = list.findIndex(i => i.id === item.id && i.type === item.type);
+                    list.splice(idx, 1);
                 } else {
                     item.amount = val;
                 }
@@ -69,17 +72,72 @@
         const materialTotals = {};
         const resourceTotals = {};
 
+        console.log("Checking List: ", list);
         list.forEach(item => {
-            const cost = productionCosts.find(c => c.id === item.id && c.type === item.type);
-            if (cost) {
-                if (cost.materialName && cost.materials) {
-                    if (!materialTotals[cost.materialName]) materialTotals[cost.materialName] = 0;
-                    materialTotals[cost.materialName] += cost.materials * item.amount;
-                }
-                if (cost.resourceName && cost.resources) {
-                    if (!resourceTotals[cost.resourceName]) resourceTotals[cost.resourceName] = 0;
-                    resourceTotals[cost.resourceName] += cost.resources * item.amount;
-                }
+            console.log("Checking Item: ", item);
+
+            // -> use filter() instead of find() to get all matches
+            const costs = flatProductionCosts.filter(c => c.craftableItemId === item.id);
+            console.log("Checking productionCosts", flatProductionCosts);
+            console.log("Checking cost", costs);
+
+            if (costs.length === 0) {
+                console.log("Cost not found");
+            } else {
+                console.log("Cost exists");
+                costs.forEach(cost => {  
+                    let x = 1;
+                    cost.productionCost.forEach(subCost => {
+                        console.log("Subcost " + x);
+
+                        if (subCost.materialId != null) {
+                            const materialName = materials.find(m => m.id === subCost.materialId)?.name;
+                            const materialCrateAmount = materials.find(m => m.id === subCost.materialId)?.crateAmount || 1;
+
+                            if (materialName) {
+                                if (!materialTotals[materialName]) materialTotals[materialName] = 0;
+                                const materialQty = subCost.amount * item.amount;
+                                materialTotals[materialName] += materialQty;
+
+                                const materialProductionCost = flatProductionCosts.find(c => c.craftableItemId === subCost.materialId);
+                                if (materialProductionCost) {
+                                    materialProductionCost.productionCost.forEach(matSubCost => {
+                                        const resourceName = resources.find(r => r.id === matSubCost.resourceId)?.name;
+                                        if (resourceName) {
+                                            if (!resourceTotals[resourceName]) resourceTotals[resourceName] = 0;
+
+                                            const salvageCost = matSubCost.amount * materialQty;
+                                            resourceTotals[resourceName] += salvageCost;
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        if (subCost.resourceId != null) {
+                            const resourceName = resources.find(r => r.id === subCost.resourceId)?.name;
+                            console.log(
+                                "Resource Name: " + resourceName +
+                                " | Resource Id: " + subCost.resourceId +
+                                " | Material Id: " + subCost.materialId +
+                                " | Cost Amount: " + subCost.amount +
+                                " | Crate Amount: " + cost.crateAmount
+                            );
+                            if (!resourceTotals[resourceName]) resourceTotals[resourceName] = 0;
+
+                            if (cost.name == "Diesel") {
+                                resourceTotals[resourceName] += subCost.amount * 1 * item.amount;
+                            }
+                            else {
+                                resourceTotals[resourceName] += subCost.amount * cost.crateAmount * item.amount;
+                            }
+                           
+                        }
+
+                        x++;
+                        console.log("Totals: ", resourceTotals);
+                    });
+                });
             }
         });
 
@@ -95,7 +153,6 @@
                 row.innerHTML = `<span>- ${name}</span><span>${total}</span>`;
                 section.appendChild(row);
             }
-
             return section;
         };
 
@@ -107,13 +164,11 @@
         }
     }
 
-
     // Stop dropdown click propagation
     document.querySelectorAll('.dropdown-menu').forEach(menu => {
         menu.addEventListener('click', e => e.stopPropagation());
     });
 
-    // Expose functions to global scope if needed
     window.addToList = addToList;
     window.removeFromList = removeFromList;
 });
