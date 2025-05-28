@@ -1,1 +1,8 @@
 ﻿Name,CategoryId,FactionId,CrateAmount,Description,WeaponType,AmmunitionId,WeaponProperties
+No.2 Loughcaster,1,0,20,Standard-issue Warden rifle. This bolt-action firearm is as robust as they come and has seen over a century of use on the battlefield.,0,10,0;1
+Fiddler Submachine Gun Model 868,1,0,20,The Fiddler Submachine gun is a widely used urban combat weapon. Its high rate of fire and compact frame make it ideal for close-quarters engagements.,8,13,
+The Hangman 757,1,0,20,The weapon of choice for pirates and smugglers. Its legend is well-earned. With incredibly high stopping power and unique revolver mechanism the Hangman often plays judge jury and executioner.,2,14,0;1;12
+No.4 The Pillory Scattergun,1,0,20,A hunting shotgun with a sawn-off barrel for higher stopping power and mobility at the expense of accuracy. This traditional civilian firearm can fire two shots in rapid succession before needing to be reloaded. It became a favourite sidearm among Caoivish Watchers and has since earned quite an ominous reputation as a result.,6,15,13
+Aalto Storm Rifle 24,1,0,20,Widely considered to be the first storm rifle the Aalto is a marvel in Caoivish engineering. With its two fire modes it can be used as a rapid-fire assault weapon or an mid-range rifle.,3,11,
+Malone MK.2,1,0,5,This heavy machine gun is bulky enough to require a steady surface to maintain stability. The Malone series of machine guns are unmatched defenders on the battlefield.,10,16,5;3
+20 Neville Anti-Tank Rifle,2,0,3,The Neville is unmatched in its versatility as a portable magazine-based anti-armour firearm.,13,18,8;6;5
