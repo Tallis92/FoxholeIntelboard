@@ -22,7 +22,7 @@
                 <span asp-validation-for="Inventory.Name" class="text-danger"></span>
             </div>
 
-            <!-- Horizontal Category Dropdowns -->
+            <!-- Dropdowns per kategori -->
             <div class="d-flex flex-wrap gap-3 mb-4">
                 @foreach (var category in Model.Categories)
                 {
@@ -54,28 +54,26 @@
                         </ul>
                     </div>
                 }
-          
 
-            <!-- Basic Materials (not in dropdowns) -->
-            <div class="btn-group">
-    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-        Supplies
-    </button>
-    <ul class="dropdown-menu">
-        @foreach (var item in Model.Materials)
-        {
-            <li class="dropdown-item d-flex justify-content-between align-items-center">
-                <span>@item.Name</span>
-                <span>
-                    <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Material')">-</button>
-                </span>
-            </li>
-            }
-        </ul>
-    </div>
-</div>
-
+                <!-- Material Dropdown -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                        Supplies
+                    </button>
+                    <ul class="dropdown-menu">
+                        @foreach (var item in Model.Materials)
+                        {
+                            <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                <span>@item.Name</span>
+                                <span>
+                                    <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Material')">-</button>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
 
             <input type="hidden" name="SelectedItems" id="SelectedItems" />
             <div class="form-group mt-4">
@@ -87,103 +85,26 @@
             <a asp-page="Index">Back to List</a>
         </div>
     </div>
-    <!-- Fixed Box: Your List -->
-    <div id="your-list" class="position-sticky top-0 ms-4 p-3 bg-light border rounded shadow" style="min-width: 300px; height: fit-content;">
-        <h5>Your List</h5>
-        <ul id="listDisplay" class="list-group"></ul>
-        <div>
-            <h5>Total cost:</h5>
-            @foreach (var item in Model.CraftableItems)
-            {
-                <div class="d-flex justify-content-between align-items-center">
-                    <span>@item.CraftableItemId</span>
-                    <span>@item.ProductionCost[0].Amount</span>
-                </div>
-            }
-        </div>
-    </div>
 
-    <!-- Fixed Box: Your List -->
-    <div id="your-list" class="position-sticky top-0 ms-4 p-3 bg-light border rounded shadow" style="min-width: 300px; height: fit-content;">
+    <!-- Sticky Sidebar -->
+    <div id="your-list" class="inventory-sidebar">
         <h5>Your List</h5>
         <ul id="listDisplay" class="list-group"></ul>
+        <div id="cost-summary">
+            <h5>Total cost:</h5>
+            <div id="costDisplay"></div>
+        </div>
     </div>
 </div>
 
-<!-- Script -->
-<script>
-    const list = [];
 
-    function addToList(id, name, type) {
-        const existing = list.find(c => c.id === id && c.type === type)
-        if (existing) {
-            existing.amount++;
-        } else {
-            list.push({ id, name, type, amount: 1 });
-        }
 
-        updateListUI();
+@section Scripts { 
+    @{
+        <script>
+            window.productionCosts = @Html.Raw(Json.Serialize(Model.CraftableItems.Select(ci => ci.ProductionCost).ToList()));
+        </script>
+        <script src="~/js/inventory.js"></script>
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    function removeFromList(id, type) {
-        const index = list.findIndex(c => c.id === id && c.type === type)
-        if (index !== -1) {
-            list[index].amount--;
-
-            if (list[index].amount <= 0) {
-                list.splice(index, 1);
-            }
-        }
-
-        updateListUI();
-    }
-
-    function updateListUI() {
-        const display = document.getElementById("listDisplay");
-        display.innerHTML = "";
-
-        list.forEach(item => {
-            const li = document.createElement("li");
-            li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
-
-            const label = document.createElement("span");
-            label.textContent = `${item.name}: `;
-
-            const input = document.createElement("input");
-            input.type = "number";
-            input.min = 1;
-            input.value = item.amount;
-            input.classList.add("form-control", "form-control-sm");
-            input.style.width = "70px";
-
-            input.onchange = () => {
-                const val = parseInt(input.value, 10);
-
-                if (isNaN(val)) {
-                    input.value = item.amount;
-                    return;
-                }
-                if (val <= 0) {
-                    const index = list.findIndex(i => i.id === item.id && i.type === item.type);
-                    list.splice(index, 1);
-                } else {
-                    item.amount = val;
-                }
-                updateListUI();
-            };
-
-            li.appendChild(label);
-            li.appendChild(input);
-            display.appendChild(li);
-        });
-
-        document.getElementById("SelectedItems").value = JSON.stringify(list);
-    }
-    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        menu.addEventListener('click', e => e.stopPropagation());
-    });
-</script>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
