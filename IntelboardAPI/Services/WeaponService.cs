@@ -21,8 +21,8 @@ namespace IntelboardAPI.Services
             var materialLookup = await _context.Materials.ToDictionaryAsync(r => r.Name);
             var weaponNames = await _context.Weapons.Select(m => m.Name).ToListAsync();
 
-            var weaponFilePath = Path.Combine(_env.ContentRootPath, "Data\\CSV", "Weapons.csv");
-            var costFilePath = Path.Combine(_env.ContentRootPath, "Data\\CSV", "WeaponCosts.csv");
+            var weaponFilePath = Path.Combine(_env.ContentRootPath, "Data\\CSV", "ColonialWeapons.csv");
+            var costFilePath = Path.Combine(_env.ContentRootPath, "Data\\CSV", "ColonialWeaponCosts.csv");
             var weaponLookup = new Dictionary<string, Weapon>();
 
             if (File.Exists(weaponFilePath))

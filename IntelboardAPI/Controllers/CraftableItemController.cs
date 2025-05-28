@@ -27,6 +27,9 @@ namespace IntelboardAPI.Controllers
                 currentCraftable.CraftableItemId = item.Id;
                 currentCraftable.Name = item.Name;
                 currentCraftable.ProductionCost = item.ProductionCost;
+                foreach(var cost in currentCraftable.ProductionCost.Where(c => c.CraftableItemId == item.Id)){
+
+                }
                 craftablesDto.Add(currentCraftable);
             }
             return craftablesDto;
