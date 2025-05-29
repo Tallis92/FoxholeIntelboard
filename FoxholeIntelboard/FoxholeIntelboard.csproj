@@ -27,7 +27,8 @@
     <IncludeAssets>compile</IncludeAssets>
     <PrivateAssets>all</PrivateAssets>
   </ProjectReference>
-  </ItemGroup>
+</ItemGroup>
+
 	
   <ItemGroup>
   <Content Update="appsettings*.json">

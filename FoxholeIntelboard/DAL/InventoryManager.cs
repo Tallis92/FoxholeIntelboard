@@ -98,8 +98,8 @@ namespace FoxholeIntelboard.DAL
 
         }
 
-        // Uses switch case to determine what type of object input is to select wich manager to get the item from.
-        // This avoids missmatches with Id's from different tables.
+        // Uses switch case to determine what type of object input is to select which manager to get the item from.
+        // This avoids mismatches with Id's from different tables.
         public async Task<CraftableItem?> getInputItemAsync(CratedItemInput input)
         {
             CraftableItem? item = null;
