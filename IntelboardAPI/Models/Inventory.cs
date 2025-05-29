@@ -25,9 +25,10 @@ namespace IntelboardAPI.Models
         [JsonPropertyName("description")]
         public string  Description { get; set; }
 
+
         // EF Core kräver alltid en parameterlös konstruktor (offentlig eller skyddad) för att kunna skapa objekt från databasen.
         public CratedItem() { }
-        public CratedItem(CraftableItem item, int amount, string description)
+        public CratedItem(CraftableItem item, int amount, string description, string name)
         {
             CraftableItem = item;
             Id = item.Id;

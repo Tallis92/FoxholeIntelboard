@@ -5,6 +5,8 @@ namespace IntelboardAPI.DTO
 {
     public class CraftableItemDto
     {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
         [JsonPropertyName("craftableItemId")]
         public int CraftableItemId { get; set; }
 

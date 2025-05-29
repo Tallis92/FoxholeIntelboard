@@ -5,9 +5,7 @@
     ViewData["Title"] = "Edit";
 }
 
-// --- Rubriker och form början ---
 <h1>Edit</h1>
-
 <h4>Inventory</h4>
 <hr />
 
@@ -17,7 +15,7 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <input type="hidden" asp-for="Inventory.Id" />
+            <input type="hidden" asp-for="Inventory.InventoryId" />
 
             <div class="form-group mb-3">
                 <label asp-for="Inventory.Name" class="control-label"></label>
@@ -25,7 +23,7 @@
                 <span asp-validation-for="Inventory.Name" class="text-danger"></span>
             </div>
 
-            <!-- Kategorier som dropdowns -->
+            <!-- Categories dropdowns -->
             <div class="d-flex flex-wrap gap-3 mb-4">
                 @foreach (var category in Model.Categories)
                 {
@@ -78,7 +76,7 @@
                 </div>
             </div>
 
-            <!-- Hidden field som håller listan i JSON -->
+            <!-- Hidden field that keeps the list JSON -->
             <input type="hidden" name="SelectedItems" id="SelectedItems" />
 
             <div class="form-group mt-4">
@@ -91,15 +89,26 @@
         </div>
     </div>
 
-    <!-- Din lista i sidospalten -->
+    <!-- Your List in the side panel -->
     <div id="your-list" class="position-sticky top-0 ms-4 p-3 bg-light border rounded shadow" style="min-width: 300px; height: fit-content;">
         <h5>Your List</h5>
         <ul id="listDisplay" class="list-group"></ul>
+        <div id="cost-summary">
+            <h5>Total cost:</h5>
+            <div id="costDisplay"></div>
+        </div>
     </div>
 </div>
 
 
 <script>
+    window.productionCosts = @Html.Raw(Json.Serialize(Model.CraftableItems.ToList()));
+    window.resources = @Html.Raw(Json.Serialize(Model.Resources.Select(r => new { id = r.Id, name = r.Name })));
+    window.materials = @Html.Raw(Json.Serialize(Model.Materials.Select(m => new { id = m.Id, name = m.Name })));
+    window.existingItems = @Html.Raw(Json.Serialize(Model.CratedItems.ToList()));
+</script>
+<script src="~/js/inventory.js"></script>
+@* <script>
     const list = @Html.Raw(Json.Serialize(Model.CratedItems ?? new List<IntelboardAPI.DTO.CratedItemInput>()));
 
     function addToList(id, name, type) {
@@ -170,7 +179,7 @@
 
     // Kör UI-uppdatering direkt vid sidladdning för att visa initiala data
     updateListUI();
-</script>
+</script> *@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

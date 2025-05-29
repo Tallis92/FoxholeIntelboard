@@ -2,8 +2,20 @@
     const list = [];
     const productionCosts = window.productionCosts || [];
     const flatProductionCosts = productionCosts.flat();
-    const resources = window.resources || [];  // ← added
-    const materials = window.materials || [];  // ← added
+    const resources = window.resources || [];
+    const materials = window.materials || [];
+    const existingItems = window.existingItems || [];
+
+    existingItems.forEach(item => {
+        const existing = list.find(c => c.id === item.id && c.type === item.type);
+        if (existing) {
+            existing.amount += item.amount;
+        } else {
+            list.push({ ...item });
+        }
+    });
+
+    updateListUI();
 
     function addToList(id, name, type) {
         const existing = list.find(c => c.id === id && c.type === type);
@@ -29,7 +41,6 @@
     function updateListUI() {
         const display = document.getElementById("listDisplay");
         display.innerHTML = "";
-
         list.forEach(item => {
             const li = document.createElement("li");
             li.className = "list-group-item d-flex justify-content-between align-items-center";
@@ -74,9 +85,8 @@
 
         console.log("Checking List: ", list);
         list.forEach(item => {
-            console.log("Checking Item: ", item);
 
-            // -> use filter() instead of find() to get all matches
+            console.log("Checking Item: ", item);
             const costs = flatProductionCosts.filter(c => c.craftableItemId === item.id);
             console.log("Checking productionCosts", flatProductionCosts);
             console.log("Checking cost", costs);

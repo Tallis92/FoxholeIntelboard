@@ -53,6 +53,7 @@ namespace IntelboardAPI.Controllers
                 return NotFound();
             }
 
+
             var dto = new InventoryDto
             {
                 InventoryId = inventory.Id,
@@ -62,10 +63,14 @@ namespace IntelboardAPI.Controllers
                     Id = ci.Id,
                     CraftableItemId = ci.CraftableItem.Id,
                     Amount = ci.Amount,
-                    Description = ci.Description
+                    Description = ci.Description,
+                    Type = ci.CraftableItem is Ammunition ? "Ammunition"
+                        : ci.CraftableItem is Material ? "Material"
+                        : ci.CraftableItem is Weapon ? "Weapon"
+                        : "Type not found"
 
-                  
                 }).ToList()
+
             };
 
             return Ok(dto);
