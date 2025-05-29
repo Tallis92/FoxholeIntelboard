@@ -3,6 +3,7 @@ using IntelboardAPI.Data;
 using IntelboardAPI.DTO;
 using IntelboardAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,16 +17,16 @@ namespace FoxholeIntelboard.Pages.Lists
 {
     public class EditModel : PageModel
     {
-        private readonly IntelboardDbContext _context;
         private readonly AmmunitionManager _ammunitionManager;
         private readonly MaterialManager _materialManager;
         private readonly ResourceManager _resourceManager;
         private readonly WeaponManager _weaponManager;
         private readonly CategoryManager _categoryManager;
         private readonly InventoryManager _inventoryManager;
+        private readonly CraftableItemManager _craftableItemManager;
 
-        public EditModel(AmmunitionManager ammunitionManager, IntelboardDbContext context, MaterialManager materialManager,
-            ResourceManager resourceManager, WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager)
+        public EditModel(AmmunitionManager ammunitionManager, MaterialManager materialManager, ResourceManager resourceManager, 
+            WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager, CraftableItemManager craftableItemManager)
         {
             _ammunitionManager = ammunitionManager;
             _materialManager = materialManager;
@@ -33,7 +34,7 @@ namespace FoxholeIntelboard.Pages.Lists
             _weaponManager = weaponManager;
             _categoryManager = categoryManager;
             _inventoryManager = inventoryManager;
-            _context = context;
+            _craftableItemManager = craftableItemManager;
         }
 
         public IList<Ammunition> Ammunitions { get; set; }
@@ -41,12 +42,12 @@ namespace FoxholeIntelboard.Pages.Lists
         public IList<Resource> Resources { get; set; }
         public IList<Weapon> Weapons { get; set; }
         public IList<Category> Categories { get; set; }
-        public IList<CraftableItem> CraftableItems { get; set; }
+        public IList<CraftableItemDto> CraftableItems { get; set; }
         [BindProperty]
-        public Inventory Inventory { get; set; }
+        public InventoryDto Inventory { get; set; }
         [BindProperty]
         public string SelectedItems { get; set; }
-
+        [BindNever]
         public List<CratedItemInput> CratedItems { get; set; } = new List<CratedItemInput>();
 
 
@@ -58,11 +59,8 @@ namespace FoxholeIntelboard.Pages.Lists
                 return NotFound();
             }
 
-            var inventory = await _context.Inventories
-                .Include(i => i.CratedItems)
-                    .ThenInclude(ci => ci.CraftableItem)
-                .FirstOrDefaultAsync(i => i.Id == id);
-
+            var inventory = await _inventoryManager.GetInventoryByIdAsync(id);
+                
             if (inventory == null)
             {
                 return NotFound();
@@ -74,28 +72,16 @@ namespace FoxholeIntelboard.Pages.Lists
             Materials = await _materialManager.GetMaterialsAsync();
             Weapons = await _weaponManager.GetWeaponsAsync();
             Categories = await _categoryManager.GetCategoriesAsync();
+            CraftableItems = await _craftableItemManager.GetCraftableItemsAsync();
+            
 
             foreach (var item in inventory.CratedItems)
             {
                 CratedItemInput selectItem = new CratedItemInput();
-                selectItem.Id = item.CraftableItem.Id;
-                selectItem.Name = item.CraftableItem.Name;
+                selectItem.Id = item.CraftableItemId;
                 selectItem.Amount = item.Amount;
-                switch (item.CraftableItem)
-                {
-                    case Ammunition ammo:
-                        selectItem.Type = "Ammunition";
-                        break;
-                    case Weapon weapon:
-                        selectItem.Type = "Weapon";
-                        break;
-                    case Material material:
-                        selectItem.Type = "Material";
-                        break;
-                    default:
-                        Console.WriteLine("Itemtype could not be found");
-                        break;
-                }
+                selectItem.Type = item.Type;
+                selectItem.Name = CraftableItems.Where(c => c.CraftableItemId == item.CraftableItemId).Select(c => c.Name).FirstOrDefault();        
                 CratedItems.Add(selectItem);
             }
             JsonSerializer.Serialize<List<CratedItemInput>>(CratedItems);
@@ -105,6 +91,7 @@ namespace FoxholeIntelboard.Pages.Lists
 
         public async Task<IActionResult> OnPostAsync()
         {
+            ModelState.Remove("Inventory.CratedItems");
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -113,7 +100,7 @@ namespace FoxholeIntelboard.Pages.Lists
 
             var dto = new InventoryDto
             {
-                InventoryId = Inventory.Id,
+                InventoryId = Inventory.InventoryId,
                 Name = Inventory.Name,
                 CratedItems = new List<CratedItemDto>()
             };
@@ -133,10 +120,10 @@ namespace FoxholeIntelboard.Pages.Lists
                 {
                     CraftableItemId = item.Id,
                     Amount = input.Amount,
-                    Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport."
+                    Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport.",         
                 });
             }
-            if (!await InventoryExistsAsync(Inventory.Id))
+            if (!await InventoryExistsAsync(Inventory.InventoryId))
             {
                 return NotFound();
             }

@@ -1,4 +1,5 @@
 ﻿using IntelboardAPI.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Text.Json.Serialization;
 
 namespace IntelboardAPI.DTO
@@ -9,6 +10,7 @@ namespace IntelboardAPI.DTO
         public Guid InventoryId { get; set; }
         [JsonPropertyName("name")]
         public string Name { get; set; }
+        [BindNever]
         [JsonPropertyName("cratedItems")]
         public List<CratedItemDto> CratedItems { get; set; }
     }
@@ -23,6 +25,10 @@ namespace IntelboardAPI.DTO
         public int Amount { get; set; }
         [JsonPropertyName("description")]
         public string Description { get; set; }
+        [JsonPropertyName("type")]
+        public string? Type { get; set; }
+        [JsonPropertyName("componentName")]
+        public string? ComponentName { get; set; }
     }
 
     public class CratedItemInput
