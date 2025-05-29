@@ -58,10 +58,11 @@ namespace IntelboardAPI.Controllers
                         MaterialId = cost.MaterialId
                     };
                     currentCraftable.ProductionCost.Add(costDto);
-                }
-
+                }       
+                
                 craftablesDto.Add(currentCraftable);
             }
+            
             return craftablesDto;
         }
     }

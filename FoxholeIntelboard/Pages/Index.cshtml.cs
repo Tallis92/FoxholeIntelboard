@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Xml.Linq;
 using IntelboardAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using IntelboardAPI.DTO;
 
 
 namespace FoxholeIntelboard.Pages;
