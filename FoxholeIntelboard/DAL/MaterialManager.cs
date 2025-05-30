@@ -5,7 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 namespace FoxholeIntelboard.DAL
 {
-    public class MaterialManager
+    public class MaterialManager : IMaterialManager
     {
         private readonly HttpClient _httpClient;
 

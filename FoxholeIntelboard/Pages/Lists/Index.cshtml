@@ -1,14 +1,23 @@
 ﻿@page
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
 @model FoxholeIntelboard.Pages.Lists.IndexModel
 
 @{
     ViewData["Title"] = "Index";
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+                   ?? IntelboardAPI.Models.DemoUser.Role;
+
 }
+
 
 <h1>Index</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    @if (demoRole.Contains("Admin"))
+    {
+        <a asp-page="Create">Create New</a>
+    }
 </p>
 <style>
     .accordion-btn {
@@ -56,9 +65,15 @@
             </button>
         </td>
         <td>
-            <a asp-page="./Edit" asp-route-id="@item.InventoryId">Edit</a> |
-            <a asp-page="./Details" asp-route-id="@item.InventoryId">Details</a> |
-            <a asp-page="./Delete" asp-route-id="@item.InventoryId">Delete</a>
+            @if(demoRole.Contains("Admin") || @demoRole.Contains("User"))
+            {
+                <a asp-page="./Edit" asp-route-id="@item.InventoryId">Edit</a>
+            }
+            <a asp-page="./Details" asp-route-id="@item.InventoryId">Details</a>
+            @if (demoRole.Contains("Admin"))
+            {
+                <a asp-page="./Delete" asp-route-id="@item.InventoryId">Delete</a>
+            }
         </td>
     </tr>
     <tr class="panel-row" id="panel-@i">

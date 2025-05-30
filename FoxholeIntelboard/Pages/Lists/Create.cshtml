@@ -10,6 +10,17 @@
 <h4>Inventory</h4>
 <hr />
 
+<div class="btn-group">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        @(Model.SelectedFactionId == 0 ? "Warden" : "Colonial")
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="?SelectedFactionId=0">Warden</a></li>
+        <li><a class="dropdown-item" href="?SelectedFactionId=1">Colonial</a></li>
+    </ul>
+</div>
+
+
 <div class="d-flex flex-row">
     <!-- Main Form Column -->
     <div class="col-md-8">
@@ -21,6 +32,7 @@
                 <input asp-for="Inventory.Name" class="form-control" />
                 <span asp-validation-for="Inventory.Name" class="text-danger"></span>
             </div>
+         
 
             <!-- Dropdowns per kategori -->
             <div class="d-flex flex-wrap gap-3 mb-4">
@@ -41,16 +53,22 @@
                                     </span>
                                 </li>
                             }
-                            @foreach (var item in Model.Weapons.Where(i => i.CategoryId == category.Id))
+
+                            @if (Model.SelectedFactionId != null)
                             {
-                                <li class="dropdown-item d-flex justify-content-between align-items-center">
-                                    <span>@item.Name</span>
-                                    <span>
-                                        <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Weapon')">+</button>
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Weapon')">-</button>
-                                    </span>
-                                </li>
+                                var factionWeapons = Model.Weapons.Where(w => w.FactionId == Model.SelectedFactionId);
+                                foreach (var item in factionWeapons)
+                                {
+                                    <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                        <span>@item.Name</span>
+                                        <span>
+                                            <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Weapon')">+</button>
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Weapon')">-</button>
+                                        </span>
+                                    </li>
+                                }
                             }
+
                         </ul>
                     </div>
                 }

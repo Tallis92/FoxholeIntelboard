@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace FoxholeIntelboard.DAL
 {
-    public class AmmunitionManager
+    public class AmmunitionManager : IAmmunitionManager
     {
         private readonly HttpClient _httpClient;
 

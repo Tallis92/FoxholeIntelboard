@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace FoxholeIntelboard.DAL
 {
-    public class WeaponManager
+    public class WeaponManager : IWeaponManager
     {
         private readonly HttpClient _httpClient;
 

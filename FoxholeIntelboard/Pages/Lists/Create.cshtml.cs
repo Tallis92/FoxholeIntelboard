@@ -44,6 +44,9 @@ namespace FoxholeIntelboard.Pages.Lists
         [BindProperty]
         public string SelectedItems { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public int? SelectedFactionId { get; set; }
+
         public async Task OnGetAsync()
         {
             Ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
@@ -52,7 +55,9 @@ namespace FoxholeIntelboard.Pages.Lists
             Weapons = await _weaponManager.GetWeaponsAsync();
             Categories = await _categoryManager.GetCategoriesAsync();
             CraftableItems = await _craftableItemManager.GetCraftableItemsAsync();
-            
+            if (SelectedFactionId == null)
+                SelectedFactionId = 0;
+
         }
 
         public async Task<IActionResult> OnPostAsync()
