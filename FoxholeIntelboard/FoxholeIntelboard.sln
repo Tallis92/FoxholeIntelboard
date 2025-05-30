@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoxholeIntelboard", "Foxhol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelboardAPI", "..\IntelboardAPI\IntelboardAPI.csproj", "{8DB50562-346C-4E0F-37DD-65AE97AC040D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelboardTests", "..\IntelboardTests\IntelboardTests.csproj", "{8848B18B-9D0F-47EA-9F1E-DA76A7B6098D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{159E925A-0B0F-DE0A-E3E3-E6A6429A4F11} = {159E925A-0B0F-DE0A-E3E3-E6A6429A4F11}
+		{8DB50562-346C-4E0F-37DD-65AE97AC040D} = {8DB50562-346C-4E0F-37DD-65AE97AC040D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,10 @@ Global
 		{8DB50562-346C-4E0F-37DD-65AE97AC040D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DB50562-346C-4E0F-37DD-65AE97AC040D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DB50562-346C-4E0F-37DD-65AE97AC040D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8848B18B-9D0F-47EA-9F1E-DA76A7B6098D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8848B18B-9D0F-47EA-9F1E-DA76A7B6098D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8848B18B-9D0F-47EA-9F1E-DA76A7B6098D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8848B18B-9D0F-47EA-9F1E-DA76A7B6098D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

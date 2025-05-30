@@ -4,9 +4,10 @@ using System.Text;
 using System.Text.Json;
 namespace FoxholeIntelboard.DAL
 {
-    public class ResourceManager
+    public class ResourceManager : IResourceManager
     {
         private readonly HttpClient _httpClient;
+
 
         public ResourceManager(HttpClient httpClient)
         {
