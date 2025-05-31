@@ -21,9 +21,10 @@
     function addToList(id, name, type) {
         const existing = list.find(c => c.id === id && c.type === type);
         if (existing) {
+            existing.amount++;
             existing.requiredAmount++;
         } else {
-            list.push({ id, name, type, amount: 0, requiredAmount: 1});
+            list.push({ id, name, type, amount: 1, requiredAmount: 1});
         }
         updateListUI();
     }
@@ -51,7 +52,7 @@
 
             const input = document.createElement("input");
             input.type = "number";
-            input.min = 0;
+            input.min = -1;
             input.value = item.amount;
             input.className = "form-control form-control-sm";
             input.style.width = "70px";
@@ -62,7 +63,7 @@
             input.onchange = () => {
                 const val = parseInt(input.value, 10);
                 if (isNaN(val)) return input.value = item.amount;
-                if (val <= 0) {
+                if (val <= -1) {
                     const idx = list.findIndex(i => i.id === item.id && i.type === item.type);
                     list.splice(idx, 1);
                 } else {
@@ -88,33 +89,26 @@
         const materialTotals = {};
         const resourceTotals = {};
 
-        console.log("Checking List: ", list);
         list.forEach(item => {
-
-            console.log("Checking Item: ", item);
-            const costs = flatProductionCosts.filter(c => c.craftableItemId === item.id);
-            console.log("Checking productionCosts", flatProductionCosts);
-            console.log("Checking cost", costs);
+            const costs = productionCosts.filter(c => c.craftableItemId === item.id);
 
             if (costs.length === 0) {
                 console.log("Cost not found");
             } else {
-                console.log("Cost exists");
                 costs.forEach(cost => {  
                     let x = 1;
                     cost.productionCost.forEach(subCost => {
-                        console.log("Subcost " + x);
-
                         if (subCost.materialId != null) {
                             const materialName = materials.find(m => m.id === subCost.materialId)?.name;
                             const materialCrateAmount = materials.find(m => m.id === subCost.materialId)?.crateAmount || 1;
 
                             if (materialName) {
                                 if (!materialTotals[materialName]) materialTotals[materialName] = 0;
-                                const materialQty = subCost.amount * item.amount;
+                                let materialQty = subCost.amount * item.requiredAmount;
+                                materialQty -= (subCost.amount * item.amount);
                                 materialTotals[materialName] += materialQty;
 
-                                const materialProductionCost = flatProductionCosts.find(c => c.craftableItemId === subCost.materialId);
+                                const materialProductionCost = productionCosts.find(c => c.craftableItemId === subCost.materialId);
                                 if (materialProductionCost) {
                                     materialProductionCost.productionCost.forEach(matSubCost => {
                                         const resourceName = resources.find(r => r.id === matSubCost.resourceId)?.name;

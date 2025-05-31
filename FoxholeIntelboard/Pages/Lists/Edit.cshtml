@@ -123,7 +123,7 @@
     window.materials = @Html.Raw(Json.Serialize(Model.Materials.Select(m => new { id = m.Id, name = m.Name })));
     window.existingItems = @Html.Raw(Json.Serialize(Model.CratedItems.ToList()));
 </script>
-<script src="~/js/inventory.js"></script>
+<script src="~/js/inventory-edit.js"></script>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

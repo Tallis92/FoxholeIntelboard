@@ -79,7 +79,7 @@ namespace FoxholeIntelboard.Pages.Lists
                 {
                     CraftableItemId = item.Id,
                     Amount = 0,
-                    RequiredAmount = input.RequiredAmount,
+                    RequiredAmount = input.Amount,
                     Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport."
                 });
             }

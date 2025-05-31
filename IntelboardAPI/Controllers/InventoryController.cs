@@ -32,6 +32,7 @@ namespace IntelboardAPI.Controllers
                 {
                     Description = item.Description,
                     Amount = item.Amount,
+                    RequiredAmount = item.RequiredAmount,
                     CraftableItemId = item.CraftableItem.Id
                     
                 }).ToList()
@@ -116,7 +117,7 @@ namespace IntelboardAPI.Controllers
                     {
                         Description = item.Description,
                         Amount = item.Amount,
-                        RequiredAmount = item.Amount,
+                        RequiredAmount = item.RequiredAmount,
                         CraftableItem = craftableItem
                     };
                     existingInventory.CratedItems.Add(cratedItem);
@@ -145,7 +146,7 @@ namespace IntelboardAPI.Controllers
                 {
                     Description = item.Description,
                     Amount = item.Amount,
-                    RequiredAmount = item.Amount,
+                    RequiredAmount = item.RequiredAmount,
                     CraftableItem = craftableItem
                 };
                 cratedItems.Add(cratedItem);
