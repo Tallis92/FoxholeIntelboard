@@ -1,4 +1,5 @@
 ﻿using FoxholeIntelboard.DAL;
+using FoxholeIntelboard.DTO;
 using IntelboardAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,13 +12,12 @@ namespace FoxholeIntelboard.Pages.Weapons
 {
     public class CreateModel : PageModel
     {
-        private readonly MaterialManager _materialManager;
-        private readonly WeaponManager _weaponManager;
+        private readonly IManagerDto _manager;
+        
 
-        public CreateModel(WeaponManager weaponManager, MaterialManager materialManager)
+        public CreateModel(IManagerDto manager)
         {
-            _weaponManager = weaponManager;
-            _materialManager = materialManager;
+            _manager = manager;
         }
         [BindProperty]
         public Weapon Weapon { get; set; } = default!;
@@ -30,7 +30,7 @@ namespace FoxholeIntelboard.Pages.Weapons
 
         public async Task<IActionResult> OnGet()
         {
-            Materials = await _materialManager.GetMaterialsAsync();
+            Materials = await _manager.MaterialManager.GetMaterialsAsync();
             WeaponTypeOptions = Enum.GetValues(typeof(WeaponType))
                 .Cast<WeaponType>()
                 .Select(d => new SelectListItem
@@ -48,8 +48,6 @@ namespace FoxholeIntelboard.Pages.Weapons
                 }).ToList();
             return Page();
         }
-
-
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -70,7 +68,7 @@ namespace FoxholeIntelboard.Pages.Weapons
                 return Page();
             }
 
-            await _weaponManager.CreateWeaponAsync(Weapon);
+            await _manager.WeaponManager.CreateWeaponAsync(Weapon);
             return RedirectToPage("./Index");
         }
 

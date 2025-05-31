@@ -14,9 +14,9 @@ namespace FoxholeIntelboard.Pages.Lists
 {
     public class DeleteModel : PageModel
     {
-        private readonly InventoryManager _inventoryManager;
+        private readonly IInventoryManager _inventoryManager;
 
-        public DeleteModel(InventoryManager inventoryManager)
+        public DeleteModel(IInventoryManager inventoryManager)
         {
             _inventoryManager = inventoryManager;
         }

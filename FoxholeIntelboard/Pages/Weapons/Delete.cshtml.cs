@@ -12,9 +12,9 @@ namespace FoxholeIntelboard.Pages.Weapons
 {
     public class DeleteModel : PageModel
     {
-        private readonly WeaponManager _weaponManager;
+        private readonly IWeaponManager _weaponManager;
 
-        public DeleteModel(WeaponManager weaponManager)
+        public DeleteModel(IWeaponManager weaponManager)
         {
             _weaponManager = weaponManager;
         }

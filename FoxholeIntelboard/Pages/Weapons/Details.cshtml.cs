@@ -12,9 +12,9 @@ namespace FoxholeIntelboard.Pages.Weapons
 {
     public class DetailsModel : PageModel
     {
-        private readonly WeaponManager _weaponManager;
+        private readonly IWeaponManager _weaponManager;
 
-        public DetailsModel(WeaponManager weaponManager)
+        public DetailsModel(IWeaponManager weaponManager)
         {
             _weaponManager = weaponManager;
         }

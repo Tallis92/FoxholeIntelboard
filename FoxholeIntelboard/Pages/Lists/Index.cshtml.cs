@@ -1,4 +1,5 @@
 ﻿using FoxholeIntelboard.DAL;
+using FoxholeIntelboard.DTO;
 using IntelboardAPI.Data;
 using IntelboardAPI.DTO;
 using IntelboardAPI.Models;
@@ -15,24 +16,10 @@ namespace FoxholeIntelboard.Pages.Lists
 {
     public class IndexModel : PageModel
     {
-        private readonly AmmunitionManager _ammunitionManager;
-        private readonly MaterialManager _materialManager;
-        private readonly ResourceManager _resourceManager;
-        private readonly WeaponManager _weaponManager;
-        private readonly CategoryManager _categoryManager;
-        private readonly InventoryManager _inventoryManager;
-        private readonly CraftableItemManager _craftableItemManager;
-        public IndexModel(AmmunitionManager ammunitionManager, IntelboardDbContext context, MaterialManager materialManager,
-            ResourceManager resourceManager, WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager,
-            CraftableItemManager craftableItemManager)
+        private readonly IManagerDto _manager;
+        public IndexModel(IManagerDto manager)
         {
-            _ammunitionManager = ammunitionManager;
-            _materialManager = materialManager;
-            _resourceManager = resourceManager;
-            _weaponManager = weaponManager;
-            _categoryManager = categoryManager;
-            _inventoryManager = inventoryManager;
-            _craftableItemManager = craftableItemManager;
+           _manager = manager;
         }
         public IList<Ammunition> Ammunitions { get; set; }
         public IList<Material> Materials { get; set; }
@@ -44,13 +31,13 @@ namespace FoxholeIntelboard.Pages.Lists
 
         public async Task OnGetAsync()
         {
-            Ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
-            Resources = await _resourceManager.GetResourcesAsync();
-            Materials = await _materialManager.GetMaterialsAsync();
-            Weapons = await _weaponManager.GetWeaponsAsync();
-            Categories = await _categoryManager.GetCategoriesAsync();
-            Inventories = await _inventoryManager.GetInventoriesAsync();
-            CraftableItems = await _craftableItemManager.GetCraftableItemsAsync();
+            Ammunitions = await _manager.AmmunitionManager.GetAmmunitionsAsync();
+            Resources = await _manager.ResourceManager.GetResourcesAsync();
+            Materials = await _manager.MaterialManager.GetMaterialsAsync();
+            Weapons = await _manager.WeaponManager.GetWeaponsAsync();
+            Categories = await _manager.CategoryManager.GetCategoriesAsync();
+            Inventories = await _manager.InventoryManager.GetInventoriesAsync();
+            CraftableItems = await _manager.CraftableItemManager.GetCraftableItemsAsync();
             
         }
 

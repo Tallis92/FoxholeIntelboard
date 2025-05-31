@@ -13,9 +13,9 @@ namespace FoxholeIntelboard.Pages.Materials
 {
     public class EditModel : PageModel
     {
-        private readonly MaterialManager _materialManager;
+        private readonly IMaterialManager _materialManager;
 
-        public EditModel(MaterialManager materialManager)
+        public EditModel(IMaterialManager materialManager)
         {
             _materialManager = materialManager;
         }
@@ -39,8 +39,6 @@ namespace FoxholeIntelboard.Pages.Materials
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)

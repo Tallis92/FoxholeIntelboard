@@ -12,9 +12,9 @@ namespace FoxholeIntelboard.Pages.Resources
 {
     public class DetailsModel : PageModel
     {
-        private readonly ResourceManager _resourceManager;
+        private readonly IResourceManager _resourceManager;
 
-        public DetailsModel(ResourceManager resourceManager)
+        public DetailsModel(IResourceManager resourceManager)
         {
             _resourceManager = resourceManager;
         }

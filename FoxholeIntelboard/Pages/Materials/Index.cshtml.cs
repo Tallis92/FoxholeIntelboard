@@ -14,9 +14,9 @@ namespace FoxholeIntelboard.Pages.Materials
     {
 
 
-        private readonly MaterialManager _materialManager;
+        private readonly IMaterialManager _materialManager;
 
-        public IndexModel(MaterialManager materialManager)
+        public IndexModel(IMaterialManager materialManager)
         {
             _materialManager = materialManager;
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FoxholeIntelboard.DAL;
 using IntelboardAPI.Data;
+using FoxholeIntelboard.DTO;
 namespace FoxholeIntelboard.Configuration
 
 {
@@ -11,13 +12,14 @@ namespace FoxholeIntelboard.Configuration
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddHttpClient();
-            builder.Services.AddScoped<AmmunitionManager>();
-            builder.Services.AddScoped<MaterialManager>();
-            builder.Services.AddScoped<ResourceManager>();
-            builder.Services.AddScoped<WeaponManager>();
-            builder.Services.AddScoped<CategoryManager>();
-            builder.Services.AddScoped<InventoryManager>();
-            builder.Services.AddScoped<CraftableItemManager>();
+            builder.Services.AddScoped<IAmmunitionManager, AmmunitionManager>();
+            builder.Services.AddScoped<IMaterialManager, MaterialManager>();
+            builder.Services.AddScoped<IResourceManager, ResourceManager>();
+            builder.Services.AddScoped<IWeaponManager, WeaponManager>();
+            builder.Services.AddScoped<ICategoryManager, CategoryManager>();
+            builder.Services.AddScoped<IInventoryManager, InventoryManager>();
+            builder.Services.AddScoped<ICraftableItemManager, CraftableItemManager>();
+            builder.Services.AddScoped<IManagerDto, ManagerDto>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddDbContext<IntelboardDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
