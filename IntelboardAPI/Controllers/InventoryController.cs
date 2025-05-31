@@ -63,6 +63,7 @@ namespace IntelboardAPI.Controllers
                     Id = ci.Id,
                     CraftableItemId = ci.CraftableItem.Id,
                     Amount = ci.Amount,
+                    RequiredAmount = ci.RequiredAmount,
                     Description = ci.Description,
                     Type = ci.CraftableItem is Ammunition ? "Ammunition"
                         : ci.CraftableItem is Material ? "Material"
@@ -115,6 +116,7 @@ namespace IntelboardAPI.Controllers
                     {
                         Description = item.Description,
                         Amount = item.Amount,
+                        RequiredAmount = item.Amount,
                         CraftableItem = craftableItem
                     };
                     existingInventory.CratedItems.Add(cratedItem);
@@ -143,6 +145,7 @@ namespace IntelboardAPI.Controllers
                 {
                     Description = item.Description,
                     Amount = item.Amount,
+                    RequiredAmount = item.Amount,
                     CraftableItem = craftableItem
                 };
                 cratedItems.Add(cratedItem);

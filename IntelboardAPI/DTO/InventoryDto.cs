@@ -23,6 +23,8 @@ namespace IntelboardAPI.DTO
         public int CraftableItemId { get; set; }
         [JsonPropertyName("amount")]
         public int Amount { get; set; }
+        [JsonPropertyName("requiredAmount")]
+        public int RequiredAmount { get; set; }
         [JsonPropertyName("description")]
         public string Description { get; set; }
         [JsonPropertyName("type")]
@@ -39,6 +41,8 @@ namespace IntelboardAPI.DTO
         public string Name { get; set; }
         [JsonPropertyName("amount")]
         public int Amount { get; set; }
+        [JsonPropertyName("requiredAmount")]
+        public int RequiredAmount { get; set; }
         [JsonPropertyName("type")]
         public string Type { get; set; }
     }

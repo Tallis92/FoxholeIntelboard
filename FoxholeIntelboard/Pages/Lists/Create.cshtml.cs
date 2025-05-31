@@ -77,8 +77,9 @@ namespace FoxholeIntelboard.Pages.Lists
 
                 dto.CratedItems.Add(new CratedItemDto
                 {
-                    CraftableItemId= item.Id,
-                    Amount = input.Amount,
+                    CraftableItemId = item.Id,
+                    Amount = 0,
+                    RequiredAmount = input.RequiredAmount,
                     Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport."
                 });
             }

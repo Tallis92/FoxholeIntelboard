@@ -11,7 +11,6 @@ namespace IntelboardAPI.Models
         public string Name { get; set; }
         [JsonPropertyName("cratedItems")]
         public List<CratedItem> CratedItems{ get; set; } = new();
-        // public UserId UserId { get; set; }
 
     }
     public class CratedItem
@@ -22,18 +21,20 @@ namespace IntelboardAPI.Models
         public CraftableItem CraftableItem { get; set; }
         [JsonPropertyName("amount")]
         public int Amount { get; set; }
+        [JsonPropertyName("requiredAmount")]
+        public int RequiredAmount { get; set; }
         [JsonPropertyName("description")]
         public string  Description { get; set; }
 
-
-        // EF Core kräver alltid en parameterlös konstruktor (offentlig eller skyddad) för att kunna skapa objekt från databasen.
+        // Ef Core always requires a parameterless constructor (public or protetect) to be able to create objects from the database
         public CratedItem() { }
-        public CratedItem(CraftableItem item, int amount, string description, string name)
+        public CratedItem(CraftableItem item, int amount, int requiredAmount, string description, string name)
         {
             CraftableItem = item;
             Id = item.Id;
             Amount = amount;
-            Description = $"Crate containing {amount} of {item.Name}";
+            RequiredAmount = requiredAmount;
+            Description = $"{amount} x crate(s) of {item.Name}";
         }
 
     }

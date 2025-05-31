@@ -86,6 +86,7 @@ namespace FoxholeIntelboard.Pages.Lists
                 CratedItemInput selectItem = new CratedItemInput();
                 selectItem.Id = item.CraftableItemId;
                 selectItem.Amount = item.Amount;
+                selectItem.RequiredAmount = item.RequiredAmount;
                 selectItem.Type = item.Type;
                 selectItem.Name = CraftableItems.Where(c => c.CraftableItemId == item.CraftableItemId).Select(c => c.Name).FirstOrDefault();
                 CratedItems.Add(selectItem);

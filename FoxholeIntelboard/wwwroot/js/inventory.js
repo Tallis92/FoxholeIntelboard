@@ -10,6 +10,7 @@
         const existing = list.find(c => c.id === item.id && c.type === item.type);
         if (existing) {
             existing.amount += item.amount;
+            existing.requiredAmount += item.requiredAmount;
         } else {
             list.push({ ...item });
         }
@@ -20,9 +21,9 @@
     function addToList(id, name, type) {
         const existing = list.find(c => c.id === id && c.type === type);
         if (existing) {
-            existing.amount++;
+            existing.requiredAmount++;
         } else {
-            list.push({ id, name, type, amount: 1 });
+            list.push({ id, name, type, amount: 0, requiredAmount: 1});
         }
         updateListUI();
     }
@@ -31,7 +32,7 @@
         const index = list.findIndex(c => c.id === id && c.type === type);
         if (index !== -1) {
             list[index].amount--;
-            if (list[index].amount <= 0) {
+            if (list[index].amount <= -1) {
                 list.splice(index, 1);
             }
         }
@@ -50,10 +51,13 @@
 
             const input = document.createElement("input");
             input.type = "number";
-            input.min = 1;
+            input.min = 0;
             input.value = item.amount;
             input.className = "form-control form-control-sm";
             input.style.width = "70px";
+
+            const span = document.createElement("span");
+            span.textContent = ` / ${item.requiredAmount}`;
 
             input.onchange = () => {
                 const val = parseInt(input.value, 10);
@@ -69,6 +73,7 @@
 
             li.appendChild(label);
             li.appendChild(input);
+            li.appendChild(span);
             display.appendChild(li);
         });
 
