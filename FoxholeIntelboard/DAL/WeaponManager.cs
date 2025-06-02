@@ -13,7 +13,6 @@ namespace FoxholeIntelboard.DAL
         {
             _httpClient = httpClient;
             _httpClient.BaseAddress = new Uri("https://localhost:7088/");
-
         }
 
         public async Task<List<Weapon>> GetWeaponsAsync()
@@ -32,12 +31,12 @@ namespace FoxholeIntelboard.DAL
             {
                 Console.WriteLine($"Error getting weapons: {response.StatusCode} {response.Content}");
             }
-
             return weapons;
+
         }
+
         public async Task<Weapon> GetWeaponByIdAsync(int? id)
         {
-
             string uri = $"/api/Weapon/{id}";
 
             HttpResponseMessage response = await _httpClient.GetAsync(uri);
@@ -52,6 +51,7 @@ namespace FoxholeIntelboard.DAL
                 Console.WriteLine($"Error getting weapon: {response.StatusCode} {response.Content}");
             }
             return weapon;
+
         }
 
         public async Task CreateWeaponAsync(Weapon weapon)
@@ -63,6 +63,7 @@ namespace FoxholeIntelboard.DAL
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true
             };
+
             var json = JsonSerializer.Serialize(weapon, options);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PostAsync(uri, content);
@@ -70,6 +71,7 @@ namespace FoxholeIntelboard.DAL
             Console.WriteLine(response.IsSuccessStatusCode ? "Weapon created successfully." : $"Error creating weapon: {response.StatusCode} {response.Content}");
 
         }
+
         public async Task DeleteWeaponAsync(int? id)
         {
             string uri = $"/api/Weapon/{id}";
@@ -77,6 +79,7 @@ namespace FoxholeIntelboard.DAL
 
             Console.WriteLine(response.IsSuccessStatusCode ? "Weapon deleted successfully." : $"Error deleting ammunition: {response.StatusCode} {response.Content}");
         }
+
         public async Task EditWeaponAsync(Weapon weapon)
         {
             string uri = $"/api/Weapon/{weapon.Id}";

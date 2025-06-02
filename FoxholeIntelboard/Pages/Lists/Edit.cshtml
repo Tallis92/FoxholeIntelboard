@@ -26,6 +26,7 @@
 
             <input type="hidden" asp-for="Inventory.InventoryId" />
 
+            <!-- Input Name -->
             <div class="form-group mb-3">
                 <label asp-for="Inventory.Name" class="control-label"></label>
                 <input asp-for="Inventory.Name" class="form-control" />
@@ -41,6 +42,7 @@
                             @category.Name
                         </button>
                         <ul class="dropdown-menu">
+
                             <!-- Ammunition categories -->
                             @foreach (var item in Model.Ammunitions.Where(i => i.CategoryId == category.Id))
                             {
@@ -71,7 +73,6 @@
                         </ul>
                     </div>
                 }
-
 
                 <!-- Materials dropdown -->
                 <div class="btn-group">
@@ -106,7 +107,7 @@
         </div>
     </div>
 
-    <!-- Your List in the side panel -->
+    <!-- Sticky Sidebar -->
     <div id="your-list" class="position-sticky top-0 ms-4 p-3 bg-light border rounded shadow" style="min-width: 300px; height: fit-content;">
         <h5>Your List</h5>
         <ul id="listDisplay" class="list-group"></ul>

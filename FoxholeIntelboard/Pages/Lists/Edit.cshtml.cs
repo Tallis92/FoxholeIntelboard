@@ -39,9 +39,7 @@ namespace FoxholeIntelboard.Pages.Lists
         public List<CratedItemInput> CratedItems { get; set; } = new List<CratedItemInput>();
 
         [BindProperty(SupportsGet = true)]
-        public int? SelectedFactionId { get; set; }
-
-        public string FactionName => SelectedFactionId == 0 ? "Wardens" : "Colonials";
+        public int? SelectedFactionId { get; set; } = 0;
 
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -56,9 +54,10 @@ namespace FoxholeIntelboard.Pages.Lists
             Inventory = inventory;
             Weapons = await _manager.WeaponManager.GetWeaponsAsync();
 
+            // Get first weaponid from CratedItems to determine what faction items to populate the dropdowns with.
             if (inventory.CratedItems != null && inventory.CratedItems.Any())
             {
-                // Get first weaponid from CratedItems
+                
                 var firstCratedItem = inventory.CratedItems.FirstOrDefault();
                 if (firstCratedItem != null)
                 {
@@ -67,11 +66,6 @@ namespace FoxholeIntelboard.Pages.Lists
                         SelectedFactionId = weapon.FactionId;
                 }
             }
-            
-            if (SelectedFactionId == null)
-                SelectedFactionId = 0;
-
-            // Filter weapons depending on faction
             Weapons = Weapons.Where(w => w.FactionId == SelectedFactionId).ToList();
 
             Ammunitions = await _manager.AmmunitionManager.GetAmmunitionsAsync();
@@ -99,10 +93,15 @@ namespace FoxholeIntelboard.Pages.Lists
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // Removes Crateitems from modelstate as it only caused issues. Still saves correctly into db after removal.
             ModelState.Remove("Inventory.CratedItems");
             if (!ModelState.IsValid)
                 return Page();
 
+            if (!await InventoryExistsAsync(Inventory.InventoryId))
+            {
+                return NotFound();
+            }
             var inputs = JsonSerializer.Deserialize<List<CratedItemInput>>(SelectedItems);
 
             var dto = new InventoryDto
@@ -130,10 +129,6 @@ namespace FoxholeIntelboard.Pages.Lists
                     RequiredAmount = input.RequiredAmount,
                     Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport.",
                 });
-            }
-            if (!await InventoryExistsAsync(Inventory.InventoryId))
-            {
-                return NotFound();
             }
 
             await _manager.InventoryManager.EditInventoryAsync(dto);

@@ -14,8 +14,8 @@ namespace IntelboardAPI.Services
             _env = env;
         }
 
-        // Loads and loops through csv file, checks for identical objects in the database and then saves a new material into the database.
-        // Uses dictionary to look for matches in Materials table.
+        // Loads and loops through csv file, checks for identical objects in the database and then saves a new ammunition into the database.
+        // Uses dictionary to look for matches in Ammunitions table.
         public async Task SeedAmmunitionsAsync()
         {
             var materialLookup = await _context.Materials.ToDictionaryAsync(r => r.Name);

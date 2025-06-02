@@ -20,13 +20,13 @@
     </ul>
 </div>
 
-
 <div class="d-flex flex-row">
     <!-- Main Form Column -->
     <div class="col-md-8">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <!-- Input Name -->
             <div class="form-group mb-3">
                 <label asp-for="Inventory.Name" class="control-label"></label>
                 <input asp-for="Inventory.Name" class="form-control" />
@@ -34,15 +34,18 @@
             </div>
          
 
-            <!-- Dropdowns per kategori -->
+            <!-- Dropdowns per category -->
             <div class="d-flex flex-wrap gap-3 mb-4">
                 @foreach (var category in Model.Categories)
                 {
+                    // Loops through each category then matches each category Id with the items categoryId's. This is to sort out objects
+                    // that can belong to different categories.
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
                             @category.Name
                         </button>
                         <ul class="dropdown-menu">
+                            <!-- Ammunition categories -->
                             @foreach (var item in Model.Ammunitions.Where(i => i.CategoryId == category.Id))
                             {
                                 <li class="dropdown-item d-flex justify-content-between align-items-center">
@@ -53,7 +56,7 @@
                                     </span>
                                 </li>
                             }
-
+                            <!-- Weapon categories depending on Faction -->
                             @if (Model.SelectedFactionId != null)
                             {
                                 var factionWeapons = Model.Weapons.Where(w => w.FactionId == Model.SelectedFactionId);
@@ -68,7 +71,6 @@
                                     </li>
                                 }
                             }
-
                         </ul>
                     </div>
                 }

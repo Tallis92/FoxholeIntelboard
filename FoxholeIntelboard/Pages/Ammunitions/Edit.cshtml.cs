@@ -16,36 +16,49 @@ namespace FoxholeIntelboard.Pages.Ammunitions
     public class EditModel : PageModel
     {
         private readonly IAmmunitionManager _ammunitionManager;
+        private readonly Ammunition _ammunition;
 
-        public EditModel(IAmmunitionManager ammunitionManager)
+        public EditModel(IAmmunitionManager ammunitionManager, Ammunition ammunition)
         {
             _ammunitionManager = ammunitionManager;
+            _ammunition = ammunition;
         }
 
         [BindProperty]
         public Ammunition Ammunition { get; set; } = default!;
         public List<SelectListItem> DamageTypeOptions { get; set; } = new();
-
+        public List<SelectListItem> AmmoPropertiesOptions { get; set; } = new();
         public async Task<IActionResult> OnGetAsync(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+
             DamageTypeOptions = Enum.GetValues(typeof(DamageType))
                .Cast<DamageType>()
                .Select(d => new SelectListItem
                {
                    Value = d.ToString(),
-                   Text = GetEnumDescription(d)
+                   Text = _ammunition.GetDamageDescription(d)
                }).ToList();
 
+            AmmoPropertiesOptions = Enum.GetValues(typeof(AmmoProperties))
+              .Cast<AmmoProperties>()
+              .Select(p => new SelectListItem
+              {
+                  Value = p.ToString(),
+                  Text = _ammunition.GetPropertyName(p)
+              }).ToList();
+
             var ammunition = await _ammunitionManager.GetAmmunitionByIdAsync(id);
+
             if (ammunition == null)
             {
                 return NotFound();
             }
             Ammunition = ammunition;
+
             return Page();
         }
 
@@ -53,9 +66,9 @@ namespace FoxholeIntelboard.Pages.Ammunitions
         {
             if (!ModelState.IsValid)
             {
-
                 return Page();
             }
+
             if (!await AmmunitionExistsAsync(Ammunition.Id))
             {
                 return NotFound();
@@ -69,16 +82,9 @@ namespace FoxholeIntelboard.Pages.Ammunitions
 
         private async Task<bool> AmmunitionExistsAsync(int id)
         {
-
             var ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
             return  ammunitions.Any(m => m.Id == id);
         }
 
-        private string GetEnumDescription(Enum value)
-        {
-            var field = value.GetType().GetField(value.ToString());
-            var attr = field?.GetCustomAttribute<DescriptionAttribute>();
-            return attr?.Description ?? value.ToString();
-        }
     }
 }

@@ -8,7 +8,6 @@ namespace FoxholeIntelboard.DAL
     {
         private readonly HttpClient _httpClient;
 
-
         public ResourceManager(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -32,8 +31,8 @@ namespace FoxholeIntelboard.DAL
             {
                 Console.WriteLine($"Error getting resources: {responseResource.StatusCode} {responseResource.Content}");
             }
-
             return resources;
+
         }
         public async Task<Resource> GetResourceByIdAsync(int? id)
         {
@@ -51,6 +50,7 @@ namespace FoxholeIntelboard.DAL
                 Console.WriteLine($"Error getting resource: {response.StatusCode} {response.Content}");
             }
             return resource;
+
         }
 
         public async Task CreateResourceAsync(Resource resource)

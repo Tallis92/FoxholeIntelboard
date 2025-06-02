@@ -23,8 +23,8 @@
         <dd>
             <ul>
                 @foreach(var crate in Model.Inventory.CratedItems)
-                {
-                   var cratedItem = Model.CraftableItems.FirstOrDefault(c => c.CraftableItemId == crate.CraftableItemId);
+                {    
+                    var cratedItem = Model.CraftableItems.FirstOrDefault(c => c.CraftableItemId == crate.CraftableItemId);
                     if (cratedItem != null)
                     {
                         <li>

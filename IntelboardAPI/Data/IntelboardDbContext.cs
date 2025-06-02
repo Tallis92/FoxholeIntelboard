@@ -30,9 +30,9 @@ namespace IntelboardAPI.Data
                    .UseTptMappingStrategy()
                    .ToTable("CraftableItems");
 
-
             builder.Entity<Ammunition>()
                    .ToTable("Ammunitions");
+
             builder.Entity<Material>()
                    .ToTable("Materials");
 
@@ -41,7 +41,6 @@ namespace IntelboardAPI.Data
                    .WithOne(c => c.CraftableItem)
                    .HasForeignKey(c => c.CraftableItemId)
                    .OnDelete(DeleteBehavior.Cascade);
-
 
             builder.Entity<Cost>()
                    .ToTable("Costs")
@@ -55,7 +54,6 @@ namespace IntelboardAPI.Data
                    .WithMany()
                    .HasForeignKey(c => c.ResourceId)
                    .OnDelete(DeleteBehavior.Restrict);
-
         }
     }
 }

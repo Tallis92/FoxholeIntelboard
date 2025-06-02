@@ -21,7 +21,7 @@ namespace IntelboardAPI.Services
         public List<string[]> CsvData { get; set; } = new();
 
         // Reads data from Resources.csv to check if the Resources table already contains each resource.
-        // If it exist, ignore. If it does not, save resource to database-
+        // If it exist, ignore. If it does not, save resource to database
         public async Task SeedResourcesAsync()
         {
             List<string> resourceNames = await _context.Resources.Select(r => r.Name).ToListAsync(); ;

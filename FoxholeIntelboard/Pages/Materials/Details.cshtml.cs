@@ -33,7 +33,6 @@ namespace FoxholeIntelboard.Pages.Materials
             if (material is not null)
             {
                 Material = material;
-
                 return Page();
             }
 

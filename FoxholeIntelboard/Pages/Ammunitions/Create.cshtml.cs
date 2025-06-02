@@ -15,15 +15,16 @@ namespace FoxholeIntelboard.Pages.Ammunitions
     {
 
         private readonly IManagerDto _manager;
+        private readonly Ammunition _ammunition;
 
-        public CreateModel(IManagerDto manager)
+        public CreateModel(IManagerDto manager, Ammunition ammunition)
         {
             _manager = manager;
+            _ammunition = ammunition;
         }
 
         [BindProperty]
-        public Ammunition Ammunitions { get; set; } = default!;
-
+        public Ammunition Ammunition { get; set; } = default!;
         [BindProperty]
         public List<Material> Materials { get; set; } = new();
         public List<SelectListItem> DamageTypeOptions { get; set; } = new();
@@ -33,21 +34,27 @@ namespace FoxholeIntelboard.Pages.Ammunitions
         {
             Materials = await _manager.MaterialManager.GetMaterialsAsync();
 
+
+            // Checks through the Enums in the Ammunition object, then retrieves the description attributes to display in a dropdown list in
+            // the view page.
             DamageTypeOptions = Enum.GetValues(typeof(DamageType))
                 .Cast<DamageType>()
                 .Select(d => new SelectListItem
                 {
                     Value = d.ToString(),
-                    Text = GetEnumDescription(d)
+                    Text = _ammunition.GetDamageDescription(d)
                 }).ToList();
 
+            // Checks through the Enums in the Ammunition object, then retrieves the name attributes to display in a dropdown list in
+            // the view page.
             AmmoPropertiesOptions = Enum.GetValues(typeof(AmmoProperties))
                .Cast<AmmoProperties>()
                .Select(p => new SelectListItem
                {
                    Value = p.ToString(),
-                   Text = GetName(p)
+                   Text = _ammunition.GetPropertyName(p)
                }).ToList();
+
             return Page();
         }
         public async Task<IActionResult> OnPostAsync()
@@ -57,43 +64,22 @@ namespace FoxholeIntelboard.Pages.Ammunitions
                 return Page();
             }
 
-            if (Ammunitions.ProductionCost == null || !Ammunitions.ProductionCost.Any())
+            // If the ammunitions Production cost is either 0 or null, return an error message.
+            if (Ammunition.ProductionCost == null || !Ammunition.ProductionCost.Any())
             {
                 ModelState.AddModelError("", "At least one production cost is required.");
                 return Page();
             }
 
-            DamageTypeOptions = Enum.GetValues(typeof(DamageType))
-                .Cast<DamageType>()
-                .Select(d => new SelectListItem
-                {
-                    Value = d.ToString(),
-                    Text = GetEnumDescription(d)
-                }).ToList();
-
-            foreach (var cost in Ammunitions.ProductionCost)
+            foreach (var cost in Ammunition.ProductionCost)
             {
-                cost.CraftableItem = Ammunitions;
+                cost.CraftableItem = Ammunition;
             }
 
-            await _manager.AmmunitionManager.CreateAmmunitionAsync(Ammunitions);
+            await _manager.AmmunitionManager.CreateAmmunitionAsync(Ammunition);
 
             return RedirectToPage("./Index");
         }
 
-        private string GetEnumDescription(Enum value)
-        {
-            var field = value.GetType().GetField(value.ToString());
-            var attr = field?.GetCustomAttribute<DescriptionAttribute>();
-            return attr?.Description ?? value.ToString();
-        }
-        public static string GetName(Enum value)
-        {
-            return value.GetType()
-                        .GetMember(value.ToString())
-                        .FirstOrDefault()?
-                        .GetCustomAttribute<DisplayAttribute>()?
-                        .Name ?? value.ToString();
-        }
     }
 }

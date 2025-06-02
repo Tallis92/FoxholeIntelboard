@@ -143,12 +143,14 @@ namespace IntelboardAPI.Models
         [JsonPropertyName("categoriId")]
         public int CategoryId { get; set; }
 
-        public string GetWeaponType()
+        // Returns the name of the selected Enum
+        public string GetWeaponName(Enum value)
         {
-            var weapon = WeaponType.GetType().GetField(WeaponType.ToString());
-            var attribute = weapon?.GetCustomAttribute<DescriptionAttribute>();
-            return attribute?.Description ?? WeaponType.ToString();
-            
+            return value.GetType()
+                        .GetMember(value.ToString())
+                        .FirstOrDefault()?
+                        .GetCustomAttribute<DisplayAttribute>()?
+                        .Name ?? value.ToString();
         }
 
     }

@@ -30,12 +30,11 @@ namespace FoxholeIntelboard.DAL
             {
                 Console.WriteLine($"Error getting materials: {response.StatusCode} {response.Content}");
             }
-
             return materials;
+
         }
         public async Task<Material> GetMaterialByIdAsync(int? id)
         {
-
             string uri = $"/api/Material/{id}";
 
             HttpResponseMessage response = await _httpClient.GetAsync(uri);
@@ -50,11 +49,11 @@ namespace FoxholeIntelboard.DAL
                 Console.WriteLine($"Error getting material: {response.StatusCode} {response.Content}");
             }
             return material;
+
         }
 
         public async Task CreateMaterialsAsync(Material material)
         {
-
             string uri = "/api/Material/";
 
             // Adds options to be able to serialize the productionCosts and not cause any Json serialization conflicts when trying to
@@ -72,11 +71,9 @@ namespace FoxholeIntelboard.DAL
 
             Console.WriteLine(response.IsSuccessStatusCode ? "Material created successfully." : $"Error creating material: {response.StatusCode} {response.Content}");
 
-
         }
         public async Task DeleteMaterialAsync(int? id)
         {
-
             string uri = $"/api/Material/{id}";
             HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
 
@@ -96,7 +93,6 @@ namespace FoxholeIntelboard.DAL
         public async Task SeedMaterialsAsync()
         {
             string uri = "/api/Material/Seed";
-
             HttpResponseMessage response = await _httpClient.PostAsync(uri, null);
 
             Console.WriteLine(response.IsSuccessStatusCode ? "Materials seeded successfully." : $"Error seeding materials: {response.StatusCode} {response.Content}");

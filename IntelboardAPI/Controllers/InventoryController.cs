@@ -20,10 +20,13 @@ namespace IntelboardAPI.Controllers
         [HttpGet]
         public async Task<IList<InventoryDto>> GetInventoriesAsync()
         {
+            // Retrieves all inventories from db with corresponding craftable items.
             var inventories = await _context.Inventories
                 .Include(i => i.CratedItems).ThenInclude(c => c.CraftableItem)
                 .ToListAsync();
 
+            // Assign all values from inventories into inventoryDtos and then returns all lists with craftableItems already set
+            // without the need of a foreach loop.
             var inventoryDtos = inventories.Select(inventory => new InventoryDto
             {
                 InventoryId = inventory.Id,
@@ -44,6 +47,7 @@ namespace IntelboardAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<InventoryDto>> GetInventoryByIdAsync(Guid id)
         {
+            // Retrieves a specific inventory from db with corresponding craftable items.
             var inventory = await _context.Inventories
                 .Include(i => i.CratedItems)
                     .ThenInclude(ci => ci.CraftableItem)
@@ -54,7 +58,7 @@ namespace IntelboardAPI.Controllers
                 return NotFound();
             }
 
-
+            // Assign relevant values from the inventory into the DTO
             var dto = new InventoryDto
             {
                 InventoryId = inventory.Id,
@@ -66,6 +70,8 @@ namespace IntelboardAPI.Controllers
                     Amount = ci.Amount,
                     RequiredAmount = ci.RequiredAmount,
                     Description = ci.Description,
+                    // Uses switch case to chek the type of current object the craftableItem is and assign it to the type
+                    // variable in the dto.
                     Type = ci.CraftableItem is Ammunition ? "Ammunition"
                         : ci.CraftableItem is Material ? "Material"
                         : ci.CraftableItem is Weapon ? "Weapon"
@@ -78,56 +84,6 @@ namespace IntelboardAPI.Controllers
             return Ok(dto);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInventoryAsync(Guid id)
-        {
-            var cratedItems = await _context.Inventories.Include(ci => ci.CratedItems).ThenInclude(c => c.CraftableItem)
-                .FirstOrDefaultAsync(i => i.Id == id);
-
-            if (cratedItems == null)
-            {
-                return NotFound();
-            }
-            _context.Inventories.Remove(cratedItems);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateInventoryAsync(Guid id, [FromBody] InventoryDto editedInventory)
-        {
-            if (editedInventory == null || id != editedInventory.InventoryId)
-            {
-                return BadRequest();
-            }
-            var existingInventory = await _context.Inventories
-                .Include(i => i.CratedItems).ThenInclude(c => c.CraftableItem)
-                .FirstOrDefaultAsync(i => i.Id == id);
-            if (existingInventory == null)
-            {
-                return NotFound();
-            }
-            existingInventory.Name = editedInventory.Name;
-            existingInventory.CratedItems.Clear();
-            foreach (var item in editedInventory.CratedItems)
-            {
-                var craftableItem = await _context.CraftableItems.FirstOrDefaultAsync(i => i.Id == item.CraftableItemId);
-                if (craftableItem != null)
-                {
-                    var cratedItem = new CratedItem
-                    {
-                        Description = item.Description,
-                        Amount = item.Amount,
-                        RequiredAmount = item.RequiredAmount,
-                        CraftableItem = craftableItem
-                    };
-                    existingInventory.CratedItems.Add(cratedItem);
-                }
-            }
-            _context.Inventories.Update(existingInventory);
-            await _context.SaveChangesAsync();
-            return Ok(existingInventory);
-        }
-
         [HttpPost]
         public async Task<IActionResult> CreateInventoryAsync([FromBody] InventoryDto inventory)
         {
@@ -135,12 +91,12 @@ namespace IntelboardAPI.Controllers
             {
                 return BadRequest();
             }
+
             var cratedItems = new List<CratedItem>();
 
             foreach (var item in inventory.CratedItems)
             {
                 var craftableItem = await _context.CraftableItems.FirstOrDefaultAsync(i => i.Id == item.CraftableItemId);
-
 
                 var cratedItem = new CratedItem
                 {
@@ -161,5 +117,64 @@ namespace IntelboardAPI.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditInventoryAsync(Guid id, [FromBody] InventoryDto editedInventory)
+        {
+            if (editedInventory == null || id != editedInventory.InventoryId)
+            {
+                return BadRequest();
+            }
+            // Retrieves a specific inventory from db with corresponding craftable items. If it doesn't exist, return an error.
+            var existingInventory = await _context.Inventories
+                .Include(i => i.CratedItems).ThenInclude(c => c.CraftableItem)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (existingInventory == null)
+            {
+                return NotFound();
+            }
+
+            // Inserts data from existingInventory into the "new" inventory object to update it with new values
+            existingInventory.Name = editedInventory.Name;
+            existingInventory.CratedItems.Clear();
+
+            foreach (var item in editedInventory.CratedItems)
+            {
+                var craftableItem = await _context.CraftableItems.FirstOrDefaultAsync(i => i.Id == item.CraftableItemId);
+                if (craftableItem != null)
+                {
+                    var cratedItem = new CratedItem
+                    {
+                        Description = item.Description,
+                        Amount = item.Amount,
+                        RequiredAmount = item.RequiredAmount,
+                        CraftableItem = craftableItem
+                    };
+                    existingInventory.CratedItems.Add(cratedItem);
+                }
+            }
+
+            _context.Inventories.Update(existingInventory);
+            await _context.SaveChangesAsync();
+            return Ok(existingInventory);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteInventoryAsync(Guid id)
+        {
+
+            var cratedItems = await _context.Inventories.Include(ci => ci.CratedItems).ThenInclude(c => c.CraftableItem)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (cratedItems == null)
+            {
+                return NotFound();
+            }
+            _context.Inventories.Remove(cratedItems);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+       
     }
 }

@@ -2,6 +2,7 @@
 using FoxholeIntelboard.DAL;
 using IntelboardAPI.Data;
 using FoxholeIntelboard.DTO;
+using IntelboardAPI.Models;
 namespace FoxholeIntelboard.Configuration
 
 {
@@ -20,6 +21,8 @@ namespace FoxholeIntelboard.Configuration
             builder.Services.AddScoped<IInventoryManager, InventoryManager>();
             builder.Services.AddScoped<ICraftableItemManager, CraftableItemManager>();
             builder.Services.AddScoped<IManagerDto, ManagerDto>();
+            builder.Services.AddScoped<Ammunition>();
+            builder.Services.AddScoped<Weapon>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddDbContext<IntelboardDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
