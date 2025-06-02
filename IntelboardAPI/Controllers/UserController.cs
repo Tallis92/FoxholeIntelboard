@@ -2,6 +2,7 @@
 using IntelboardAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
+// Not currently in use, will be used and better implemented soon
 namespace IntelboardAPI.Controllers
 {
     [ApiController]
@@ -36,7 +37,7 @@ namespace IntelboardAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAsync(int id, [FromBody] User editedUser)
+        public async Task<IActionResult> EditUserAsync(int id, [FromBody] User editedUser)
         {
             if (editedUser == null || id != editedUser.Id)
             {

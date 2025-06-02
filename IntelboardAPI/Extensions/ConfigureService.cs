@@ -17,7 +17,6 @@ namespace IntelboardAPI.Extensions
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-
             // CORS policy to allow requests from the frontend
             builder.Services.AddCors(options =>
             {
@@ -32,7 +31,6 @@ namespace IntelboardAPI.Extensions
             });
 
             // DbContext configuration
-
             builder.Services.AddDbContext<IntelboardDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
 
@@ -42,7 +40,6 @@ namespace IntelboardAPI.Extensions
             builder.Services.AddScoped<IAmmunitionService, AmmunitionService>();
             builder.Services.AddScoped<IWeaponService, WeaponService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
-
         }
     }
 }

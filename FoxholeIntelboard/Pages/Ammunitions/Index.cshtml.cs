@@ -20,17 +20,11 @@ namespace FoxholeIntelboard.Pages.Ammunitions
             _ammunitionManager = ammunitionManger;
         }
 
-        public IList<Ammunition> Ammunition { get;set; } = default!;
+        public IList<Ammunition> Ammunitions { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Ammunition = await _ammunitionManager.GetAmmunitionsAsync();
-        }
-
-        public async Task<IActionResult> OnPostSeedAmmunitionsAsync()
-        {
-            await _ammunitionManager.SeedAmmunitionsAsync();
-            return RedirectToPage();
+            Ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
         }
     }
 }

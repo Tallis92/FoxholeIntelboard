@@ -14,6 +14,8 @@ namespace IntelboardAPI.Services
             _context = context;
             _env = env;
         }
+
+        // Loads and loops through csv file, checks for identical objects in the database and then saves a new category into the database.
         public async Task SeedCategoriesAsync()
         {
             List<string> categoryNames = await _context.Categories.Select(r => r.Name).ToListAsync(); ;

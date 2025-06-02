@@ -8,8 +8,9 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Resource.Id" />
+
+            <!-- Input Name -->
             <div class="form-group">
-                
                 <label asp-for="Resource.Name" class="control-label"></label>
                 <input asp-for="Resource.Name" class="form-control" />
                 <span asp-validation-for="Resource.Name" class="text-danger"></span>

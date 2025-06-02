@@ -6,6 +6,8 @@
     const materials = window.materials || [];
     const existingItems = window.existingItems || [];
 
+    // Loops through each item in existingItem, if it finds a match in List it sets the amount to the existing values, else it makes a shallow copy
+    // and ads it to the list. Then calls updateListUI to show the changes in the UI. This is to combine both existing and new items.
     existingItems.forEach(item => {
         const existing = list.find(c => c.id === item.id && c.type === item.type);
         if (existing) {
@@ -18,6 +20,7 @@
 
     updateListUI();
 
+    // Checks for existing items in the list, if they exist it just increases the values, if not it will create a new item and with amounts set to 1.
     function addToList(id, name, type) {
         const existing = list.find(c => c.id === id && c.type === type);
         if (existing) {
@@ -40,6 +43,8 @@
         updateListUI();
     }
 
+    // Loads up the listdisplay div, clears it then loops through each item in list to create a list of input items that can be modified.
+    // Then appends everything into a new list item.
     function updateListUI() {
         const display = document.getElementById("listDisplay");
         display.innerHTML = "";
@@ -62,7 +67,9 @@
 
             input.onchange = () => {
                 const val = parseInt(input.value, 10);
-                if (isNaN(val)) return input.value = item.amount;
+                if (isNaN(val)) {
+                    return input.value = item.amount;
+                }
                 if (val <= -1) {
                     const idx = list.findIndex(i => i.id === item.id && i.type === item.type);
                     list.splice(idx, 1);
@@ -82,6 +89,9 @@
         updateCostUI();
     }
 
+    // Goes through the items ProductionCost in an outer loop, in the innerloop it loops through the subcosts with the names and amounts of materials
+    // or resources. It then calculates the requiredAmounts total costs, calculates amounts totalcost and then subtract the amounts totalcost from the requiredAmounts totalcost
+    // to dynamically change costs on the screen.
     function updateCostUI() {
         const costDisplay = document.getElementById("costDisplay");
         costDisplay.innerHTML = "";
@@ -96,7 +106,6 @@
                 console.log("Cost not found");
             } else {
                 costs.forEach(cost => {  
-                    let x = 1;
                     cost.productionCost.forEach(subCost => {
                         if (subCost.materialId != null) {
                             const materialName = materials.find(m => m.id === subCost.materialId)?.name;
@@ -125,31 +134,24 @@
 
                         if (subCost.resourceId != null) {
                             const resourceName = resources.find(r => r.id === subCost.resourceId)?.name;
-                            console.log(
-                                "Resource Name: " + resourceName +
-                                " | Resource Id: " + subCost.resourceId +
-                                " | Material Id: " + subCost.materialId +
-                                " | Cost Amount: " + subCost.amount +
-                                " | Crate Amount: " + cost.crateAmount
-                            );
+
                             if (!resourceTotals[resourceName]) resourceTotals[resourceName] = 0;
 
+                            // Diesel requires a different calculation method so the app needs to check this specifically.
                             if (cost.name == "Diesel") {
                                 resourceTotals[resourceName] += subCost.amount * 1 * item.amount;
                             }
                             else {
                                 resourceTotals[resourceName] += subCost.amount * cost.crateAmount * item.amount;
-                            }
-                           
+                            }    
                         }
-
-                        x++;
                         console.log("Totals: ", resourceTotals);
                     });
                 });
             }
         });
 
+        // Builds the costsection with specific stylings for the productionCosts.
         const buildCostSection = (title, totals) => {
             const section = document.createElement("div");
             const header = document.createElement("h5");
@@ -165,6 +167,7 @@
             return section;
         };
 
+        // Combines the different cost objects under two main categories.
         if (Object.keys(materialTotals).length > 0) {
             costDisplay.appendChild(buildCostSection("Materials", materialTotals));
         }

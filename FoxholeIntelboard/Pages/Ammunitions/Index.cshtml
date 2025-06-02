@@ -10,28 +10,26 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-<form method="post">
-    <button asp-page-handler="SeedAmmunitions" type="submit">Seed database for ammunitions</button>
-</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Ammunition[0].Name)
+                @Html.DisplayNameFor(model => model.Ammunitions[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ammunition[0].Description)
+                @Html.DisplayNameFor(model => model.Ammunitions[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ammunition[0].CrateAmount)
+                @Html.DisplayNameFor(model => model.Ammunitions[0].CrateAmount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ammunition[0].DamageType)
+                @Html.DisplayNameFor(model => model.Ammunitions[0].DamageType)
             </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Ammunition) {
+
+@foreach (var item in Model.Ammunitions) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)

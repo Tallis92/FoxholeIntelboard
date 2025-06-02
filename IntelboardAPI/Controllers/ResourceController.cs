@@ -49,7 +49,7 @@ namespace IntelboardAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateResourceAsync(Resource editedResource)
+        public async Task<IActionResult> EditResourceAsync(Resource editedResource)
         {
 
             if (editedResource == null)
@@ -80,7 +80,7 @@ namespace IntelboardAPI.Controllers
         public async Task<IActionResult> SeedResourcesAsync()
         {
             await _resourceService.SeedResourcesAsync();
-            return Ok("Status kod 200");
+            return Ok("Resources seeded successfully!");
         }
         
     }

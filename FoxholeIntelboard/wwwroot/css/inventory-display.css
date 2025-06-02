@@ -1,0 +1,25 @@
+﻿.accordion-btn {
+    all: unset;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    font-weight: bold;
+}
+
+.panel-row {
+    display: none;
+    background-color: #f9f9f9;
+}
+
+    .panel-row.open {
+        display: table-row;
+    }
+
+.panel-content a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+    .panel-content a:hover {
+        text-decoration: underline;
+    }

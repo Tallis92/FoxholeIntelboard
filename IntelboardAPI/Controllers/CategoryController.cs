@@ -28,7 +28,7 @@ namespace IntelboardAPI.Controllers
         public async Task<IActionResult> SeedCategoriesAsync()
         {
             await _categoryService.SeedCategoriesAsync();
-            return Ok("Status kod 200");
+            return Ok("Categories seeded successfully!");
         }
         
     }

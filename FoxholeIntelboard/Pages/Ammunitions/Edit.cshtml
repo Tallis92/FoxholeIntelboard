@@ -14,24 +14,38 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Ammunition.Id" />
-            <div class="form-group">
-                
+            @* --- Input Name --- *@
+            <div class="form-group">           
                 <label asp-for="Ammunition.Name" class="control-label"></label>
                 <input asp-for="Ammunition.Name" class="form-control" />
                 <span asp-validation-for="Ammunition.Name" class="text-danger"></span>
             </div>
+
+            @* --- Input Category --- *@
             <div class="form-group">
-                
+                <label asp-for="Ammunition.CategoryId" class="control-label"></label>
+                <select asp-for="Ammunition.CategoryId" class="form-control">
+                    <option value="1">Small Arms</option>
+                    <option value="2">Heavy Arms</option>
+                    <option value="3">Heavy Ammunitions</option>
+                </select>
+            </div>
+
+            @* --- Input Description --- *@
+            <div class="form-group">          
                 <label asp-for="Ammunition.Description" class="control-label"></label>
                 <input asp-for="Ammunition.Description" class="form-control" />
                 <span asp-validation-for="Ammunition.Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                
+
+            @* --- Input Crate Amount --- *@
+            <div class="form-group">              
                 <label asp-for="Ammunition.CrateAmount" class="control-label"></label>
                 <input asp-for="Ammunition.CrateAmount" class="form-control" />
                 <span asp-validation-for="Ammunition.CrateAmount" class="text-danger"></span>
             </div>
+
+            @* --- Input Damage Type --- *@
             <div class="form-group">
                 <label asp-for="Ammunition.DamageType">Damage Type</label>
                 <select asp-for="Ammunition.DamageType" asp-items="Model.DamageTypeOptions" class="form-control">
@@ -39,6 +53,40 @@
                 </select>
                 <span asp-validation-for="Ammunition.DamageType" class="text-danger"></span>
             </div>
+
+            @* --- Input Costs --- *@
+            <div class="form-group">       
+                <p>Choose amount of materials required:</p>
+                <input type="hidden" name="SelectedCost" id="SelectedCost" />
+
+                <div id="selectCosts" style="display: flex; gap: 10px;">
+                    <input type="radio" name="cost" value="1"> 1 Material
+                    <input type="radio" name="cost" value="2"> 2 Materials
+                    <input type="radio" name="cost" value="3"> 3 Materials
+                </div>
+
+                <h2>Material Cost</h2>
+                <br />
+                <div id="materialCostsContainer"></div>
+            </div>
+
+            @* --- Input Properties --- *@
+            <div class="form-group">             
+                <p>Choose amount of Ammo Properties:</p>
+                <input type="hidden" name="SelectedProperty" id="SelectedProperty" />
+
+                <div id="selectProperties" style="display: flex; gap: 10px;">
+                    <input type="radio" name="property" value="1"> 1 Property
+                    <input type="radio" name="property" value="2"> 2 Properties
+                    <input type="radio" name="property" value="3"> 3 Properties
+                </div>
+
+                <h2>Ammo Property</h2>
+                <br />
+                <div id="specialPropertiesContainer"></div>
+            </div>
+
+            @* --- Submit Ammunition --- *@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -51,5 +99,12 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    @{
+        <script>
+            const specialProperties = @Html.Raw(Json.Serialize(Model.AmmoPropertiesOptions));
+        </script>
+        <script src="~/js/create-ammunition.js"></script>
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

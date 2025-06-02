@@ -25,11 +25,5 @@ namespace FoxholeIntelboard.Pages.Weapons
         {
             Weapons = await _weaponManager.GetWeaponsAsync();
         }
-
-        public async Task<IActionResult> OnPostSeedWeaponsAsync()
-        {
-            await _weaponManager.SeedWeaponsAsync();
-            return RedirectToPage();
-        }
     }
 }

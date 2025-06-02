@@ -18,15 +18,13 @@ namespace FoxholeIntelboard.Pages.Resources
         {
             _resourceManager = resourceManager;
         }
+        [BindProperty]
+        public Resource Resource { get; set; } = default!;
 
         public IActionResult OnGet()
         {
             return Page();
         }
-
-
-        [BindProperty]
-        public Resource Resource { get; set; } = default!;
 
         public async Task<IActionResult> OnPostAsync()
         {

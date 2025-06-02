@@ -24,10 +24,5 @@ namespace FoxholeIntelboard.Pages.Resources
         {
             Resource = await _resourceManager.GetResourcesAsync();
         }
-        public async Task<IActionResult> OnPostSeedResourcesAsync()
-        {
-            await _resourceManager.SeedResourcesAsync();
-            return RedirectToPage();
-        }
     }
 }

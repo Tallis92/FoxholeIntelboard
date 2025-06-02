@@ -2,6 +2,7 @@
 {
     public static class ConfigureApiMiddleware
     {
+        // Middleware Injection to Program.cs
         public static void ConfigureApiPipeline(this WebApplication app)
         {
             app.UseCors("AllowFrontend");

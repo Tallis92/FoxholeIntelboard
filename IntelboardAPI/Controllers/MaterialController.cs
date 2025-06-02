@@ -50,7 +50,7 @@ namespace IntelboardAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMaterialAsync(Material editedmaterial)
+        public async Task<IActionResult> EditMaterialAsync(Material editedmaterial)
         {
 
             if (editedmaterial == null)
@@ -81,7 +81,7 @@ namespace IntelboardAPI.Controllers
         public async Task<IActionResult> SeedMaterialsAsync()
         {
             await _materialService.SeedMaterialsAsync();
-            return Ok("Status kod 200");
+            return Ok("Materials seeded successfully!");
         }
 
     }

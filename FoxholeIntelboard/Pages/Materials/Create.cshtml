@@ -12,19 +12,20 @@
     <form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-
+            <!-- Input Name -->
             <div class="form-group">
                 <label asp-for="Material.Name" class="control-label"></label>
                 <input asp-for="Material.Name" class="form-control" />
                 <span asp-validation-for="Material.Name" class="text-danger"></span>
             </div>
-
+            <!-- Input Crate Amount -->
             <div class="form-group">
                 <label asp-for="Material.CrateAmount" class="control-label"></label>
                 <input asp-for="Material.CrateAmount" class="form-control" />
                 <span asp-validation-for="Material.CrateAmount" class="text-danger"></span>
             </div>
 
+            <!-- Input Resource Costs -->
             <p>Choose amount of resources:</p>
             <input type="hidden" name="SelectedCost" id="SelectedCost" />
 
@@ -34,12 +35,13 @@
                 <input type="radio" name="cost" value="3"> 3 Resources
             </div>
 
-            <h2>Material Cost</h2>
+            <h2>Resource Cost</h2>
             <br><br>
-            <div id="materialCostsContainer"></div>
+            <div id="resourceCostsContainer"></div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+
         </form>
     </div>
 </div>
@@ -48,64 +50,9 @@
     <a asp-page="Index">Back to List</a>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", async () => {
-        const selectedCosts = document.getElementById("selectCosts");
-        const materialCostsContainer = document.getElementById("materialCostsContainer");
-        let resources = [];
-
-        // 1) fetch resources from your API endpoint
-        try {
-            const resp = await fetch("https://localhost:7088/api/Resource");        // or "/api/Resource"
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-            resources = await resp.json();
-        } catch (err) {
-            console.error("Failed to load resources:", err);
-            return;
-        }
-
-        // 2) wire up your radio buttons
-        selectedCosts.addEventListener("change", () => {
-            const selectedRadio = selectedCosts.querySelector('input[name="cost"]:checked');
-            if (!selectedRadio) return;
-
-            const selectedValue = parseInt(selectedRadio.value, 10);
-            materialCostsContainer.innerHTML = "";
-
-            for (let i = 0; i < selectedValue; i++) {
-                const div = document.createElement("div");
-                div.className = "form-group";
-                div.innerHTML = `
-              <div style="border: 1px solid grey; text-align: center; padding: 10px;">
-                <label for="Material_ProductionCost_${i}__ResourceId">
-                  Resource ${i + 1}
-                </label>
-                <select
-                  name="Material.ProductionCost[${i}].ResourceId"
-                  class="form-control"
-                  style="background-color: #f8f9fa; text-align: center;"
-                >
-                  <option value="">-- Select Resource --</option>
-                  ${resources.map(r => `<option value="${r.id}">${r.name}</option>`).join("")}
-                </select>
-
-                <label for="Material_ProductionCost_${i}__Amount">
-                  Amount
-                </label>
-                <input
-                  type="number"
-                  name="Material.ProductionCost[${i}].Amount"
-                  class="form-control"
-                />
-              </div>
-              <br/>
-            `;
-                materialCostsContainer.appendChild(div);
-            }
-        });
-    });
-</script>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        <script src="~/js/create-material.js"></script>
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

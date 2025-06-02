@@ -20,6 +20,7 @@ namespace FoxholeIntelboard.Pages.Materials
 
             _manager = manager;
         }
+
         [BindProperty]
         public Material Material { get; set; } = default!;
         [BindProperty]
@@ -36,7 +37,6 @@ namespace FoxholeIntelboard.Pages.Materials
 
             if (!ModelState.IsValid)
             {
-
                 return Page();
             }
 

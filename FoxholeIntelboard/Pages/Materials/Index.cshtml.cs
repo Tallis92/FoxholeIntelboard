@@ -28,10 +28,5 @@ namespace FoxholeIntelboard.Pages.Materials
             Material = await _materialManager.GetMaterialsAsync();
         }
 
-        public async Task<IActionResult> OnPostSeedMaterialsAsync()
-        {
-            await _materialManager.SeedMaterialsAsync();
-            return RedirectToPage();
-        }
     }
 }

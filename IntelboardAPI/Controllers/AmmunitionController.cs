@@ -52,7 +52,7 @@ namespace IntelboardAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAmmunitionAsync(Ammunition editedammunition)
+        public async Task<IActionResult> EditAmmunitionAsync(Ammunition editedammunition)
         {
 
             if (editedammunition == null)
@@ -83,7 +83,7 @@ namespace IntelboardAPI.Controllers
         public async Task<IActionResult> SeedAmmunitionsAsync()
         {
             await _service.SeedAmmunitionsAsync();
-            return Ok("Status kod 200");
+            return Ok("Ammunitions seeded successfully!");
         }
 
     }

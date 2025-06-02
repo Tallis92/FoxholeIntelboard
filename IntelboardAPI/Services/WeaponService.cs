@@ -14,7 +14,8 @@ namespace IntelboardAPI.Services
             _env = env;
         }
 
-        // Loads and loops through csv file, checks for identical objects in the database and then saves a new weapon into the database.
+        // Loads csv files into an array, loops through the array to create factionspecific weapons and correspodning costs.
+        // Then checks for identical objects in the database and then saves a new weapon into the database.
         // Uses dictionary to look for matches in Weapons table.
         public async Task SeedWeaponsAsync()
         {

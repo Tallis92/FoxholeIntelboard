@@ -45,10 +45,12 @@ namespace FoxholeIntelboard.Pages.Resources
             {
                 return Page();
             }
+
             if (!await ResourceExists(Resource.Id))
             {
                 return NotFound();
             }
+
             await _resourceManager.EditResourceAsync(Resource);
            
             return RedirectToPage("./Index");

@@ -20,7 +20,6 @@ namespace FoxholeIntelboard.Pages.Lists
             _manager = manager;
         }
 
-        public List <CratedItemInput> CratedItemInputs { get; set; } = new List<CratedItemInput>();
         public IList<Ammunition> Ammunitions { get; set; }
         public IList<Material> Materials { get; set; }
         public IList<Resource> Resources { get; set; }
@@ -33,7 +32,7 @@ namespace FoxholeIntelboard.Pages.Lists
         public string SelectedItems { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public int? SelectedFactionId { get; set; }
+        public int? SelectedFactionId { get; set; } = 0;
 
         public async Task OnGetAsync()
         {
@@ -43,9 +42,6 @@ namespace FoxholeIntelboard.Pages.Lists
             Weapons = await _manager.WeaponManager.GetWeaponsAsync();
             Categories = await _manager.CategoryManager.GetCategoriesAsync();
             CraftableItems = await _manager.CraftableItemManager.GetCraftableItemsAsync();
-            if (SelectedFactionId == null)
-                SelectedFactionId = 0;
-
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -55,8 +51,9 @@ namespace FoxholeIntelboard.Pages.Lists
                 return Page();
             }
 
+            // Converts SelectedItems string to a list of CratedItemInput so we can loop through all the items and add it to InventoryDto with
+            // all the relevant data.
             var inputs = JsonSerializer.Deserialize<List<CratedItemInput>>(SelectedItems);
-            CratedItemInputs = inputs; 
 
             var dto = new InventoryDto
             {
@@ -80,16 +77,12 @@ namespace FoxholeIntelboard.Pages.Lists
                     CraftableItemId = item.Id,
                     Amount = 0,
                     RequiredAmount = input.Amount,
-                    Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport."
+                    Description = $"A crate of {input.Amount}x {item.Name}(s). Submit to a stockpile or seaport."
                 });
             }
 
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
             await _manager.InventoryManager.CreateInventoryAsync(dto);
+
             return RedirectToPage("./Index");
         }
 

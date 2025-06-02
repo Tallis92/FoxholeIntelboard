@@ -13,11 +13,12 @@ namespace FoxholeIntelboard.Pages.Weapons
     public class CreateModel : PageModel
     {
         private readonly IManagerDto _manager;
-        
+        private readonly Weapon _weapon;
 
-        public CreateModel(IManagerDto manager)
+        public CreateModel(IManagerDto manager, Weapon weapon)
         {
             _manager = manager;
+            _weapon = weapon;
         }
         [BindProperty]
         public Weapon Weapon { get; set; } = default!;
@@ -27,16 +28,19 @@ namespace FoxholeIntelboard.Pages.Weapons
 
         public List<SelectListItem> WeaponTypeOptions { get; set; } = new();
         public List<SelectListItem> WeaponPropertiesOptions { get; set; } = new();
+        public List<Ammunition> AmmunitionsOptions { get; set; } = new();
 
         public async Task<IActionResult> OnGet()
         {
             Materials = await _manager.MaterialManager.GetMaterialsAsync();
+            AmmunitionsOptions = await _manager.AmmunitionManager.GetAmmunitionsAsync();
+
             WeaponTypeOptions = Enum.GetValues(typeof(WeaponType))
                 .Cast<WeaponType>()
                 .Select(d => new SelectListItem
                 {
                     Value = d.ToString(),
-                    Text = GetEnumDescription(d)
+                    Text = _weapon.GetWeaponName(d)
                 }).ToList();
 
             WeaponPropertiesOptions = Enum.GetValues(typeof(WeaponProperties))
@@ -44,8 +48,9 @@ namespace FoxholeIntelboard.Pages.Weapons
                 .Select(p => new SelectListItem
                 {
                     Value = p.ToString(),
-                    Text = GetName(p)
+                    Text = _weapon.GetWeaponName(p)
                 }).ToList();
+
             return Page();
         }
 
@@ -72,20 +77,5 @@ namespace FoxholeIntelboard.Pages.Weapons
             return RedirectToPage("./Index");
         }
 
-        private string GetEnumDescription(Enum value)
-        {
-            var field = value.GetType().GetField(value.ToString());
-            var attr = field?.GetCustomAttribute<DescriptionAttribute>();
-            return attr?.Description ?? value.ToString();
-        }
-
-        public static string GetName(Enum value)
-        {
-            return value.GetType()
-                        .GetMember(value.ToString())
-                        .FirstOrDefault()?
-                        .GetCustomAttribute<DisplayAttribute>()?
-                        .Name ?? value.ToString();
-        }
     }
 }

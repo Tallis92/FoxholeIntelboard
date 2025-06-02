@@ -28,8 +28,6 @@ namespace FoxholeIntelboard.DAL
             if (response.IsSuccessStatusCode)
             {
                 string responseString = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("RESPONSE:");
-                Console.WriteLine(responseString);
                 ammunitions = JsonSerializer.Deserialize<List<Ammunition>>(responseString);
             }
             else
@@ -78,7 +76,6 @@ namespace FoxholeIntelboard.DAL
         }
         public async Task DeleteAmmunitionAsync(int? id)
         {
-
             string uri = $"/api/Ammunition/{id}";
             HttpResponseMessage response = await _httpClient.DeleteAsync(uri);
 
