@@ -12,9 +12,9 @@ namespace FoxholeIntelboard.Pages.Resources
 {
     public class CreateModel : PageModel
     {
-        private readonly ResourceManager _resourceManager;
+        private readonly IResourceManager _resourceManager;
 
-        public CreateModel(ResourceManager resourceManager)
+        public CreateModel(IResourceManager resourceManager)
         {
             _resourceManager = resourceManager;
         }
@@ -28,7 +28,6 @@ namespace FoxholeIntelboard.Pages.Resources
         [BindProperty]
         public Resource Resource { get; set; } = default!;
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)

@@ -15,9 +15,9 @@ namespace FoxholeIntelboard.Pages.Ammunitions
 {
     public class EditModel : PageModel
     {
-        private readonly AmmunitionManager _ammunitionManager;
+        private readonly IAmmunitionManager _ammunitionManager;
 
-        public EditModel(AmmunitionManager ammunitionManager)
+        public EditModel(IAmmunitionManager ammunitionManager)
         {
             _ammunitionManager = ammunitionManager;
         }
@@ -49,8 +49,6 @@ namespace FoxholeIntelboard.Pages.Ammunitions
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)

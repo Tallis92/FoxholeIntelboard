@@ -12,8 +12,8 @@ namespace FoxholeIntelboard.Pages.Ammunitions
 {
     public class DetailsModel : PageModel
     {
-        private readonly AmmunitionManager _ammunitionManager;
-        public DetailsModel(AmmunitionManager ammunitionManager)
+        private readonly IAmmunitionManager _ammunitionManager;
+        public DetailsModel(IAmmunitionManager ammunitionManager)
         {
             _ammunitionManager = ammunitionManager;
         }

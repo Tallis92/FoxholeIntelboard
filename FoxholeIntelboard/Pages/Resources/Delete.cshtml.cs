@@ -12,9 +12,9 @@ namespace FoxholeIntelboard.Pages.Resources
 {
     public class DeleteModel : PageModel
     {
-        private readonly ResourceManager _resourceManager;
+        private readonly IResourceManager _resourceManager;
 
-        public DeleteModel(ResourceManager resourceManager)
+        public DeleteModel(IResourceManager resourceManager)
         {
             _resourceManager = resourceManager;
         }
@@ -28,8 +28,7 @@ namespace FoxholeIntelboard.Pages.Resources
             {
                 return NotFound();
             }
-
-           
+          
             var resource = await _resourceManager.GetResourceByIdAsync(id);
 
             if (resource is not null)

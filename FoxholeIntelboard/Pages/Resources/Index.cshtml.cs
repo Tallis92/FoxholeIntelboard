@@ -12,8 +12,8 @@ namespace FoxholeIntelboard.Pages.Resources
 {
     public class IndexModel : PageModel
     {
-        private readonly ResourceManager _resourceManager;
-        public IndexModel(ResourceManager resourceManager)
+        private readonly IResourceManager _resourceManager;
+        public IndexModel(IResourceManager resourceManager)
         {
             _resourceManager = resourceManager;
         }

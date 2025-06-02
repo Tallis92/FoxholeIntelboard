@@ -86,7 +86,7 @@
                     {
                         <li>
                             <a asp-page="/Ammunitions/Details" asp-route-id="@cratedItem.CraftableItemId">
-                                @crate.Amount x @cratedItem.Name
+                                @crate.Amount / @crate.RequiredAmount x @cratedItem.Name
                             </a>
                         </li>
                     }

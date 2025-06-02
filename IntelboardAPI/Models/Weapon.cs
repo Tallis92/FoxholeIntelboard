@@ -148,7 +148,7 @@ namespace IntelboardAPI.Models
             var weapon = WeaponType.GetType().GetField(WeaponType.ToString());
             var attribute = weapon?.GetCustomAttribute<DescriptionAttribute>();
             return attribute?.Description ?? WeaponType.ToString();
-
+            
         }
 
     }

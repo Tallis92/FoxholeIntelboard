@@ -12,9 +12,9 @@ namespace FoxholeIntelboard.Pages.Ammunitions
 {
     public class DeleteModel : PageModel
     {
-        private readonly AmmunitionManager _ammunitionManager;
+        private readonly IAmmunitionManager _ammunitionManager;
 
-        public DeleteModel(AmmunitionManager ammunitionManger)
+        public DeleteModel(IAmmunitionManager ammunitionManger)
         {
            _ammunitionManager = ammunitionManger;
         }
@@ -49,7 +49,6 @@ namespace FoxholeIntelboard.Pages.Ammunitions
             }
 
             await _ammunitionManager.DeleteAmmunitionAsync(id);
-
 
             return RedirectToPage("./Index");
         }

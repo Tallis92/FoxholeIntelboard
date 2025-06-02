@@ -1,4 +1,5 @@
 ﻿using FoxholeIntelboard.DAL;
+using FoxholeIntelboard.DTO;
 using IntelboardAPI.Data;
 using IntelboardAPI.DTO;
 using IntelboardAPI.Models;
@@ -17,24 +18,11 @@ namespace FoxholeIntelboard.Pages.Lists
 {
     public class EditModel : PageModel
     {
-        private readonly AmmunitionManager _ammunitionManager;
-        private readonly MaterialManager _materialManager;
-        private readonly ResourceManager _resourceManager;
-        private readonly WeaponManager _weaponManager;
-        private readonly CategoryManager _categoryManager;
-        private readonly InventoryManager _inventoryManager;
-        private readonly CraftableItemManager _craftableItemManager;
+        private readonly IManagerDto _manager;
 
-        public EditModel(AmmunitionManager ammunitionManager, MaterialManager materialManager, ResourceManager resourceManager,
-            WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager, CraftableItemManager craftableItemManager)
+        public EditModel(IManagerDto manager)
         {
-            _ammunitionManager = ammunitionManager;
-            _materialManager = materialManager;
-            _resourceManager = resourceManager;
-            _weaponManager = weaponManager;
-            _categoryManager = categoryManager;
-            _inventoryManager = inventoryManager;
-            _craftableItemManager = craftableItemManager;
+            _manager = manager;
         }
 
         public IList<Ammunition> Ammunitions { get; set; }
@@ -61,14 +49,13 @@ namespace FoxholeIntelboard.Pages.Lists
             if (id == null)
                 return NotFound();
 
-            var inventory = await _inventoryManager.GetInventoryByIdAsync(id);
+            var inventory = await _manager.InventoryManager.GetInventoryByIdAsync(id);
             if (inventory == null)
                 return NotFound();
 
             Inventory = inventory;
-            Weapons = await _weaponManager.GetWeaponsAsync();
+            Weapons = await _manager.WeaponManager.GetWeaponsAsync();
 
-            //
             if (inventory.CratedItems != null && inventory.CratedItems.Any())
             {
                 // Get first weaponid from CratedItems
@@ -80,7 +67,6 @@ namespace FoxholeIntelboard.Pages.Lists
                         SelectedFactionId = weapon.FactionId;
                 }
             }
-
             
             if (SelectedFactionId == null)
                 SelectedFactionId = 0;
@@ -88,11 +74,11 @@ namespace FoxholeIntelboard.Pages.Lists
             // Filter weapons depending on faction
             Weapons = Weapons.Where(w => w.FactionId == SelectedFactionId).ToList();
 
-            Ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
-            Resources = await _resourceManager.GetResourcesAsync();
-            Materials = await _materialManager.GetMaterialsAsync();
-            Categories = await _categoryManager.GetCategoriesAsync();
-            CraftableItems = await _craftableItemManager.GetCraftableItemsAsync();
+            Ammunitions = await _manager.AmmunitionManager.GetAmmunitionsAsync();
+            Resources = await _manager.ResourceManager.GetResourcesAsync();
+            Materials = await _manager.MaterialManager.GetMaterialsAsync();
+            Categories = await _manager.CategoryManager.GetCategoriesAsync();
+            CraftableItems = await _manager.CraftableItemManager.GetCraftableItemsAsync();
 
             
             foreach (var item in inventory.CratedItems)
@@ -100,6 +86,7 @@ namespace FoxholeIntelboard.Pages.Lists
                 CratedItemInput selectItem = new CratedItemInput();
                 selectItem.Id = item.CraftableItemId;
                 selectItem.Amount = item.Amount;
+                selectItem.RequiredAmount = item.RequiredAmount;
                 selectItem.Type = item.Type;
                 selectItem.Name = CraftableItems.Where(c => c.CraftableItemId == item.CraftableItemId).Select(c => c.Name).FirstOrDefault();
                 CratedItems.Add(selectItem);
@@ -127,7 +114,7 @@ namespace FoxholeIntelboard.Pages.Lists
 
             foreach (var input in inputs)
             {
-                CraftableItem? item = await _inventoryManager.getInputItemAsync(input);
+                CraftableItem? item = await _manager.InventoryManager.getInputItemAsync(input);
 
                 // Validation: Only add if item exists
                 if (item == null)
@@ -140,6 +127,7 @@ namespace FoxholeIntelboard.Pages.Lists
                 {
                     CraftableItemId = item.Id,
                     Amount = input.Amount,
+                    RequiredAmount = input.RequiredAmount,
                     Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport.",
                 });
             }
@@ -148,14 +136,14 @@ namespace FoxholeIntelboard.Pages.Lists
                 return NotFound();
             }
 
-            await _inventoryManager.EditInventoryAsync(dto);
+            await _manager.InventoryManager.EditInventoryAsync(dto);
 
             return RedirectToPage("./Index");
         }
 
         private async Task<bool> InventoryExistsAsync(Guid id)
         {
-            var inventories = await _inventoryManager.GetInventoriesAsync();
+            var inventories = await _manager.InventoryManager.GetInventoriesAsync();
             return inventories.Any(e => e.InventoryId == id);
         }
     }

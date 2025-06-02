@@ -12,9 +12,9 @@ namespace FoxholeIntelboard.Pages.Materials
 {
     public class DeleteModel : PageModel
     {
-        private readonly MaterialManager _materialManager;
+        private readonly IMaterialManager _materialManager;
 
-        public DeleteModel(MaterialManager materialManager)
+        public DeleteModel(IMaterialManager materialManager)
         {
             _materialManager = materialManager;
         }

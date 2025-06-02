@@ -7,29 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using FoxholeIntelboard.DTO;
 
 namespace FoxholeIntelboard.Pages.Lists
 {
     public class CreateModel : PageModel
     {
-        private readonly AmmunitionManager _ammunitionManager;
-        private readonly MaterialManager _materialManager;
-        private readonly ResourceManager _resourceManager;
-        private readonly WeaponManager _weaponManager;
-        private readonly CategoryManager _categoryManager;
-        private readonly InventoryManager _inventoryManager;
-        private readonly CraftableItemManager _craftableItemManager;
+        private readonly IManagerDto _manager;
 
-        public CreateModel(AmmunitionManager ammunitionManager, MaterialManager materialManager,
-            ResourceManager resourceManager, WeaponManager weaponManager, CategoryManager categoryManager, InventoryManager inventoryManager, CraftableItemManager craftableItemManager)
+        public CreateModel(IManagerDto manager)
         {
-            _ammunitionManager = ammunitionManager;
-            _materialManager = materialManager;
-            _resourceManager = resourceManager;
-            _weaponManager = weaponManager;
-            _categoryManager = categoryManager;
-            _inventoryManager = inventoryManager;
-            _craftableItemManager = craftableItemManager;
+            _manager = manager;
         }
 
         public List <CratedItemInput> CratedItemInputs { get; set; } = new List<CratedItemInput>();
@@ -49,12 +37,12 @@ namespace FoxholeIntelboard.Pages.Lists
 
         public async Task OnGetAsync()
         {
-            Ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
-            Resources = await _resourceManager.GetResourcesAsync();
-            Materials = await _materialManager.GetMaterialsAsync();
-            Weapons = await _weaponManager.GetWeaponsAsync();
-            Categories = await _categoryManager.GetCategoriesAsync();
-            CraftableItems = await _craftableItemManager.GetCraftableItemsAsync();
+            Ammunitions = await _manager.AmmunitionManager.GetAmmunitionsAsync();
+            Resources = await _manager.ResourceManager.GetResourcesAsync();
+            Materials = await _manager.MaterialManager.GetMaterialsAsync();
+            Weapons = await _manager.WeaponManager.GetWeaponsAsync();
+            Categories = await _manager.CategoryManager.GetCategoriesAsync();
+            CraftableItems = await _manager.CraftableItemManager.GetCraftableItemsAsync();
             if (SelectedFactionId == null)
                 SelectedFactionId = 0;
 
@@ -78,7 +66,7 @@ namespace FoxholeIntelboard.Pages.Lists
 
             foreach (var input in inputs)
             {             
-                CraftableItem? item = await _inventoryManager.getInputItemAsync(input);
+                CraftableItem? item = await _manager.InventoryManager.getInputItemAsync(input);
 
                 // Validation: Only add if item exists
                 if (item == null)
@@ -89,8 +77,9 @@ namespace FoxholeIntelboard.Pages.Lists
 
                 dto.CratedItems.Add(new CratedItemDto
                 {
-                    CraftableItemId= item.Id,
-                    Amount = input.Amount,
+                    CraftableItemId = item.Id,
+                    Amount = 0,
+                    RequiredAmount = input.Amount,
                     Description = $"A crate of {input.Amount}x {item.Name}. Submit to a stockpile or seaport."
                 });
             }
@@ -100,7 +89,7 @@ namespace FoxholeIntelboard.Pages.Lists
                 return Page();
             }
 
-            await _inventoryManager.CreateInventoryAsync(dto);
+            await _manager.InventoryManager.CreateInventoryAsync(dto);
             return RedirectToPage("./Index");
         }
 

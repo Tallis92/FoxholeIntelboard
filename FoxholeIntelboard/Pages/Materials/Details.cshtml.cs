@@ -12,9 +12,9 @@ namespace FoxholeIntelboard.Pages.Materials
 {
     public class DetailsModel : PageModel
     {
-        private readonly MaterialManager _materialManager;
+        private readonly IMaterialManager _materialManager;
 
-        public DetailsModel(MaterialManager materialManager)
+        public DetailsModel(IMaterialManager materialManager)
         {
             _materialManager = materialManager;
         }

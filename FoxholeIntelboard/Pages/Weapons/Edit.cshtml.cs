@@ -10,9 +10,9 @@ namespace FoxholeIntelboard.Pages.Weapons
 {
     public class EditModel : PageModel
     {
-        private readonly WeaponManager _weaponManager;
+        private readonly IWeaponManager _weaponManager;
 
-        public EditModel(WeaponManager weaponManager)
+        public EditModel(IWeaponManager weaponManager)
         {
             _weaponManager = weaponManager;
         }
@@ -46,8 +46,6 @@ namespace FoxholeIntelboard.Pages.Weapons
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)

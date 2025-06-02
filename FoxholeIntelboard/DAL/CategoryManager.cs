@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace FoxholeIntelboard.DAL
 {
-    public class CategoryManager
+    public class CategoryManager : ICategoryManager
     {
         private readonly HttpClient _httpClient;
 

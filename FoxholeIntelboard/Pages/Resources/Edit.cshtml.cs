@@ -13,9 +13,9 @@ namespace FoxholeIntelboard.Pages.Resources
 {
     public class EditModel : PageModel
     {
-        private readonly ResourceManager _resourceManager;
+        private readonly IResourceManager _resourceManager;
 
-        public EditModel(ResourceManager resourceManager)
+        public EditModel(IResourceManager resourceManager)
         {
             _resourceManager = resourceManager;
         }
@@ -39,8 +39,6 @@ namespace FoxholeIntelboard.Pages.Resources
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)

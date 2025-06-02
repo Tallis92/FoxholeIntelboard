@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace FoxholeIntelboard.DAL
 {
-    public class CraftableItemManager
+    public class CraftableItemManager : ICraftableItemManager
     {
         private readonly HttpClient _httpClient;
 

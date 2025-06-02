@@ -7,18 +7,18 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using FoxholeIntelboard.DAL;
 using IntelboardAPI.Models;
+using FoxholeIntelboard.DTO;
 
 namespace FoxholeIntelboard.Pages.Materials
 {
     public class CreateModel : PageModel
     {
-        private readonly ResourceManager _resourceManager;
-        private readonly MaterialManager _materialManager;
+        private readonly IManagerDto _manager;
 
-        public CreateModel(ResourceManager resourceManager, MaterialManager materialManager)
+        public CreateModel(IManagerDto manager)
         {
-            _resourceManager = resourceManager;
-            _materialManager = materialManager;
+
+            _manager = manager;
         }
         [BindProperty]
         public Material Material { get; set; } = default!;
@@ -27,7 +27,7 @@ namespace FoxholeIntelboard.Pages.Materials
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Resources = await _resourceManager.GetResourcesAsync();
+            Resources = await _manager.ResourceManager.GetResourcesAsync();
             return Page();
         }
 
@@ -46,14 +46,12 @@ namespace FoxholeIntelboard.Pages.Materials
                 return Page();
             }
 
-
-
             foreach (var cost in Material.ProductionCost)
             {
                 cost.CraftableItem = Material;
             }
 
-            await _materialManager.CreateMaterialsAsync(Material);
+            await _manager.MaterialManager.CreateMaterialsAsync(Material);
 
             return RedirectToPage("./Index");
         }
