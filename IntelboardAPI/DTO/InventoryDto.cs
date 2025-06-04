@@ -13,6 +13,8 @@ namespace IntelboardAPI.DTO
         [BindNever]
         [JsonPropertyName("cratedItems")]
         public List<CratedItemDto> CratedItems { get; set; }
+        [JsonPropertyName("factionId")]
+        public int? FactionId { get; set; }
     }
 
     public class CratedItemDto
