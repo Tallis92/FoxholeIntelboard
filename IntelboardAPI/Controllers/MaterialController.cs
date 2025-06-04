@@ -29,7 +29,7 @@ namespace IntelboardAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Material>> GetMaterialByIdAsync(int id)
         {
-            var material = await _context.Materials.FindAsync(id);
+            var material = await _context.Materials.Include(m => m.ProductionCost).SingleOrDefaultAsync(m => m.Id == id);
             if (material == null)
             {
                 return NotFound();
@@ -50,17 +50,39 @@ namespace IntelboardAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditMaterialAsync(Material editedmaterial)
+        public async Task<IActionResult> EditMaterialAsync(Material editedMaterial)
         {
+            if (editedMaterial == null)
+            {
+                return BadRequest();
+            }
+                
+            var existingMaterial = await _context.Materials
+                .Include(m => m.ProductionCost)
+                .FirstOrDefaultAsync(m => m.Id == editedMaterial.Id);
 
-            if (editedmaterial == null)
+            if (existingMaterial == null)
             {
                 return NotFound();
             }
-            _context.Materials.Update(editedmaterial);
-            _context.SaveChanges();
 
-            return Ok(editedmaterial);
+            existingMaterial.Name = editedMaterial.Name;
+            existingMaterial.CrateAmount = editedMaterial.CrateAmount;
+
+            // This removes the existing values in the Costs table and then adds new one to avoid making multiple costs for the same craftable item
+            _context.Costs.RemoveRange(existingMaterial.ProductionCost);
+
+            existingMaterial.ProductionCost = editedMaterial.ProductionCost.Select(c => new Cost
+            {
+                CraftableItemId = c.CraftableItemId,
+                Amount = c.Amount,
+                ResourceId = c.ResourceId,
+                MaterialId = editedMaterial.Id
+            }).ToList();
+
+            await _context.SaveChangesAsync();
+
+            return Ok(existingMaterial);
         }
 
         [HttpDelete("{id}")]

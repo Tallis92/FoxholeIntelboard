@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var selectedPropertyCount = Model.Weapon.WeaponProperties?.Count ?? 0;
+    var selectedCostCount = Model.Weapon.ProductionCost?.Count ?? 0;
 }
 
 <h1>Edit</h1>
@@ -65,12 +67,74 @@
                 </select>
                 <span asp-validation-for="Weapon.AmmunitionId" class="text-danger"></span>
             </div>
+            <!-- Input Material Costs -->
+            <p>Choose amount of materials required:</p>
+            <input type="hidden" name="SelectedCost" id="SelectedCost" />
+
+            <div id="selectCosts" style="display: flex; gap: 10px;">
+                @for (int i = 1; i <= 3; i++)
+                {
+                    <label>
+                        <input type="radio" name="cost" value="@i" @(i == selectedCostCount ? "checked" : "") />
+                        @(i == 1 ? "1 Cost" : $"{i} Costs")
+                    </label>
+                }
+            </div>
+
+            <h2>Material Cost</h2>
+            <br />
+            <div id="materialCostsContainer">
+                @if (Model.Weapon.ProductionCost != null)
+                {
+                    for (int i = 0; i < Model.Weapon.ProductionCost.Count; i++)
+                    {
+                        <div class="form-group">
+                            <label for="Weapon.ProductionCost[@i].MaterialId">Cost @(i + 1)</label>
+                            <select name="Weapon.ProductionCost[@i].MaterialId" class="form-control">
+                                <option value="">-- Select Material --</option>
+                                @foreach (var option in Model.Materials)
+                                {
+                                    <option value="@option.Id" selected="@(option.Id == Model.Weapon.ProductionCost[i].MaterialId ? "selected" : null)">@option.Name</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                }
+            </div>
 
             <!-- Input Weapon Properties -->
-            <div class="form-group">              
-                <label asp-for="Weapon.WeaponProperties" class="control-label"></label>
-                <input asp-for="Weapon.WeaponProperties" class="form-control" />
-                <span asp-validation-for="Weapon.WeaponProperties" class="text-danger"></span>
+            <p>Choose amount of Weapon Properties:</p>
+            <input type="hidden" name="SelectedProperty" id="SelectedProperty" />
+
+            <div id="selectProperties" style="display: flex; gap: 10px;">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <label>
+                        <input type="radio" name="property" value="@i" @(i == selectedPropertyCount ? "checked" : "") />
+                        @(i == 1 ? "1 Property" : $"{i} Properties")
+                    </label>
+                }
+            </div>
+
+            <h2>Weapon Property</h2>
+            <br />
+            <div id="specialPropertiesContainer">
+                @if (Model.Weapon.WeaponProperties != null)
+                {
+                    for (int i = 0; i < Model.Weapon.WeaponProperties.Count; i++)
+                    {
+                        <div class="form-group">
+                            <label for="Weapon.WeaponProperties@i">Weapon Property @(i + 1)</label>
+                            <select name="Weapon.WeaponProperties[@i]" class="form-control">
+                                <option value="">-- Select Property --</option>
+                                @foreach (var option in Model.WeaponPropertiesOptions)
+                                {
+                                    <option value="@option.Value" selected="@(option.Value == Model.Weapon.WeaponProperties[i].ToString() ? "selected" : null)">@option.Text</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                }
             </div>
 
             <!-- Input Tech -->
@@ -93,5 +157,10 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        <script>const initialProductionCosts = @Html.Raw(Json.Serialize(Model.Weapon.ProductionCost));</script>
+        <script>const initialWeaponProperties = @Html.Raw(Json.Serialize(Model.Weapon.WeaponProperties.Select(p => p.ToString())));</script>
+        <script>const specialProperties = @Html.Raw(Json.Serialize(Model.WeaponPropertiesOptions));</script>
+        <script src="~/js/edit-weapon.js"></script>
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -31,12 +31,23 @@ namespace IntelboardAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Weapon>> GetWeaponByIdAsync(int id)
         {
-            var weapon = await _context.Weapons.FindAsync(id);
-            if (weapon == null)
+            try
             {
-                return NotFound();
+                var weapon = await _context.Weapons
+                 .Include(w => w.ProductionCost)
+                 .SingleOrDefaultAsync(w => w.Id == id);
+
+                if (weapon == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(weapon);
             }
-            return Ok(weapon);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost]
@@ -54,12 +65,38 @@ namespace IntelboardAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> EditWeaponAsync(Weapon editedWeapon)
         {
-
             if (editedWeapon == null)
             {
                 return NotFound();
             }
-            _context.Weapons.Update(editedWeapon);
+
+            var existingWeapon = await _context.Weapons
+               .Include(a => a.ProductionCost)
+               .FirstOrDefaultAsync(a => a.Id == editedWeapon.Id);
+
+            if (existingWeapon == null)
+                return NotFound();
+
+            existingWeapon.Name = editedWeapon.Name;
+            existingWeapon.CategoryId = editedWeapon.CategoryId;
+            existingWeapon.Description = editedWeapon.Description;
+            existingWeapon.CrateAmount = editedWeapon.CrateAmount;
+            existingWeapon.AmmunitionId = editedWeapon.AmmunitionId;
+            existingWeapon.WeaponProperties = editedWeapon.WeaponProperties;
+            existingWeapon.WeaponType = editedWeapon.WeaponType;
+            existingWeapon.FactionId = editedWeapon.FactionId;
+            existingWeapon.IsTeched = editedWeapon.IsTeched;
+
+            _context.Costs.RemoveRange(existingWeapon.ProductionCost);
+
+            existingWeapon.ProductionCost = editedWeapon.ProductionCost.Select(c => new Cost
+            {
+                CraftableItemId = c.CraftableItemId,
+                Amount = c.Amount,
+                ResourceId = c.ResourceId,
+                MaterialId = c.MaterialId
+            }).ToList();
+
             _context.SaveChanges();
 
             return Ok(editedWeapon);

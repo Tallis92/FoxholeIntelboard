@@ -64,6 +64,10 @@ public enum WeaponType
 
 public enum WeaponProperties
 {
+    [Display(Name = "None")]
+    [Description("No properties")]
+    None,
+
     [Display(Name = "Bayonette")]
     [Description("Allows buckhorn CCQ-18 (Bayonet) attatchment")]
     bayonette,

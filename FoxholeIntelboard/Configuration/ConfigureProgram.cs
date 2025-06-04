@@ -23,6 +23,7 @@ namespace FoxholeIntelboard.Configuration
             builder.Services.AddScoped<IManagerDto, ManagerDto>();
             builder.Services.AddScoped<Ammunition>();
             builder.Services.AddScoped<Weapon>();
+            builder.Services.AddScoped<DatabaseSeeding>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddDbContext<IntelboardDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));

@@ -88,8 +88,11 @@ namespace FoxholeIntelboard.DAL
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
 
-            Console.WriteLine(response.IsSuccessStatusCode ? "Ammunition updated successfully." : $"Error updated ammunition: {response.StatusCode} {response.Content}");
-
+            if (!response.IsSuccessStatusCode)
+            {
+                string error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error getting weapon: {response.StatusCode} {error}");
+            }
         }
 
         public async Task SeedAmmunitionsAsync()

@@ -31,7 +31,7 @@ namespace IntelboardAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Ammunition>> GetAmmunitionByIdAsync(int id)
         {
-            var ammunition = await _context.Ammunitions.FindAsync(id);
+            var ammunition = await _context.Ammunitions.Include(a => a.ProductionCost).SingleOrDefaultAsync(a => a.Id == id);
             if (ammunition == null)
             {
                 return NotFound();
@@ -52,17 +52,37 @@ namespace IntelboardAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditAmmunitionAsync(Ammunition editedammunition)
+        public async Task<IActionResult> EditAmmunitionAsync(Ammunition editedAmmunition)
         {
+            if (editedAmmunition == null)
+                return BadRequest();
 
-            if (editedammunition == null)
-            {
+            var existingAmmunition = await _context.Ammunitions
+                .Include(a => a.ProductionCost)
+                .FirstOrDefaultAsync(a => a.Id == editedAmmunition.Id);
+
+            if (existingAmmunition == null)
                 return NotFound();
-            }
-            _context.Ammunitions.Update(editedammunition);
-            _context.SaveChanges();
 
-            return Ok(editedammunition);
+            existingAmmunition.Name = editedAmmunition.Name;
+            existingAmmunition.Description = editedAmmunition.Description;
+            existingAmmunition.CrateAmount = editedAmmunition.CrateAmount;
+            existingAmmunition.CategoryId = editedAmmunition.CategoryId;
+            existingAmmunition.DamageType = editedAmmunition.DamageType;
+            existingAmmunition.AmmoProperties = editedAmmunition.AmmoProperties;
+
+            _context.Costs.RemoveRange(existingAmmunition.ProductionCost);
+
+            existingAmmunition.ProductionCost = editedAmmunition.ProductionCost.Select(c => new Cost
+            {
+                CraftableItemId = c.CraftableItemId,
+                Amount = c.Amount,
+                ResourceId = c.ResourceId,
+                MaterialId = c.MaterialId
+            }).ToList();
+
+            await _context.SaveChangesAsync();
+            return Ok(existingAmmunition);
         }
 
         [HttpDelete("{id}")]

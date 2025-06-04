@@ -79,15 +79,18 @@ namespace FoxholeIntelboard.DAL
 
             Console.WriteLine(response.IsSuccessStatusCode ? "Material deleted successfully." : $"Error deleting material: {response.StatusCode} {response.Content}");
         }
+
         public async Task EditMaterialAsync(Material material)
         {
             string uri = $"/api/Material/{material.Id}";
             var json = JsonSerializer.Serialize(material);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PutAsync(uri, content);
-
-            Console.WriteLine(response.IsSuccessStatusCode ? "Material updated successfully." : $"Error updating material: {response.StatusCode} {response.Content}");
-
+            if (!response.IsSuccessStatusCode)
+            {
+                string error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error getting weapon: {response.StatusCode} {error}");
+            }
         }
 
         public async Task SeedMaterialsAsync()
