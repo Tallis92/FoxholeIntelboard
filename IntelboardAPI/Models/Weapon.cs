@@ -144,7 +144,7 @@ namespace IntelboardAPI.Models
         public List<WeaponProperties> WeaponProperties { get; set; } = new();
         [JsonPropertyName("isTeched")]
         public bool IsTeched { get; set; } = false;
-        [JsonPropertyName("categoriId")]
+        [JsonPropertyName("categoryId")]
         public int CategoryId { get; set; }
 
         // Returns the name of the selected Enum

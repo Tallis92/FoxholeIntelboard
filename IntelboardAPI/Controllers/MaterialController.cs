@@ -44,6 +44,7 @@ namespace IntelboardAPI.Controllers
             {
                 return BadRequest();
             }
+            material.CategoryId = 4;
             await _context.Materials.AddAsync(material);
             await _context.SaveChangesAsync();
             return Ok();
@@ -68,6 +69,7 @@ namespace IntelboardAPI.Controllers
 
             existingMaterial.Name = editedMaterial.Name;
             existingMaterial.CrateAmount = editedMaterial.CrateAmount;
+            existingMaterial.CategoryId = 4;
 
             // This removes the existing values in the Costs table and then adds new one to avoid making multiple costs for the same craftable item
             _context.Costs.RemoveRange(existingMaterial.ProductionCost);
