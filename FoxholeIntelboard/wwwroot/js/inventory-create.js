@@ -94,34 +94,42 @@
                     cost.productionCost.forEach(subCost => {
 
                         if (subCost.materialId != null) {
+                            // Retrieves materialName and crateAmount from the subcost
                             const materialName = materials.find(m => m.id === subCost.materialId)?.name;
                             const materialCrateAmount = materials.find(m => m.id === subCost.materialId)?.crateAmount || 1;
 
+                            // Checks if materialName exist in materialTotals, if not it creates the new materialName with 0 amount.
                             if (materialName) {
-                                if (!materialTotals[materialName]) materialTotals[materialName] = 0;
+                                if (!materialTotals[materialName]) {
+                                    materialTotals[materialName] = 0;
+                                }
+                                // Calculates total material cost and adds that avlue to materialName dictionary
                                 const materialQty = subCost.amount * item.amount;
                                 materialTotals[materialName] += materialQty;
 
+                                // Calculates total resourceCost of each listed material in cost list
                                 const materialProductionCost = flatProductionCosts.find(c => c.craftableItemId === subCost.materialId);
                                 if (materialProductionCost) {
                                     materialProductionCost.productionCost.forEach(matSubCost => {
                                         const resourceName = resources.find(r => r.id === matSubCost.resourceId)?.name;
                                         if (resourceName) {
-                                            if (!resourceTotals[resourceName]) resourceTotals[resourceName] = 0;
-
-                                            const salvageCost = matSubCost.amount * materialQty;
-                                            resourceTotals[resourceName] += salvageCost;
+                                            if (!resourceTotals[resourceName]) {
+                                                resourceTotals[resourceName] = 0;
+                                            }
+                                            const resourceCost = matSubCost.amount * materialQty;
+                                            resourceTotals[resourceName] += resourceCost;
                                         }
                                     });
                                 }
                             }
                         }
-
+                        // Checks if the added object has a resourceCost, checks it with resourceTotals and adds it to the list 
                         if (subCost.resourceId != null) {
                             const resourceName = resources.find(r => r.id === subCost.resourceId)?.name;
 
-                            if (!resourceTotals[resourceName]) resourceTotals[resourceName] = 0;
-
+                            if (!resourceTotals[resourceName]) {
+                                resourceTotals[resourceName] = 0;
+                            }
                             // Diesel requires a different calculation method so the app needs to check this specifically.
                             if (cost.name == "Diesel") {
                                 resourceTotals[resourceName] += subCost.amount * 1 * item.amount;

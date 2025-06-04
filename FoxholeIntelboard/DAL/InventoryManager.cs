@@ -54,7 +54,8 @@ namespace FoxholeIntelboard.DAL
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _httpClient.PostAsync(uri, content);
 
-            Console.WriteLine(response.IsSuccessStatusCode ? "Inventory created successfully." : $"Error creating inventory: {response.StatusCode} {response.Content}");
+            Console.WriteLine(response.IsSuccessStatusCode ? "Inventory created successfully." : 
+                $"Error creating inventory: {response.StatusCode} {response.Content}");
 
         }
         public async Task DeleteInventoryAsync(Guid? id)
