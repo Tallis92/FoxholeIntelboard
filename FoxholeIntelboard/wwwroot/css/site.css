@@ -9,7 +9,7 @@ html {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow:0 0 0 0.25rem #258cfb;
 }
 
 html {
@@ -29,3 +29,61 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+header {
+    background-color: #1e1e2f;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+}
+.navbar {
+    background-color: #1e1e2f !important;
+}
+.navbar .dropdown-menu {
+    background-color: #1e1e2f !important;
+    border: none !important;
+    border-radius: 0 !important; /* Tar bort rundade hörn */
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18); /* Valfri drop-shadow */
+    margin-top: 0.25rem !important; /* Justerar lite avstånd om det behövs */
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.navbar .navbar-brand,
+.navbar .nav-link,
+.navbar .dropdown-toggle,
+.navbar .dropdown-item {
+  background-color: #1e1e2f !important;
+    color: silver !important;
+}
+.navbar .nav-link:hover,
+.navbar .dropdown-item:hover {
+    color: gold !important;
+}
+footer {
+    background-color: #1e1e2f;
+    color: #ffffff;
+    padding: 1px;
+    text-align: center;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  padding: 2px;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: box-shadow 0.1s;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+}
+.icon-btn:focus, .icon-btn:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.16);
+  outline: none;
+}
+.edit-btn svg rect { fill: #FFD600; }
+.info-btn svg rect { fill: #1976D2; }
+.delete-btn svg rect { fill: #D32F2F; }

@@ -79,7 +79,7 @@ namespace IntelboardAPI.Controllers
                 CraftableItemId = c.CraftableItemId,
                 Amount = c.Amount,
                 ResourceId = c.ResourceId,
-                MaterialId = editedMaterial.Id
+                MaterialId = c.MaterialId
             }).ToList();
 
             await _context.SaveChangesAsync();
