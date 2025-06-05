@@ -48,7 +48,8 @@ namespace FoxholeIntelboard.DAL
             }
             else
             {
-                Console.WriteLine($"Error getting weapon: {response.StatusCode} {response.Content}");
+                string error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error getting weapon: {response.StatusCode} {error}");
             }
             return weapon;
 

@@ -10,22 +10,24 @@ using IntelboardAPI.Models;
 using FoxholeIntelboard.DAL;
 using System.ComponentModel;
 using System.Reflection;
+using FoxholeIntelboard.DTO;
 
 namespace FoxholeIntelboard.Pages.Ammunitions
 {
     public class EditModel : PageModel
     {
-        private readonly IAmmunitionManager _ammunitionManager;
+        private readonly IManagerDto _manager;
         private readonly Ammunition _ammunition;
 
-        public EditModel(IAmmunitionManager ammunitionManager, Ammunition ammunition)
+        public EditModel(IManagerDto manager, Ammunition ammunition)
         {
-            _ammunitionManager = ammunitionManager;
+            _manager = manager;
             _ammunition = ammunition;
         }
 
         [BindProperty]
         public Ammunition Ammunition { get; set; } = default!;
+        public List<Material> Materials { get; set; } = new();
         public List<SelectListItem> DamageTypeOptions { get; set; } = new();
         public List<SelectListItem> AmmoPropertiesOptions { get; set; } = new();
         public async Task<IActionResult> OnGetAsync(int id)
@@ -51,12 +53,14 @@ namespace FoxholeIntelboard.Pages.Ammunitions
                   Text = _ammunition.GetPropertyName(p)
               }).ToList();
 
-            var ammunition = await _ammunitionManager.GetAmmunitionByIdAsync(id);
+            var ammunition = await _manager.AmmunitionManager.GetAmmunitionByIdAsync(id);
+            var materials = await _manager.MaterialManager.GetMaterialsAsync();
 
-            if (ammunition == null)
+            if (ammunition == null && materials == null)
             {
                 return NotFound();
             }
+            Materials = materials;
             Ammunition = ammunition;
 
             return Page();
@@ -74,7 +78,7 @@ namespace FoxholeIntelboard.Pages.Ammunitions
                 return NotFound();
             }
           
-            await _ammunitionManager.EditAmmunitionAsync(Ammunition);
+            await _manager.AmmunitionManager.EditAmmunitionAsync(Ammunition);
 
 
             return RedirectToPage("./Index");
@@ -82,7 +86,7 @@ namespace FoxholeIntelboard.Pages.Ammunitions
 
         private async Task<bool> AmmunitionExistsAsync(int id)
         {
-            var ammunitions = await _ammunitionManager.GetAmmunitionsAsync();
+            var ammunitions = await _manager.AmmunitionManager.GetAmmunitionsAsync();
             return  ammunitions.Any(m => m.Id == id);
         }
 

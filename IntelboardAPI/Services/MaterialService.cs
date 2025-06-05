@@ -35,6 +35,7 @@ namespace IntelboardAPI.Services
                     bool tech = bool.Parse(parts[2]);
                     bool large = bool.Parse(parts[3]);
                     bool facility = bool.Parse(parts[4]);
+                    int categoryId = int.Parse(parts[5]);
 
                     if (!materialNames.Contains(name))
                     {
@@ -45,6 +46,7 @@ namespace IntelboardAPI.Services
                             TechMaterial = tech,
                             LargeMaterial = large,
                             FacilityMade = facility,
+                            CategoryId = categoryId,
                             ProductionCost = new List<Cost>()
                         };
 

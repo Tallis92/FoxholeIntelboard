@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var selectedPropertyCount = Model.Ammunition.AmmoProperties?.Count ?? 0;
+    var selectedCostCount = Model.Ammunition.ProductionCost?.Count ?? 0;
 }
 
 <h1>Edit</h1>
@@ -60,14 +62,35 @@
                 <input type="hidden" name="SelectedCost" id="SelectedCost" />
 
                 <div id="selectCosts" style="display: flex; gap: 10px;">
-                    <input type="radio" name="cost" value="1"> 1 Material
-                    <input type="radio" name="cost" value="2"> 2 Materials
-                    <input type="radio" name="cost" value="3"> 3 Materials
+                    @for (int i = 1; i <= 3; i++)
+                    {
+                        <label>
+                            <input type="radio" name="cost" value="@i" @(i == selectedCostCount ? "checked" : "") />
+                            @(i == 1 ? "1 Cost" : $"{i} Costs")
+                        </label>
+                    }
                 </div>
 
                 <h2>Material Cost</h2>
                 <br />
-                <div id="materialCostsContainer"></div>
+                <div id="materialCostsContainer">
+                    @if (Model.Ammunition.ProductionCost != null)
+                    {
+                        for (int i = 0; i < Model.Ammunition.ProductionCost.Count; i++)
+                        {
+                            <div class="form-group">
+                                <label for="Ammunition.ProductionCost[@i].MaterialId">Cost @(i + 1)</label>
+                                <select name="Ammunition.ProductionCost[@i].MaterialId" class="form-control">
+                                    <option value="">-- Select Material --</option>
+                                    @foreach (var option in Model.Materials)
+                                    {
+                                        <option value="@option.Id" selected="@(option.Id == Model.Ammunition.ProductionCost[i].MaterialId ? "selected" : null)">@option.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                    }
+                </div>
             </div>
 
             @* --- Input Properties --- *@
@@ -76,14 +99,35 @@
                 <input type="hidden" name="SelectedProperty" id="SelectedProperty" />
 
                 <div id="selectProperties" style="display: flex; gap: 10px;">
-                    <input type="radio" name="property" value="1"> 1 Property
-                    <input type="radio" name="property" value="2"> 2 Properties
-                    <input type="radio" name="property" value="3"> 3 Properties
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <label>
+                            <input type="radio" name="property" value="@i" @(i == selectedPropertyCount ? "checked" : "") />
+                            @(i == 1 ? "1 Property" : $"{i} Properties")
+                        </label>
+                    }
                 </div>
 
                 <h2>Ammo Property</h2>
                 <br />
-                <div id="specialPropertiesContainer"></div>
+                <div id="specialPropertiesContainer">
+                    @if (Model.Ammunition.AmmoProperties != null)
+                    {
+                        for (int i = 0; i < Model.Ammunition.AmmoProperties.Count; i++)
+                        {
+                            <div class="form-group">
+                                <label for="Ammunition.AmmoProperties@i">Ammunition Property @(i + 1)</label>
+                                <select name="Ammunition.AmmoProperties[@i]" class="form-control">
+                                    <option value="">-- Select Property --</option>
+                                    @foreach (var option in Model.AmmoPropertiesOptions)
+                                    {
+                                        <option value="@option.Value" selected="@(option.Value == Model.Ammunition.AmmoProperties[i].ToString() ? "selected" : null)">@option.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                    }
+                </div>
             </div>
 
             @* --- Submit Ammunition --- *@
@@ -101,10 +145,10 @@
 @section Scripts {
 
     @{
-        <script>
-            const specialProperties = @Html.Raw(Json.Serialize(Model.AmmoPropertiesOptions));
-        </script>
-        <script src="~/js/create-ammunition.js"></script>
+        <script>const specialProperties = @Html.Raw(Json.Serialize(Model.AmmoPropertiesOptions));</script>
+        <script>const initialProductionCosts = @Html.Raw(Json.Serialize(Model.Ammunition.ProductionCost));</script>
+        <script>const initialSpecialProperties = @Html.Raw(Json.Serialize(Model.Ammunition.AmmoProperties?.Select(p => p.ToString())));</script>
+        <script src="~/js/edit-ammunition.js"></script>
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

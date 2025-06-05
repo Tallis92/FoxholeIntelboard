@@ -4,6 +4,7 @@ using IntelboardAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntelboardAPI.Migrations
 {
     [DbContext(typeof(IntelboardDbContext))]
-    partial class IntelboardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250604131109_FactionIdInventories")]
+    partial class FactionIdInventories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,10 +238,6 @@ namespace IntelboardAPI.Migrations
                 {
                     b.HasBaseType("IntelboardAPI.Models.CraftableItem");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "categoryId");
-
                     b.Property<int>("CrateAmount")
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "crateAmount");
@@ -270,7 +269,7 @@ namespace IntelboardAPI.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "categoryId");
+                        .HasAnnotation("Relational:JsonPropertyName", "categoriId");
 
                     b.Property<int>("CrateAmount")
                         .HasColumnType("int")

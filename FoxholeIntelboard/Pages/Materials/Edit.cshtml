@@ -2,6 +2,7 @@
 @model FoxholeIntelboard.Pages.Materials.EditModel
 @{
     ViewData["Title"] = "Edit";
+    var selectedCostCount = Model.Material.ProductionCost?.Count ?? 0;
 }
 
 <h1>Edit</h1>
@@ -34,18 +35,35 @@
             <input type="hidden" name="SelectedCost" id="SelectedCost" />
 
             <div id="selectCosts" style="display: flex; gap: 10px;">
-                <input type="radio" name="cost" value="1"> 1 Resource
-                <input type="radio" name="cost" value="2"> 2 Resources
-                <input type="radio" name="cost" value="3"> 3 Resources
+                @for (int i = 1; i <= 3; i++)
+                {
+                    <label>
+                        <input type="radio" name="cost" value="@i" @(i == selectedCostCount ? "checked" : "") />
+                        @(i == 1 ? "1 Cost" : $"{i} Costs")
+                    </label>
+                }
             </div>
 
             <h2>Resource Cost</h2>
             <br><br>
-            <div id="resourceCostsContainer"></div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-            
+            <div id="resourceCostsContainer">
+                @if (Model.Material.ProductionCost != null)
+                {
+                    for (int i = 0; i < Model.Material.ProductionCost.Count; i++)
+                    {
+                        <div class="form-group">
+                            <label for="Weapon.ProductionCost[@i].MaterialId">Cost @(i + 1)</label>
+                            <select name="Weapon.ProductionCost[@i].MaterialId" class="form-control">
+                                <option value="">-- Select Material --</option>
+                                @foreach (var option in Model.Resources)
+                                {
+                                    <option value="@option.Id" selected="@(option.Id == Model.Material.ProductionCost[i].ResourceId ? "selected" : null)">@option.Name</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                }
+            </div>           
            
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -60,7 +78,8 @@
 
 @section Scripts {
     @{
-        <script src="~/js/create-material.js"></script>
+        <script>const initialProductionCosts = @Html.Raw(Json.Serialize(Model.Material.ProductionCost));</script>
+        <script src="~/js/edit-material.js"></script>
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

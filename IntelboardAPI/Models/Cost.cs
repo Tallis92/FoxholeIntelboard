@@ -10,6 +10,7 @@ namespace IntelboardAPI.Models
         public int Amount { get; set; }
         [JsonPropertyName("craftableItemId")]
         public int CraftableItemId { get; set; }
+        [JsonIgnore]
         [JsonPropertyName("craftableItem")]
         public CraftableItem? CraftableItem { get; set; }
         [JsonPropertyName("resourceId")]

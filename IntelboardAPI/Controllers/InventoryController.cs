@@ -30,6 +30,7 @@ namespace IntelboardAPI.Controllers
             var inventoryDtos = inventories.Select(inventory => new InventoryDto
             {
                 InventoryId = inventory.Id,
+                FactionId = inventory.FactionId,
                 Name = inventory.Name,
                 CratedItems = inventory.CratedItems.Select(item => new CratedItemDto
                 {
@@ -63,6 +64,7 @@ namespace IntelboardAPI.Controllers
             {
                 InventoryId = inventory.Id,
                 Name = inventory.Name,
+                FactionId = inventory.FactionId,
                 CratedItems = inventory.CratedItems.Select(ci => new CratedItemDto
                 {
                     Id = ci.Id,
@@ -111,6 +113,7 @@ namespace IntelboardAPI.Controllers
             var newInventory = new Inventory
             {
                 Name = inventory.Name,
+                FactionId = inventory.FactionId,
                 CratedItems = cratedItems
             };
             await _context.Inventories.AddAsync(newInventory);

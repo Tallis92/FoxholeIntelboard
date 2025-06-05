@@ -11,6 +11,8 @@ namespace IntelboardAPI.Models
         public string Name { get; set; }
         [JsonPropertyName("cratedItems")]
         public List<CratedItem> CratedItems{ get; set; } = new();
+        [JsonPropertyName("factionId")]
+        public int? FactionId { get; set; }
 
     }
     public class CratedItem

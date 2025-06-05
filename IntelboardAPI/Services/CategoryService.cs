@@ -33,7 +33,7 @@ namespace IntelboardAPI.Services
                     {
                         Category newCategory = new Category
                         {
-                            Name = values[0]
+                            Name = values[0]       
                         };
                         _context.Categories.Add(newCategory);
                         Console.WriteLine($"{values[0]} added succesfully to resource list!");

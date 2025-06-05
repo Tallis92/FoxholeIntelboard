@@ -28,4 +28,6 @@ namespace FoxholeIntelboard.Configuration
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
         }
     }
+
 }
+

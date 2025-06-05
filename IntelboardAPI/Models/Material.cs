@@ -12,6 +12,8 @@ namespace IntelboardAPI.Models
         public bool? LargeMaterial { get; set; }
         [JsonPropertyName("facilitymade")]
         public bool? FacilityMade { get; set; }
+        [JsonPropertyName("categoryId")]
+        public int CategoryId { get; set; }
 
     }
 }

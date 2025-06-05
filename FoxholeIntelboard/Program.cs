@@ -12,4 +12,6 @@ Console.WriteLine("Build is starting...");
 // Middleware + routing etc.
 app.ConfigurePipeline();
 
+await app.SeedDatabaseOnStartupAsync();
+
 app.Run();
