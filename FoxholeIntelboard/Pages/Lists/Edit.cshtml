@@ -58,7 +58,7 @@
                             @if (Model.SelectedFactionId != null)
                             {
                                 var factionWeapons = Model.Weapons
-                                .Where(w => w.FactionId == Model.SelectedFactionId && w.CategoryId == category.Id);
+                                .Where(w => w.FactionId == Model.SelectedFactionId && w.CategoryId == category.Id && category.Id != 4);
                                 foreach (var item in factionWeapons)
                                 {
                                     <li class="dropdown-item d-flex justify-content-between align-items-center">
@@ -69,29 +69,23 @@
                                         </span>
                                     </li>
                                 }
+                            } 
+                            <!-- Material categories-->
+                            @foreach (var item in Model.Materials.Where(m => m.CategoryId == category.Id))
+                            {
+                                <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                    <span>@item.Name</span>
+                                    <span>
+                                        <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
+                                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'MMaterial')">-</button>
+                                    </span>
+                                </li>
                             }
                         </ul>
                     </div>
                 }
 
-                <!-- Materials dropdown -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                        Supplies
-                    </button>
-                    <ul class="dropdown-menu">
-                        @foreach (var item in Model.Materials)
-                        {
-                            <li class="dropdown-item d-flex justify-content-between align-items-center">
-                                <span>@item.Name</span>
-                                <span>
-                                    <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
-                                    <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Material')">-</button>
-                                </span>
-                            </li>
-                        }
-                    </ul>
-                </div>
+             
             </div>
 
             <!-- Hidden field that keeps the list JSON -->

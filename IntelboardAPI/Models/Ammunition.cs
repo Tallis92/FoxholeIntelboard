@@ -31,6 +31,10 @@ namespace IntelboardAPI.Models
 
     public enum AmmoProperties
     {
+        [Display(Name = "None")]
+        [Description("No properties")]
+        None,
+
         [Display(Name = "AT-Suppressesion")]
         [Description("Suppresses enemy vehicles")]
         AT_Suppression,

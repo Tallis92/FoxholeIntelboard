@@ -64,6 +64,10 @@ public enum WeaponType
 
 public enum WeaponProperties
 {
+    [Display(Name = "None")]
+    [Description("No properties")]
+    None,
+
     [Display(Name = "Bayonette")]
     [Description("Allows buckhorn CCQ-18 (Bayonet) attatchment")]
     bayonette,
@@ -140,7 +144,7 @@ namespace IntelboardAPI.Models
         public List<WeaponProperties> WeaponProperties { get; set; } = new();
         [JsonPropertyName("isTeched")]
         public bool IsTeched { get; set; } = false;
-        [JsonPropertyName("categoriId")]
+        [JsonPropertyName("categoryId")]
         public int CategoryId { get; set; }
 
         // Returns the name of the selected Enum

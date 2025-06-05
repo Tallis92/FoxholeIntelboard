@@ -58,6 +58,7 @@ namespace FoxholeIntelboard.Pages.Lists
             var dto = new InventoryDto
             {
                 Name = Inventory.Name,
+                FactionId = SelectedFactionId,
                 CratedItems = new List<CratedItemDto>()
             };
 

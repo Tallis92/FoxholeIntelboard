@@ -8,20 +8,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IntelboardAPI.Models;
 using FoxholeIntelboard.DAL;
+using FoxholeIntelboard.DTO;
 
 namespace FoxholeIntelboard.Pages.Materials
 {
     public class EditModel : PageModel
     {
-        private readonly IMaterialManager _materialManager;
+        private readonly IManagerDto _manager;
 
-        public EditModel(IMaterialManager materialManager)
+        public EditModel(IManagerDto manager)
         {
-            _materialManager = materialManager;
+            _manager = manager;
         }
 
         [BindProperty]
         public Material Material { get; set; } = default!;
+        public List<Resource> Resources { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,12 +32,14 @@ namespace FoxholeIntelboard.Pages.Materials
                 return NotFound();
             }
 
-            var material =  await _materialManager.GetMaterialByIdAsync(id);
-            if (material == null)
+            var material =  await _manager.MaterialManager.GetMaterialByIdAsync(id);
+            var resources = await _manager.ResourceManager.GetResourcesAsync();
+            if (material == null && resources == null)
             {
                 return NotFound();
             }
             Material = material;
+            Resources = resources;
             return Page();
         }
 
@@ -49,13 +53,13 @@ namespace FoxholeIntelboard.Pages.Materials
             {
                 return NotFound();
             }
-            await _materialManager.EditMaterialAsync(Material);
+            await _manager.MaterialManager.EditMaterialAsync(Material);
             return RedirectToPage("./Index");
         }
 
         private async Task<bool> MaterialExists(int id)
         {
-            var materials = await _materialManager.GetMaterialsAsync();
+            var materials = await _manager.MaterialManager.GetMaterialsAsync();
             return materials.Any(e => e.Id == id);
         }
     }

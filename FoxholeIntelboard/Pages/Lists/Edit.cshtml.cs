@@ -55,17 +55,7 @@ namespace FoxholeIntelboard.Pages.Lists
             Weapons = await _manager.WeaponManager.GetWeaponsAsync();
 
             // Get first weaponid from CratedItems to determine what faction items to populate the dropdowns with.
-            if (inventory.CratedItems != null && inventory.CratedItems.Any())
-            {
-                
-                var firstCratedItem = inventory.CratedItems.FirstOrDefault();
-                if (firstCratedItem != null)
-                {
-                    var weapon = Weapons.FirstOrDefault(w => w.Id == firstCratedItem.CraftableItemId);
-                    if (weapon != null)
-                        SelectedFactionId = weapon.FactionId;
-                }
-            }
+            SelectedFactionId = Inventory.FactionId;
             Weapons = Weapons.Where(w => w.FactionId == SelectedFactionId).ToList();
 
             Ammunitions = await _manager.AmmunitionManager.GetAmmunitionsAsync();
