@@ -78,8 +78,11 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.AmmunitionId)
                     </td>
+                    @{
+                        var propertiesString = string.Join(",  ", item.WeaponProperties.Select(p => p.ToString()));
+                    }
                     <td>
-                        @Html.DisplayFor(modelItem => item.WeaponProperties)
+                       @propertiesString
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.IsTeched)
