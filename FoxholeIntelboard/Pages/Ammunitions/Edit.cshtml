@@ -1,146 +1,156 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Ammunitions.EditModel
-
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
 @{
     ViewData["Title"] = "Edit";
     var selectedPropertyCount = Model.Ammunition.AmmoProperties?.Count ?? 0;
     var selectedCostCount = Model.Ammunition.ProductionCost?.Count ?? 0;
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+                ?? IntelboardAPI.Models.DemoUser.Role;
 }
+@if(demoRole == "Admin")
+{
+    <h1>Edit</h1>
 
-<h1>Edit</h1>
-
-<h4>Ammunition</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Ammunition.Id" />
-            @* --- Input Name --- *@
-            <div class="form-group">           
-                <label asp-for="Ammunition.Name" class="control-label"></label>
-                <input asp-for="Ammunition.Name" class="form-control" />
-                <span asp-validation-for="Ammunition.Name" class="text-danger"></span>
-            </div>
-
-            @* --- Input Category --- *@
-            <div class="form-group">
-                <label asp-for="Ammunition.CategoryId" class="control-label"></label>
-                <select asp-for="Ammunition.CategoryId" class="form-control">
-                    <option value="1">Small Arms</option>
-                    <option value="2">Heavy Arms</option>
-                    <option value="3">Heavy Ammunitions</option>
-                </select>
-            </div>
-
-            @* --- Input Description --- *@
-            <div class="form-group">          
-                <label asp-for="Ammunition.Description" class="control-label"></label>
-                <input asp-for="Ammunition.Description" class="form-control" />
-                <span asp-validation-for="Ammunition.Description" class="text-danger"></span>
-            </div>
-
-            @* --- Input Crate Amount --- *@
-            <div class="form-group">              
-                <label asp-for="Ammunition.CrateAmount" class="control-label"></label>
-                <input asp-for="Ammunition.CrateAmount" class="form-control" />
-                <span asp-validation-for="Ammunition.CrateAmount" class="text-danger"></span>
-            </div>
-
-            @* --- Input Damage Type --- *@
-            <div class="form-group">
-                <label asp-for="Ammunition.DamageType">Damage Type</label>
-                <select asp-for="Ammunition.DamageType" asp-items="Model.DamageTypeOptions" class="form-control">
-                    <option value="">-- Select Damage Type --</option>
-                </select>
-                <span asp-validation-for="Ammunition.DamageType" class="text-danger"></span>
-            </div>
-
-            @* --- Input Costs --- *@
-            <div class="form-group">       
-                <p>Choose amount of materials required:</p>
-                <input type="hidden" name="SelectedCost" id="SelectedCost" />
-
-                <div id="selectCosts" style="display: flex; gap: 10px;">
-                    @for (int i = 1; i <= 3; i++)
-                    {
-                        <label>
-                            <input type="radio" name="cost" value="@i" @(i == selectedCostCount ? "checked" : "") />
-                            @(i == 1 ? "1 Cost" : $"{i} Costs")
-                        </label>
-                    }
+    <h4>Ammunition</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Ammunition.Id" />
+                @* --- Input Name --- *@
+                <div class="form-group">
+                    <label asp-for="Ammunition.Name" class="control-label"></label>
+                    <input asp-for="Ammunition.Name" class="form-control" />
+                    <span asp-validation-for="Ammunition.Name" class="text-danger"></span>
                 </div>
 
-                <h2>Material Cost</h2>
-                <br />
-                <div id="materialCostsContainer">
-                    @if (Model.Ammunition.ProductionCost != null)
-                    {
-                        for (int i = 0; i < Model.Ammunition.ProductionCost.Count; i++)
+                @* --- Input Category --- *@
+                <div class="form-group">
+                    <label asp-for="Ammunition.CategoryId" class="control-label"></label>
+                    <select asp-for="Ammunition.CategoryId" class="form-control">
+                        <option value="1">Small Arms</option>
+                        <option value="2">Heavy Arms</option>
+                        <option value="3">Heavy Ammunitions</option>
+                    </select>
+                </div>
+
+                @* --- Input Description --- *@
+                <div class="form-group">
+                    <label asp-for="Ammunition.Description" class="control-label"></label>
+                    <input asp-for="Ammunition.Description" class="form-control" />
+                    <span asp-validation-for="Ammunition.Description" class="text-danger"></span>
+                </div>
+
+                @* --- Input Crate Amount --- *@
+                <div class="form-group">
+                    <label asp-for="Ammunition.CrateAmount" class="control-label"></label>
+                    <input asp-for="Ammunition.CrateAmount" class="form-control" />
+                    <span asp-validation-for="Ammunition.CrateAmount" class="text-danger"></span>
+                </div>
+
+                @* --- Input Damage Type --- *@
+                <div class="form-group">
+                    <label asp-for="Ammunition.DamageType">Damage Type</label>
+                    <select asp-for="Ammunition.DamageType" asp-items="Model.DamageTypeOptions" class="form-control">
+                        <option value="">-- Select Damage Type --</option>
+                    </select>
+                    <span asp-validation-for="Ammunition.DamageType" class="text-danger"></span>
+                </div>
+
+                @* --- Input Costs --- *@
+                <div class="form-group">
+                    <p>Choose amount of materials required:</p>
+                    <input type="hidden" name="SelectedCost" id="SelectedCost" />
+
+                    <div id="selectCosts" style="display: flex; gap: 10px;">
+                        @for (int i = 1; i <= 3; i++)
                         {
-                            <div class="form-group">
-                                <label for="Ammunition.ProductionCost[@i].MaterialId">Cost @(i + 1)</label>
-                                <select name="Ammunition.ProductionCost[@i].MaterialId" class="form-control">
-                                    <option value="">-- Select Material --</option>
-                                    @foreach (var option in Model.Materials)
-                                    {
-                                        <option value="@option.Id" selected="@(option.Id == Model.Ammunition.ProductionCost[i].MaterialId ? "selected" : null)">@option.Name</option>
-                                    }
-                                </select>
-                            </div>
+                            <label>
+                                <input type="radio" name="cost" value="@i" @(i == selectedCostCount ? "checked" : "") />
+                                @(i == 1 ? "1 Cost" : $"{i} Costs")
+                            </label>
                         }
-                    }
-                </div>
-            </div>
+                    </div>
 
-            @* --- Input Properties --- *@
-            <div class="form-group">             
-                <p>Choose amount of Ammo Properties:</p>
-                <input type="hidden" name="SelectedProperty" id="SelectedProperty" />
-
-                <div id="selectProperties" style="display: flex; gap: 10px;">
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        <label>
-                            <input type="radio" name="property" value="@i" @(i == selectedPropertyCount ? "checked" : "") />
-                            @(i == 1 ? "1 Property" : $"{i} Properties")
-                        </label>
-                    }
-                </div>
-
-                <h2>Ammo Property</h2>
-                <br />
-                <div id="specialPropertiesContainer">
-                    @if (Model.Ammunition.AmmoProperties != null)
-                    {
-                        for (int i = 0; i < Model.Ammunition.AmmoProperties.Count; i++)
+                    <h2>Material Cost</h2>
+                    <br />
+                    <div id="materialCostsContainer">
+                        @if (Model.Ammunition.ProductionCost != null)
                         {
-                            <div class="form-group">
-                                <label for="Ammunition.AmmoProperties@i">Ammunition Property @(i + 1)</label>
-                                <select name="Ammunition.AmmoProperties[@i]" class="form-control">
-                                    <option value="">-- Select Property --</option>
-                                    @foreach (var option in Model.AmmoPropertiesOptions)
-                                    {
-                                        <option value="@option.Value" selected="@(option.Value == Model.Ammunition.AmmoProperties[i].ToString() ? "selected" : null)">@option.Text</option>
-                                    }
-                                </select>
-                            </div>
+                            for (int i = 0; i < Model.Ammunition.ProductionCost.Count; i++)
+                            {
+                                <div class="form-group">
+                                    <label for="Ammunition.ProductionCost[@i].MaterialId">Cost @(i + 1)</label>
+                                    <select name="Ammunition.ProductionCost[@i].MaterialId" class="form-control">
+                                        <option value="">-- Select Material --</option>
+                                        @foreach (var option in Model.Materials)
+                                        {
+                                            <option value="@option.Id" selected="@(option.Id == Model.Ammunition.ProductionCost[i].MaterialId ? "selected" : null)">@option.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            }
                         }
-                    }
+                    </div>
                 </div>
-            </div>
 
-            @* --- Submit Ammunition --- *@
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                @* --- Input Properties --- *@
+                <div class="form-group">
+                    <p>Choose amount of Ammo Properties:</p>
+                    <input type="hidden" name="SelectedProperty" id="SelectedProperty" />
+
+                    <div id="selectProperties" style="display: flex; gap: 10px;">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <label>
+                                <input type="radio" name="property" value="@i" @(i == selectedPropertyCount ? "checked" : "") />
+                                @(i == 1 ? "1 Property" : $"{i} Properties")
+                            </label>
+                        }
+                    </div>
+
+                    <h2>Ammo Property</h2>
+                    <br />
+                    <div id="specialPropertiesContainer">
+                        @if (Model.Ammunition.AmmoProperties != null)
+                        {
+                            for (int i = 0; i < Model.Ammunition.AmmoProperties.Count; i++)
+                            {
+                                <div class="form-group">
+                                    <label for="Ammunition.AmmoProperties@i">Ammunition Property @(i + 1)</label>
+                                    <select name="Ammunition.AmmoProperties[@i]" class="form-control">
+                                        <option value="">-- Select Property --</option>
+                                        @foreach (var option in Model.AmmoPropertiesOptions)
+                                        {
+                                            <option value="@option.Value" selected="@(option.Value == Model.Ammunition.AmmoProperties[i].ToString() ? "selected" : null)">@option.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                @* --- Submit Ammunition --- *@
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+    <div>
+        <a asp-page="./Index">Back to List</a>
+    </div>
+}
+else
+{
+    <h4>You don't have permission to be here</h4>
+    <a href="../Index">Go back</a>
+}
 
 @section Scripts {
 

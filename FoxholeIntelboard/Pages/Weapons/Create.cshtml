@@ -1,117 +1,127 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Weapons.CreateModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
+@{
+    ViewData["Title"] = "Create";
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+             ?? IntelboardAPI.Models.DemoUser.Role;
+}
+@if(demoRole == "Admin")
+{
+    <h1>Create</h1>
 
-        @{
-        ViewData["Title"] = "Create";
-        }
-        
-        <h1>Create</h1>
-        
     <h4>Weapon</h4>
     <hr />
     <div class="row">
-    <div class="col-md-4">
-    <form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- Input Name -->
-            <div class="form-group">
-                <label asp-for="Weapon.Name" class="control-label"></label>
-                <input asp-for="Weapon.Name" class="form-control" />
-                <span asp-validation-for="Weapon.Name" class="text-danger"></span>
-            </div>
+                <!-- Input Name -->
+                <div class="form-group">
+                    <label asp-for="Weapon.Name" class="control-label"></label>
+                    <input asp-for="Weapon.Name" class="form-control" />
+                    <span asp-validation-for="Weapon.Name" class="text-danger"></span>
+                </div>
 
-            <!-- Input Faction -->
-            <div class="form-group">
-                <label asp-for="Weapon.FactionId" class="control-label"></label>
-                <input asp-for="Weapon.FactionId" class="form-control" min="0" max="1"/>
-                <span asp-validation-for="Weapon.FactionId" class="text-danger"></span>
-            </div>
+                <!-- Input Faction -->
+                <div class="form-group">
+                    <label asp-for="Weapon.FactionId" class="control-label"></label>
+                    <input asp-for="Weapon.FactionId" class="form-control" min="0" max="1" />
+                    <span asp-validation-for="Weapon.FactionId" class="text-danger"></span>
+                </div>
 
-            <!-- Input Crate Amount -->
-            <div class="form-group">
-                <label asp-for="Weapon.CrateAmount" class="control-label"></label>
-                <input asp-for="Weapon.CrateAmount" class="form-control" />
-                <span asp-validation-for="Weapon.CrateAmount" class="text-danger"></span>
-            </div>
+                <!-- Input Crate Amount -->
+                <div class="form-group">
+                    <label asp-for="Weapon.CrateAmount" class="control-label"></label>
+                    <input asp-for="Weapon.CrateAmount" class="form-control" />
+                    <span asp-validation-for="Weapon.CrateAmount" class="text-danger"></span>
+                </div>
 
-            <!-- Input Weapon Type -->
-            <div class="form-group">
-                <label asp-for="Weapon.WeaponType" class="control-label">Weapon Type</label>
-                <select asp-for="Weapon.WeaponType" asp-items="Model.WeaponTypeOptions" class="form-control">
-                    <option value="">-- Select Weapon Type --</option>
-                </select>
-                <span asp-validation-for="Weapon.WeaponType" class="text-danger"></span>
-            </div>
+                <!-- Input Weapon Type -->
+                <div class="form-group">
+                    <label asp-for="Weapon.WeaponType" class="control-label">Weapon Type</label>
+                    <select asp-for="Weapon.WeaponType" asp-items="Model.WeaponTypeOptions" class="form-control">
+                        <option value="">-- Select Weapon Type --</option>
+                    </select>
+                    <span asp-validation-for="Weapon.WeaponType" class="text-danger"></span>
+                </div>
 
-            <!-- Input Description -->
-            <div class="form-group">
-                <label asp-for="Weapon.Description" class="control-label">Description</label>
-                <input asp-for="Weapon.Description" class="form-control" />
-                <span asp-validation-for="Weapon.Description" class="text-danger"></span>
-            </div>
+                <!-- Input Description -->
+                <div class="form-group">
+                    <label asp-for="Weapon.Description" class="control-label">Description</label>
+                    <input asp-for="Weapon.Description" class="form-control" />
+                    <span asp-validation-for="Weapon.Description" class="text-danger"></span>
+                </div>
 
-            <!-- Input Ammunition -->
-            <div class="form-group">
+                <!-- Input Ammunition -->
+                <div class="form-group">
 
-                <label asp-for="Weapon.AmmunitionId" class="control-label">Ammunition</label>
-                <select asp-for="Weapon.AmmunitionId" class="form-control">
-                    @foreach(var ammo in Model.AmmunitionsOptions)
-                    {
-                        <option value="@ammo.Id">@ammo.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="Weapon.AmmunitionId" class="text-danger"></span>
-            </div>
+                    <label asp-for="Weapon.AmmunitionId" class="control-label">Ammunition</label>
+                    <select asp-for="Weapon.AmmunitionId" class="form-control">
+                        @foreach (var ammo in Model.AmmunitionsOptions)
+                        {
+                            <option value="@ammo.Id">@ammo.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Weapon.AmmunitionId" class="text-danger"></span>
+                </div>
 
-            <!-- Input Teched -->
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Weapon.IsTeched" /> @Html.DisplayNameFor(model => model.Weapon.IsTeched)
-                </label>
-            </div>
+                <!-- Input Teched -->
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Weapon.IsTeched" /> @Html.DisplayNameFor(model => model.Weapon.IsTeched)
+                    </label>
+                </div>
 
-            <!-- Input Material Costs -->
-            <p>Choose amount of materials required:</p>
-            <input type="hidden" name="SelectedCost" id="SelectedCost" />
+                <!-- Input Material Costs -->
+                <p>Choose amount of materials required:</p>
+                <input type="hidden" name="SelectedCost" id="SelectedCost" />
 
-            <div id="selectCosts" style="display: flex; gap: 10px;">
-                <input type="radio" name="cost" value="1"> 1 Material
-                <input type="radio" name="cost" value="2"> 2 Materials
-                <input type="radio" name="cost" value="3"> 3 Materials
-            </div>
+                <div id="selectCosts" style="display: flex; gap: 10px;">
+                    <input type="radio" name="cost" value="1"> 1 Material
+                    <input type="radio" name="cost" value="2"> 2 Materials
+                    <input type="radio" name="cost" value="3"> 3 Materials
+                </div>
 
-            <h2>Material Cost</h2>
-            <br />
-            <div id="materialCostsContainer"></div>
+                <h2>Material Cost</h2>
+                <br />
+                <div id="materialCostsContainer"></div>
 
-            <!-- Input Weapon Properties -->
-            <p>Choose amount of Weapon Properties:</p>
-            <input type="hidden" name="SelectedProperty" id="SelectedProperty" />
+                <!-- Input Weapon Properties -->
+                <p>Choose amount of Weapon Properties:</p>
+                <input type="hidden" name="SelectedProperty" id="SelectedProperty" />
 
-            <div id="selectProperties" style="display: flex; gap: 10px;">
-                <input type="radio" name="property" value="1"> 1 Property
-                <input type="radio" name="property" value="2"> 2 Properties
-                <input type="radio" name="property" value="3"> 3 Properties
-                <input type="radio" name="property" value="4"> 4 Properties
-                <input type="radio" name="property" value="5"> 5 Properties
-            </div>
-          
-            <h2>Weapon Property</h2>
-            <br />
-            <div id="specialPropertiesContainer"></div>
+                <div id="selectProperties" style="display: flex; gap: 10px;">
+                    <input type="radio" name="property" value="1"> 1 Property
+                    <input type="radio" name="property" value="2"> 2 Properties
+                    <input type="radio" name="property" value="3"> 3 Properties
+                    <input type="radio" name="property" value="4"> 4 Properties
+                    <input type="radio" name="property" value="5"> 5 Properties
+                </div>
 
-            <!-- Submit Weapon -->
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <h2>Weapon Property</h2>
+                <br />
+                <div id="specialPropertiesContainer"></div>
+
+                <!-- Submit Weapon -->
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-page="Index">Back to List</a>
+    </div>
+}
+else
+{
+    <h4>You don't have permission to be here</h4>
+    <a href="../Index">Go back</a>
+}
 
 @section Scripts {
     @{

@@ -1,116 +1,127 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Lists.EditModel
-
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
 @{
     ViewData["Title"] = "Edit";
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+              ?? IntelboardAPI.Models.DemoUser.Role;
 }
 
-<h1>Edit</h1>
-<h4>Inventory</h4>
-<hr />
+@if(demoRole == "Admin" || demoRole == "User")
+{
+    <h1>Edit</h1>
+    <h4>Inventory</h4>
+    <hr />
 
-<!-- Locked faction when choice was made when creating list -->
-<div class="mb-3">
-    <label class="fw-bold">Faction:</label>
-    <span class="badge bg-secondary ms-2">
-        @(Model.SelectedFactionId == 0 ? "Warden" : "Colonial")
-    </span>
-    <input type="hidden" asp-for="SelectedFactionId" />
-</div>
+    <!-- Locked faction when choice was made when creating list -->
+    <div class="mb-3">
+        <label class="fw-bold">Faction:</label>
+        <span class="badge bg-secondary ms-2">
+            @(Model.SelectedFactionId == 0 ? "Warden" : "Colonial")
+        </span>
+        <input type="hidden" asp-for="SelectedFactionId" />
+    </div>
 
-<div class="d-flex flex-row">
-    
-    <div class="col-md-8">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="d-flex flex-row">
 
-            <input type="hidden" asp-for="Inventory.InventoryId" />
+        <div class="col-md-8">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- Input Name -->
-            <div class="form-group mb-3">
-                <label asp-for="Inventory.Name" class="control-label"></label>
-                <input asp-for="Inventory.Name" class="form-control" />
-                <span asp-validation-for="Inventory.Name" class="text-danger"></span>
-            </div>
+                <input type="hidden" asp-for="Inventory.InventoryId" />
 
-            <!-- Categories dropdowns -->
-            <div class="d-flex flex-wrap gap-3 mb-4">
-                @foreach (var category in Model.Categories)
-                {
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                            @category.Name
-                        </button>
-                        <ul class="dropdown-menu">
+                <!-- Input Name -->
+                <div class="form-group mb-3">
+                    <label asp-for="Inventory.Name" class="control-label"></label>
+                    <input asp-for="Inventory.Name" class="form-control" />
+                    <span asp-validation-for="Inventory.Name" class="text-danger"></span>
+                </div>
 
-                            <!-- Ammunition categories -->
-                            @foreach (var item in Model.Ammunitions.Where(i => i.CategoryId == category.Id))
-                            {
-                                <li class="dropdown-item d-flex justify-content-between align-items-center">
-                                    <span>@item.Name</span>
-                                    <span>
-                                        <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Ammunition')">+</button>
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Ammunition')">-</button>
-                                    </span>
-                                </li>
-                            }
-                            <!-- Weapon categories depending on Faction -->
-                            @if (Model.SelectedFactionId != null)
-                            {
-                                var factionWeapons = Model.Weapons
-                                .Where(w => w.FactionId == Model.SelectedFactionId && w.CategoryId == category.Id && category.Id != 4);
-                                foreach (var item in factionWeapons)
+                <!-- Categories dropdowns -->
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                                @category.Name
+                            </button>
+                            <ul class="dropdown-menu">
+
+                                <!-- Ammunition categories -->
+                                @foreach (var item in Model.Ammunitions.Where(i => i.CategoryId == category.Id))
                                 {
                                     <li class="dropdown-item d-flex justify-content-between align-items-center">
                                         <span>@item.Name</span>
                                         <span>
-                                            <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Weapon')">+</button>
-                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Weapon')">-</button>
+                                            <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Ammunition')">+</button>
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Ammunition')">-</button>
                                         </span>
                                     </li>
                                 }
-                            } 
-                            <!-- Material categories-->
-                            @foreach (var item in Model.Materials.Where(m => m.CategoryId == category.Id))
-                            {
-                                <li class="dropdown-item d-flex justify-content-between align-items-center">
-                                    <span>@item.Name</span>
-                                    <span>
-                                        <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'MMaterial')">-</button>
-                                    </span>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                }
+                                <!-- Weapon categories depending on Faction -->
+                                @if (Model.SelectedFactionId != null)
+                                {
+                                    var factionWeapons = Model.Weapons
+                                    .Where(w => w.FactionId == Model.SelectedFactionId && w.CategoryId == category.Id && category.Id != 4);
+                                    foreach (var item in factionWeapons)
+                                    {
+                                        <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                            <span>@item.Name</span>
+                                            <span>
+                                                <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Weapon')">+</button>
+                                                <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Weapon')">-</button>
+                                            </span>
+                                        </li>
+                                    }
+                                }
+                                <!-- Material categories-->
+                                @foreach (var item in Model.Materials.Where(m => m.CategoryId == category.Id))
+                                {
+                                    <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                        <span>@item.Name</span>
+                                        <span>
+                                            <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'MMaterial')">-</button>
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
 
-             
+
+                </div>
+
+                <!-- Hidden field that keeps the list JSON -->
+                <input type="hidden" name="SelectedItems" id="SelectedItems" />
+
+                <div class="form-group mt-4">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+
+            <div class="mt-3">
+                <a asp-page="Index">Back to List</a>
             </div>
+        </div>
 
-            <!-- Hidden field that keeps the list JSON -->
-            <input type="hidden" name="SelectedItems" id="SelectedItems" />
-
-            <div class="form-group mt-4">
-                <input type="submit" value="Save" class="btn btn-primary" />
+        <!-- Sticky Sidebar -->
+        <div id="your-list" class="position-sticky top-0 ms-4 p-3 bg-light border rounded shadow" style="min-width: 300px; height: fit-content;">
+            <h5>Your List</h5>
+            <ul id="listDisplay" class="list-group"></ul>
+            <div id="cost-summary">
+                <h5>Total cost:</h5>
+                <div id="costDisplay"></div>
             </div>
-        </form>
-
-        <div class="mt-3">
-            <a asp-page="Index">Back to List</a>
         </div>
     </div>
-
-    <!-- Sticky Sidebar -->
-    <div id="your-list" class="position-sticky top-0 ms-4 p-3 bg-light border rounded shadow" style="min-width: 300px; height: fit-content;">
-        <h5>Your List</h5>
-        <ul id="listDisplay" class="list-group"></ul>
-        <div id="cost-summary">
-            <h5>Total cost:</h5>
-            <div id="costDisplay"></div>
-        </div>
-    </div>
-</div>
+}
+else
+{
+    <h4>You don't have permission to be here</h4>
+    <a href="../Index">Go back</a>
+}
 
 <script>
     window.productionCosts = @Html.Raw(Json.Serialize(Model.CraftableItems.ToList()));

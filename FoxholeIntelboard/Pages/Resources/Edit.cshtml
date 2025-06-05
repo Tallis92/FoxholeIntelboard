@@ -1,31 +1,43 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Resources.EditModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
+@{
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+             ?? IntelboardAPI.Models.DemoUser.Role;
+}
+@if (demoRole == "Admin")
+{
+    <h4>Resource</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Resource.Id" />
 
-<h4>Resource</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Resource.Id" />
-
-            <!-- Input Name -->
-            <div class="form-group">
-                <label asp-for="Resource.Name" class="control-label"></label>
-                <input asp-for="Resource.Name" class="form-control" />
-                <span asp-validation-for="Resource.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <!-- Input Name -->
+                <div class="form-group">
+                    <label asp-for="Resource.Name" class="control-label"></label>
+                    <input asp-for="Resource.Name" class="form-control" />
+                    <span asp-validation-for="Resource.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
-
+    <div>
+        <a asp-page="./Index">Back to List</a>
+    </div>
+}
+else
+{
+    <h4>You don't have permission to be here</h4>
+    <a href="../Index">Go back</a>
+}
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
