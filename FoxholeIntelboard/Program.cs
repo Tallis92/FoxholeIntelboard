@@ -12,11 +12,6 @@ Console.WriteLine("Build is starting...");
 // Middleware + routing etc.
 app.ConfigurePipeline();
 
-using (var scope = app.Services.CreateScope())
-{
-    var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeding>();
-    await seeder.SeedDatabaseOnStartupAsync();
-}
-
+await app.SeedDatabaseOnStartupAsync();
 
 app.Run();

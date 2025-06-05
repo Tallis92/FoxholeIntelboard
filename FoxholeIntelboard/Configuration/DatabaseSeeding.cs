@@ -1,19 +1,19 @@
 ﻿using FoxholeIntelboard.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FoxholeIntelboard.Configuration
 {
-    public class DatabaseSeeding
+    public static class DatabaseSeeding
     {
-        private readonly IManagerDto _manager;
-        public DatabaseSeeding(IManagerDto manager)
+        public static async Task SeedDatabaseOnStartupAsync(this WebApplication app)
         {
-            _manager = manager;
-        }
-        public async Task SeedDatabaseOnStartupAsync()
-        {
+            using var scope = app.Services.CreateScope();
+            var services = scope.ServiceProvider;  
             try
             {
+                var _manager = services.GetRequiredService<IManagerDto>();
+
                 await _manager.CategoryManager.SeedCategoriesAsync();
                 await _manager.ResourceManager.SeedResourcesAsync();
                 await _manager.MaterialManager.SeedMaterialsAsync();
@@ -28,5 +28,8 @@ namespace FoxholeIntelboard.Configuration
 
             Console.WriteLine("Seeded Database Successfully");
         }
+
     }
+
+
 }
