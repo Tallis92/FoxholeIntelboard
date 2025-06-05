@@ -1,81 +1,92 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Materials.EditModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
 @{
     ViewData["Title"] = "Edit";
     var selectedCostCount = Model.Material.ProductionCost?.Count ?? 0;
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+             ?? IntelboardAPI.Models.DemoUser.Role;
 }
+@if(demoRole == "Admin")
+{
+    <h1>Edit</h1>
 
-<h1>Edit</h1>
+    <h4>Material</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <!-- Hidden Input Id -->
+                <input type="hidden" asp-for="Material.Id" />
 
-<h4>Material</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <!-- Hidden Input Id -->
-            <input type="hidden" asp-for="Material.Id" />
+                <!-- Input Name -->
+                <div class="form-group">
+                    <label asp-for="Material.Name" class="control-label"></label>
+                    <input asp-for="Material.Name" class="form-control" />
+                    <span asp-validation-for="Material.Name" class="text-danger"></span>
+                </div>
 
-            <!-- Input Name -->
-            <div class="form-group">
-                <label asp-for="Material.Name" class="control-label"></label>
-                <input asp-for="Material.Name" class="form-control" />
-                <span asp-validation-for="Material.Name" class="text-danger"></span>
-            </div>
+                <!-- Input Crate Amount -->
+                <div class="form-group">
+                    <label asp-for="Material.CrateAmount" class="control-label"></label>
+                    <input asp-for="Material.CrateAmount" class="form-control" />
+                    <span asp-validation-for="Material.CrateAmount" class="text-danger"></span>
+                </div>
 
-            <!-- Input Crate Amount -->
-            <div class="form-group">                   
-                <label asp-for="Material.CrateAmount" class="control-label"></label>
-                <input asp-for="Material.CrateAmount" class="form-control" />
-                <span asp-validation-for="Material.CrateAmount" class="text-danger"></span>
-            </div>
+                <!-- Input Resource Costs -->
+                <p>Choose amount of resources:</p>
+                <input type="hidden" name="SelectedCost" id="SelectedCost" />
 
-            <!-- Input Resource Costs -->
-            <p>Choose amount of resources:</p>
-            <input type="hidden" name="SelectedCost" id="SelectedCost" />
-
-            <div id="selectCosts" style="display: flex; gap: 10px;">
-                @for (int i = 1; i <= 3; i++)
-                {
-                    <label>
-                        <input type="radio" name="cost" value="@i" @(i == selectedCostCount ? "checked" : "") />
-                        @(i == 1 ? "1 Cost" : $"{i} Costs")
-                    </label>
-                }
-            </div>
-
-            <h2>Resource Cost</h2>
-            <br><br>
-            <div id="resourceCostsContainer">
-                @if (Model.Material.ProductionCost != null)
-                {
-                    for (int i = 0; i < Model.Material.ProductionCost.Count; i++)
+                <div id="selectCosts" style="display: flex; gap: 10px;">
+                    @for (int i = 1; i <= 3; i++)
                     {
-                        <div class="form-group">
-                            <label for="Weapon.ProductionCost[@i].MaterialId">Cost @(i + 1)</label>
-                            <select name="Weapon.ProductionCost[@i].MaterialId" class="form-control">
-                                <option value="">-- Select Material --</option>
-                                @foreach (var option in Model.Resources)
-                                {
-                                    <option value="@option.Id" selected="@(option.Id == Model.Material.ProductionCost[i].ResourceId ? "selected" : null)">@option.Name</option>
-                                }
-                            </select>
-                        </div>
+                        <label>
+                            <input type="radio" name="cost" value="@i" @(i == selectedCostCount ? "checked" : "") />
+                            @(i == 1 ? "1 Cost" : $"{i} Costs")
+                        </label>
                     }
-                }
-            </div>           
-           
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                </div>
+
+                <h2>Resource Cost</h2>
+                <br><br>
+                <div id="resourceCostsContainer">
+                    @if (Model.Material.ProductionCost != null)
+                    {
+                        for (int i = 0; i < Model.Material.ProductionCost.Count; i++)
+                        {
+                            <div class="form-group">
+                                <label for="Weapon.ProductionCost[@i].MaterialId">Cost @(i + 1)</label>
+                                <select name="Weapon.ProductionCost[@i].MaterialId" class="form-control">
+                                    <option value="">-- Select Material --</option>
+                                    @foreach (var option in Model.Resources)
+                                    {
+                                        <option value="@option.Id" selected="@(option.Id == Model.Material.ProductionCost[i].ResourceId ? "selected" : null)">@option.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+    <div>
+        <a asp-page="./Index">Back to List</a>
+    </div>
 
+}
+else
+{
+    <h4>You don't have permission to be here</h4>
+    <a href="../Index">Go back</a>
+}
 @section Scripts {
     @{
         <script>const initialProductionCosts = @Html.Raw(Json.Serialize(Model.Material.ProductionCost));</script>

@@ -1,41 +1,53 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Materials.IndexModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
 @{
     ViewData["Title"] = "Index";
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+             ?? IntelboardAPI.Models.DemoUser.Role;
 }
+@if(demoRole == "Admin")
+{
+    <h1>Index</h1>
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Material[0].Name)
 
-<h1>Index</h1>
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Material[0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Material[0].CrateAmount)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Material)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
 
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Material[0].CrateAmount)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Material) {
-        <tr>
-            <td>
-                 @Html.DisplayFor(modelItem => item.Name)
-
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CrateAmount)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CrateAmount)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+else
+{
+    <h4>You don't have permission to be here</h4>
+    <a href="../Index">Go back</a>
+}

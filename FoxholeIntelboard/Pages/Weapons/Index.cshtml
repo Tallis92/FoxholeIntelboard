@@ -1,91 +1,103 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Weapons.IndexModel
-
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
 @{
     ViewData["Title"] = "Index";
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+           ?? IntelboardAPI.Models.DemoUser.Role;
+}
+@if(demoRole == "Admin")
+{
+    <h1>Index</h1>
+
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weapons[0].Name)
+                </th>
+                <th>
+                    Faction
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weapons[0].CrateAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weapons[0].WeaponType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weapons[0].Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weapons[0].AmmunitionId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weapons[0].WeaponProperties)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Weapons[0].IsTeched)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Weapons)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @if (item.FactionId == 0)
+                        {
+                            <p>Warden</p>
+                        }
+                        else
+                        {
+                            <p>Colonial</p>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CrateAmount)
+                    </td>
+                    <td>
+                        @{
+                            var weaponType = item.WeaponType.ToString().Replace("_", " ");
+                        }
+                        @Html.DisplayFor(modelItem => weaponType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AmmunitionId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WeaponProperties)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsTeched)
+                    </td>
+
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h4>You don't have permission to be here</h4>
+    <a href="../Index">Go back</a>
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Weapons[0].Name)
-            </th>
-            <th>
-                Faction
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weapons[0].CrateAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weapons[0].WeaponType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weapons[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weapons[0].AmmunitionId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weapons[0].WeaponProperties)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Weapons[0].IsTeched)
-            </th>
-           
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Weapons) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                    @if(item.FactionId == 0)
-                    {
-                        <p>Warden</p>
-                    }
-                    else
-                    {
-                        <p>Colonial</p>
-                    }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CrateAmount)
-            </td>
-            <td>
-                    @{
-                        var weaponType = item.WeaponType.ToString().Replace("_", " ");                   
-                    }
-                @Html.DisplayFor(modelItem => weaponType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AmmunitionId)
-            </td>
-            <td>
-                    @Html.DisplayFor(modelItem => item.WeaponProperties)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsTeched)
-            </td>
-           
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>

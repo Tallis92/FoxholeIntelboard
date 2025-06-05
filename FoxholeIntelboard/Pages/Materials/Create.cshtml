@@ -1,54 +1,65 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.Materials.CreateModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
 @{
     ViewData["Title"] = "Create";
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+                ?? IntelboardAPI.Models.DemoUser.Role;
 }
-        
+@if(demoRole == "Admin")
+{
     <h1>Create</h1>
     <h4>Material</h4>
     <hr />
     <div class="row">
-    <div class="col-md-4">
-    <form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <!-- Input Name -->
-            <div class="form-group">
-                <label asp-for="Material.Name" class="control-label"></label>
-                <input asp-for="Material.Name" class="form-control" />
-                <span asp-validation-for="Material.Name" class="text-danger"></span>
-            </div>
-            <!-- Input Crate Amount -->
-            <div class="form-group">
-                <label asp-for="Material.CrateAmount" class="control-label"></label>
-                <input asp-for="Material.CrateAmount" class="form-control" />
-                <span asp-validation-for="Material.CrateAmount" class="text-danger"></span>
-            </div>
+                <!-- Input Name -->
+                <div class="form-group">
+                    <label asp-for="Material.Name" class="control-label"></label>
+                    <input asp-for="Material.Name" class="form-control" />
+                    <span asp-validation-for="Material.Name" class="text-danger"></span>
+                </div>
+                <!-- Input Crate Amount -->
+                <div class="form-group">
+                    <label asp-for="Material.CrateAmount" class="control-label"></label>
+                    <input asp-for="Material.CrateAmount" class="form-control" />
+                    <span asp-validation-for="Material.CrateAmount" class="text-danger"></span>
+                </div>
 
-            <!-- Input Resource Costs -->
-            <p>Choose amount of resources:</p>
-            <input type="hidden" name="SelectedCost" id="SelectedCost" />
+                <!-- Input Resource Costs -->
+                <p>Choose amount of resources:</p>
+                <input type="hidden" name="SelectedCost" id="SelectedCost" />
 
-            <div id="selectCosts" style="display: flex; gap: 10px;"> 
-                <input type="radio" name="cost" value="1"> 1 Resource
-                <input type="radio" name="cost" value="2"> 2 Resources
-                <input type="radio" name="cost" value="3"> 3 Resources
-            </div>
+                <div id="selectCosts" style="display: flex; gap: 10px;">
+                    <input type="radio" name="cost" value="1"> 1 Resource
+                    <input type="radio" name="cost" value="2"> 2 Resources
+                    <input type="radio" name="cost" value="3"> 3 Resources
+                </div>
 
-            <h2>Resource Cost</h2>
-            <br><br>
-            <div id="resourceCostsContainer"></div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+                <h2>Resource Cost</h2>
+                <br><br>
+                <div id="resourceCostsContainer"></div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
 
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-page="Index">Back to List</a>
+    </div>
+}       
+else
+{
+    <h4>You don't have permission to be here</h4>
+    <a href="../Index">Go back</a>
+}
 
 @section Scripts {
     @{

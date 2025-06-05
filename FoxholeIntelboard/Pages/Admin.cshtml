@@ -1,4 +1,13 @@
 ﻿@page
 @model FoxholeIntelboard.Pages.AdminModel
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Http
 @{
+    var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
+             ?? IntelboardAPI.Models.DemoUser.Role;
+}
+@if(demoRole != "Admin")
+{
+    <h4>You don't have permission to be here</h4>
+    <a href="../Index">Go back</a>
 }
