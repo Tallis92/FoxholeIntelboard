@@ -1,7 +1,8 @@
 ﻿using IntelboardAPI.Data;
-using IntelboardAPI.Models;
+using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using IntelboardCore.Services;
 
 namespace IntelboardAPI.Controllers
 {
@@ -10,9 +11,9 @@ namespace IntelboardAPI.Controllers
     public class MaterialController : Controller
     {
         private readonly IntelboardDbContext _context;
-        private readonly Services.IMaterialService _materialService;
+        private readonly IMaterialService _materialService;
 
-        public MaterialController(IntelboardDbContext context, Services.IMaterialService materialService)
+        public MaterialController(IntelboardDbContext context, IMaterialService materialService)
         {
             _context = context;
             _materialService = materialService;

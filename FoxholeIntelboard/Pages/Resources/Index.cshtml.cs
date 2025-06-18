@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Models;
-using FoxholeIntelboard.DAL;
+using IntelboardCore.Models;
+using IntelboardCore.DAL;
 
 namespace FoxholeIntelboard.Pages.Resources
 {

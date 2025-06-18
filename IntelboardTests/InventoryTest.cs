@@ -1,9 +1,9 @@
-﻿using FoxholeIntelboard.DAL;
+﻿using IntelboardCore.DAL;
 using Moq;
-using IntelboardAPI.DTO;
-using IntelboardAPI.Models;
+using IntelboardCore.DTO;
+using IntelboardCore.Models;
 using Xunit;
-using IntelboardAPI.Services;
+using IntelboardCore.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

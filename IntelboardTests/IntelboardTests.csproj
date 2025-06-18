@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FoxholeIntelboard\FoxholeIntelboard.csproj" />
     <ProjectReference Include="..\IntelboardAPI\IntelboardAPI.csproj" />
+    <ProjectReference Include="..\IntelboardCore\IntelboardCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,67 +4,95 @@
     ViewData["Title"] = "Home page";
 }
 <head style="">
-<link rel="stylesheet" href="/css/inventory-display.css" />
+    <link rel="stylesheet" href="/css/inventory-display.css" />
 </head>
 
-<h1 style="text-align: center; color: white;" >Welcome to the front!</h1>
+<h1 style="text-align: center; color: white;">Welcome to the front!</h1>
+
 <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-  <div class="yt-carousel">
-  <button class="yt-prev">&#10094;</button>
-  <div class="yt-slides">
-    <iframe src="https://www.youtube.com/embed/i-DTKFrJ6Qc" frameborder="0" allowfullscreen></iframe>
-    <iframe src="https://www.youtube.com/embed/aF7C99pdXUk" frameborder="0" allowfullscreen style="display:none"></iframe>
-    <iframe src="https://www.youtube.com/embed/W_X2TcrDBqY" frameborder="0" allowfullscreen style="display:none"></iframe>
-  </div>
-  <button class="yt-next">&#10095;</button>
-</div>
+    <div class="yt-carousel">
+        <button class="yt-prev">&#10094;</button>
+        <div class="yt-slides">
+            <!-- IMPORTANT: We let YouTube API create the iframes -->
+            <div id="player-0"></div>
+            <div id="player-1" style="display:none"></div>
+            <div id="player-2" style="display:none"></div>
+        </div>
+        <button class="yt-next">&#10095;</button>
+    </div>
 </div>
 
+<!-- Load the YouTube IFrame API asynchronously -->
+<script src="https://www.youtube.com/iframe_api" async></script>
 
 <script>
-  // Video carousel and background changer
-  const carouselData = [
-    {
-      video: "https://www.youtube.com/embed/i-DTKFrJ6Qc",
-      bg:   "url('/images/airborne-1.jpg')" 
-    },
-    {
-      video: "https://www.youtube.com/embed/aF7C99pdXUk",
-      bg:   "url('/images/inferno-1.jpg')" 
-    },
-    {
-      video: "https://www.youtube.com/embed/W_X2TcrDBqY",
-      bg:   "url('/images/naval-1.jpg')" 
+    const carouselData = [
+        { bg: "url('/images/misc/airborne-1.jpg')" },
+        { bg: "url('/images/misc/inferno-1.jpg')" },
+        { bg: "url('/images/misc/naval-1.jpg')" }
+    ];
+
+    const prevBtn = document.querySelector('.yt-prev');
+    const nextBtn = document.querySelector('.yt-next');
+    const slideDivs = document.querySelectorAll('.yt-slides > div'); // use divs instead of iframes
+    let players = [];
+    let current = 0;
+    let playersReady = 0;
+
+    // YouTube API ready callback
+    function onYouTubeIframeAPIReady() {
+        // Initialize players and let YT API create the iframes dynamically
+        players[0] = new YT.Player('player-0', {
+            videoId: 'i-DTKFrJ6Qc',
+            events: {
+                onReady: onPlayerReady
+            }
+        });
+        players[1] = new YT.Player('player-1', {
+            videoId: 'aF7C99pdXUk',
+            events: {
+                onReady: onPlayerReady
+            }
+        });
+        players[2] = new YT.Player('player-2', {
+            videoId: 'W_X2TcrDBqY',
+            events: {
+                onReady: onPlayerReady
+            }
+        });
     }
-  ];
 
-  const slides = document.querySelectorAll('.yt-slides iframe');
-  const prevBtn = document.querySelector('.yt-prev');
-  const nextBtn = document.querySelector('.yt-next');
-  let current = 0;
+    function onPlayerReady(event) {
+        playersReady++;
+        if (playersReady === players.length) {
+            // All players initialized, now safe to call showSlide
+            showSlide(0);
+        }
+    }
 
-  function showSlide(idx) {
-    slides.forEach((slide, i) => {
-      slide.style.display = (i === idx) ? 'block' : 'none';
-      // Stops the video if it's hidden
-      if(i !== idx) slide.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-    });
-    // Switch background image
-    document.body.style.backgroundImage = carouselData[idx].bg;
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
-    document.body.style.backgroundRepeat = "no-repeat";
-  }
+    function showSlide(idx) {
+        slideDivs.forEach((div, i) => {
+            div.style.display = (i === idx) ? 'block' : 'none';
 
-  prevBtn.onclick = function() {
-    current = (current - 1 + slides.length) % slides.length;
-    showSlide(current);
-  };
-  nextBtn.onclick = function() {
-    current = (current + 1) % slides.length;
-    showSlide(current);
-  };
+            // Pause other videos
+            if (i !== idx && players[i] && typeof players[i].stopVideo === 'function') {
+                players[i].stopVideo();
+            }
+        });
 
-  // Show first slide and set initial background
-  showSlide(current);
+        document.body.style.backgroundImage = carouselData[idx].bg;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundRepeat = "no-repeat";
+
+        current = idx;
+    }
+
+    prevBtn.onclick = function() {
+        showSlide((current - 1 + slideDivs.length) % slideDivs.length);
+    };
+
+    nextBtn.onclick = function() {
+        showSlide((current + 1) % slideDivs.length);
+    };
 </script>

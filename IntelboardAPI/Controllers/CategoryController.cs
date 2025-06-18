@@ -1,7 +1,7 @@
-﻿using IntelboardAPI.Models;
+﻿using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Services;
+using IntelboardCore.Services;
 using IntelboardAPI.Data;
 
 namespace IntelboardAPI.Controllers

@@ -1,5 +1,5 @@
 ﻿using IntelboardAPI.Data;
-using IntelboardAPI.Services;
+using IntelboardCore.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace IntelboardAPI.Extensions
@@ -16,7 +16,7 @@ namespace IntelboardAPI.Extensions
              });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            builder.Services.AddHttpClient();
             // CORS policy to allow requests from the frontend
             builder.Services.AddCors(options =>
             {
@@ -35,11 +35,36 @@ namespace IntelboardAPI.Extensions
                 options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
 
             // Dependency injection for services
-            builder.Services.AddScoped<IResourceService, ResourceService>();
-            builder.Services.AddScoped<IMaterialService, MaterialService>();
-            builder.Services.AddScoped<IAmmunitionService, AmmunitionService>();
-            builder.Services.AddScoped<IWeaponService, WeaponService>();
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IResourceService>(provider =>
+            {
+                var env = provider.GetRequiredService<IWebHostEnvironment>();
+                var httpClient = provider.GetRequiredService<HttpClient>();
+                return new ResourceService(env.ContentRootPath, httpClient);
+            });
+            builder.Services.AddScoped<IMaterialService>(provider =>
+            {
+                var env = provider.GetRequiredService<IWebHostEnvironment>();
+                var httpClient = provider.GetRequiredService<HttpClient>();
+                return new MaterialService(env.ContentRootPath, httpClient);
+            });
+            builder.Services.AddScoped<IAmmunitionService>(provider =>
+            {
+                var env = provider.GetRequiredService<IWebHostEnvironment>();
+                var httpClient = provider.GetRequiredService<HttpClient>();
+                return new AmmunitionService(env.ContentRootPath, httpClient);
+            });
+            builder.Services.AddScoped<IWeaponService>(provider =>
+            {
+                var env = provider.GetRequiredService<IWebHostEnvironment>();
+                var httpClient = provider.GetRequiredService<HttpClient>();
+                return new WeaponService(env.ContentRootPath, httpClient);
+            });
+            builder.Services.AddScoped<ICategoryService>(provider =>
+            {
+                var env = provider.GetRequiredService<IWebHostEnvironment>();
+                var httpClient = provider.GetRequiredService<HttpClient>();
+                return new CategoryService(env.ContentRootPath, httpClient);
+            });
         }
     }
 }

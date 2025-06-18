@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using FoxholeIntelboard.DAL;
-using IntelboardAPI.Data;
+using IntelboardCore.DAL;
+//using IntelboardAPI.Data;
 using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.DTO;
+using IntelboardCore.DTO;
+using Microsoft.Identity.Client;
 
 namespace FoxholeIntelboard.Pages
 {
@@ -18,8 +19,8 @@ namespace FoxholeIntelboard.Pages
         {
         }
 
-        public async Task OnPostSeedDatabaseAsync()
-        {
+        public async Task <IActionResult> OnPostSeedDatabaseAsync()
+        { 
             try
             {
                 await _manager.CategoryManager.SeedCategoriesAsync();
@@ -35,6 +36,7 @@ namespace FoxholeIntelboard.Pages
             }
             
             Console.WriteLine("Seeded Database Successfully");
+            return RedirectToPage("/Index");
         }
     }
 }

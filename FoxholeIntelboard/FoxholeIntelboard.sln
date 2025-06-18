@@ -4,14 +4,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoxholeIntelboard", "FoxholeIntelboard.csproj", "{159E925A-0B0F-DE0A-E3E3-E6A6429A4F11}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A2FE4B1-E011-4E0D-B904-6FA4E47CD712} = {8A2FE4B1-E011-4E0D-B904-6FA4E47CD712}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelboardAPI", "..\IntelboardAPI\IntelboardAPI.csproj", "{8DB50562-346C-4E0F-37DD-65AE97AC040D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A2FE4B1-E011-4E0D-B904-6FA4E47CD712} = {8A2FE4B1-E011-4E0D-B904-6FA4E47CD712}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelboardTests", "..\IntelboardTests\IntelboardTests.csproj", "{8848B18B-9D0F-47EA-9F1E-DA76A7B6098D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{159E925A-0B0F-DE0A-E3E3-E6A6429A4F11} = {159E925A-0B0F-DE0A-E3E3-E6A6429A4F11}
 		{8DB50562-346C-4E0F-37DD-65AE97AC040D} = {8DB50562-346C-4E0F-37DD-65AE97AC040D}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelboardCore", "..\IntelboardCore\IntelboardCore.csproj", "{8A2FE4B1-E011-4E0D-B904-6FA4E47CD712}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +39,10 @@ Global
 		{8848B18B-9D0F-47EA-9F1E-DA76A7B6098D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8848B18B-9D0F-47EA-9F1E-DA76A7B6098D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8848B18B-9D0F-47EA-9F1E-DA76A7B6098D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A2FE4B1-E011-4E0D-B904-6FA4E47CD712}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A2FE4B1-E011-4E0D-B904-6FA4E47CD712}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A2FE4B1-E011-4E0D-B904-6FA4E47CD712}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A2FE4B1-E011-4E0D-B904-6FA4E47CD712}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

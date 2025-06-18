@@ -1,6 +1,6 @@
 ﻿using IntelboardAPI.Data;
-using IntelboardAPI.DTO;
-using IntelboardAPI.Models;
+using IntelboardCore.DTO;
+using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

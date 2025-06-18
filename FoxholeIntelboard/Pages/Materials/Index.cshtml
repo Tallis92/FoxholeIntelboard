@@ -5,7 +5,7 @@
 @{
     ViewData["Title"] = "Index";
     var demoRole = Http.HttpContext.Request.Cookies["demoRole"]
-             ?? IntelboardAPI.Models.DemoUser.Role;
+             ?? IntelboardCore.Models.DemoUser.Role;
 }
 @if(demoRole == "Admin")
 {

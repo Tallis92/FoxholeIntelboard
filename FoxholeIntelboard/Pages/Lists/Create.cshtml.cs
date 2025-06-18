@@ -1,13 +1,13 @@
-﻿using FoxholeIntelboard.DAL;
-using IntelboardAPI.DTO;
-using IntelboardAPI.Data;
-using IntelboardAPI.Models;
+﻿using IntelboardCore.DAL;
+using IntelboardCore.DTO;
+//using IntelboardAPI.Data;
+using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using FoxholeIntelboard.DTO;
+using IntelboardCore.DTO;
 
 namespace FoxholeIntelboard.Pages.Lists
 {

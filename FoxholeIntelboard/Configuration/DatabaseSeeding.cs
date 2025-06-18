@@ -1,4 +1,4 @@
-﻿using FoxholeIntelboard.DTO;
+﻿using IntelboardCore.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 

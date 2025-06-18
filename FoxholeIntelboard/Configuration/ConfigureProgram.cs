@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FoxholeIntelboard.DAL;
-using IntelboardAPI.Data;
-using FoxholeIntelboard.DTO;
-using IntelboardAPI.Models;
+using IntelboardCore.DAL;
+//using IntelboardAPI.Data;
+using IntelboardCore.DTO;
+using IntelboardCore.Models;
 namespace FoxholeIntelboard.Configuration
 
 {
@@ -24,8 +24,8 @@ namespace FoxholeIntelboard.Configuration
             builder.Services.AddScoped<Ammunition>();
             builder.Services.AddScoped<Weapon>();
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddDbContext<IntelboardDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
+            //builder.Services.AddDbContext<IntelboardDbContext>(options =>
+            //    options.UseSqlServer(builder.Configuration.GetConnectionString("IntelboardDB")));
         }
     }
 

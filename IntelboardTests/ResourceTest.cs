@@ -1,6 +1,6 @@
-﻿using FoxholeIntelboard.DAL;
-using IntelboardAPI.Models;
-using IntelboardAPI.DTO;
+﻿using IntelboardCore.DAL;
+using IntelboardCore.Models;
+using IntelboardCore.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

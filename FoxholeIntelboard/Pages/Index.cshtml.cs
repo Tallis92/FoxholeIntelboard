@@ -1,13 +1,11 @@
-using FoxholeIntelboard.DAL;
-using IntelboardAPI.Models;
+using IntelboardCore.DAL;
+using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Xml.Linq;
-using IntelboardAPI.Data;
+//using IntelboardAPI.Data;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.DTO;
-using FoxholeIntelboard.DTO;
-
+using IntelboardCore.DTO;
 
 namespace FoxholeIntelboard.Pages;
 
