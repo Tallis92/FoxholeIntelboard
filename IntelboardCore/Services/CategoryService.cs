@@ -25,7 +25,7 @@ namespace IntelboardCore.Services
             Console.WriteLine("Filepath: " + filePath);
 
             if (System.IO.File.Exists(filePath))
-            {
+            {+
                 var lines = System.IO.File.ReadAllLines(filePath);
                 foreach (var line in lines.Skip(1))
                 {
