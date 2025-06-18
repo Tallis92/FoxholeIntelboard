@@ -36,7 +36,7 @@ namespace IntelboardCore.Services
                         {
                             Name = values[0]       
                         };
-                        var response = await _httpClient.PostAsJsonAsync("/api/Resource/", newCategory);
+                        var response = await _httpClient.PostAsJsonAsync("/api/Category/", newCategory);
                         Console.WriteLine(response.IsSuccessStatusCode ? $"{values[0]} created successfully." : $"Error creating category: {response.StatusCode} {response.Content}");
                     }
                     else
