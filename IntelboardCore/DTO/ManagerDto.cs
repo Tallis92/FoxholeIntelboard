@@ -1,4 +1,5 @@
-﻿using IntelboardCore.DAL;
+﻿using IntelboardCore.DAL.Interfaces;
+using IntelboardCore.DTO.Interfaces;
 
 namespace IntelboardCore.DTO
 {

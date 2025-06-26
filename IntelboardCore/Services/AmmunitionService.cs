@@ -1,4 +1,5 @@
 ﻿using IntelboardCore.Models;
+using IntelboardCore.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
 

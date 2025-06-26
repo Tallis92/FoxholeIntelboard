@@ -1,5 +1,7 @@
 ﻿using IntelboardCore.DAL;
 using IntelboardCore.DTO;
+using IntelboardCore.DTO.Interfaces;
+
 //using IntelboardAPI.Data;
 using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;

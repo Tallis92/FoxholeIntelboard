@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 //using IntelboardAPI.Data;
 using IntelboardCore.Models;
-using IntelboardCore.DAL;
 using IntelboardCore.DTO;
+using IntelboardCore.DAL.Interfaces;
 
 namespace FoxholeIntelboard.Pages.Lists
 {

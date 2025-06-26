@@ -1,7 +1,7 @@
 ﻿using IntelboardCore.DTO;
 using IntelboardCore.Models;
 
-namespace IntelboardCore.DAL
+namespace IntelboardCore.DAL.Interfaces
 {
     public interface IInventoryManager
     {

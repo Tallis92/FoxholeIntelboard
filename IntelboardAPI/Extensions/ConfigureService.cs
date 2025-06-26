@@ -1,5 +1,6 @@
 ﻿using IntelboardAPI.Data;
 using IntelboardCore.Services;
+using IntelboardCore.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace IntelboardAPI.Extensions

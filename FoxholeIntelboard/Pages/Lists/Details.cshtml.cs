@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using IntelboardCore.Models;
 using IntelboardCore.DAL;
 using IntelboardCore.DTO;
+using IntelboardCore.DTO.Interfaces;
 
 namespace FoxholeIntelboard.Pages.Lists
 {

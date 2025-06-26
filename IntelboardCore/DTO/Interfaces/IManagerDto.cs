@@ -1,6 +1,6 @@
-﻿using IntelboardCore.DAL;
+﻿using IntelboardCore.DAL.Interfaces;
 
-namespace IntelboardCore.DTO
+namespace IntelboardCore.DTO.Interfaces
 {
     public interface IManagerDto
     {

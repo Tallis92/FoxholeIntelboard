@@ -1,6 +1,7 @@
 ﻿using IntelboardCore.Models;
 using IntelboardCore.DTO;
 using System.Text.Json;
+using IntelboardCore.DAL.Interfaces;
 
 namespace IntelboardCore.DAL
 {

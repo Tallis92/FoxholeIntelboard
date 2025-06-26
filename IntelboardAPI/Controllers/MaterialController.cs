@@ -2,7 +2,7 @@
 using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IntelboardCore.Services;
+using IntelboardCore.Services.Interfaces;
 
 namespace IntelboardAPI.Controllers
 {

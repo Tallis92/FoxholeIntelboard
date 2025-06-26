@@ -66,7 +66,7 @@
                                 @if (Model.SelectedFactionId != null)
                                 {
                                     // Sorts weapons into correct categories and excludes category 4 (supplies)
-                                    var factionWeapons = Model.Weapons.Where(w => w.FactionId == Model.SelectedFactionId && category.Id != 4);
+                                    var factionWeapons = Model.Weapons.Where(w => w.FactionId == Model.SelectedFactionId && w.CategoryId == category.Id );
                                     foreach (var item in factionWeapons)
                                     {
                                         <li class="dropdown-item d-flex justify-content-between align-items-center">

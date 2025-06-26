@@ -3,6 +3,7 @@ using IntelboardCore.DTO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using IntelboardCore.DAL.Interfaces;
 
 namespace IntelboardCore.DAL
 {

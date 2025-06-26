@@ -3,6 +3,8 @@ using IntelboardCore.DAL;
 //using IntelboardAPI.Data;
 using IntelboardCore.DTO;
 using IntelboardCore.Models;
+using IntelboardCore.DTO.Interfaces;
+using IntelboardCore.DAL.Interfaces;
 namespace FoxholeIntelboard.Configuration
 
 {

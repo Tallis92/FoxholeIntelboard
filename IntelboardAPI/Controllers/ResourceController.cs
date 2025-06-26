@@ -3,7 +3,6 @@ using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.Design;
-using IntelboardCore.Services;
 
 namespace IntelboardAPI.Controllers
 {
@@ -12,9 +11,9 @@ namespace IntelboardAPI.Controllers
     public class ResourceController : Controller
     {
         private readonly IntelboardDbContext _context;
-        private readonly IntelboardCore.Services.IResourceService _resourceService;
+        private readonly IntelboardCore.Services.Interfaces.IResourceService _resourceService;
 
-        public ResourceController(IntelboardDbContext context, IntelboardCore.Services.IResourceService resourceService)
+        public ResourceController(IntelboardDbContext context, IntelboardCore.Services.Interfaces.IResourceService resourceService)
         {
             _context = context;
             _resourceService = resourceService;

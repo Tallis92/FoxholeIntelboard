@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using IntelboardCore.DAL;
 //using IntelboardAPI.Data;
 using Microsoft.EntityFrameworkCore;
-using IntelboardCore.DTO;
 using Microsoft.Identity.Client;
+using IntelboardCore.DTO.Interfaces;
 
 namespace FoxholeIntelboard.Pages
 {

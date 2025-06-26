@@ -1,4 +1,4 @@
-﻿namespace IntelboardCore.Services
+﻿namespace IntelboardCore.Services.Interfaces
 {
     public interface IWeaponService
     {

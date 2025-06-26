@@ -1,4 +1,5 @@
 ﻿using IntelboardCore.Models;
+using IntelboardCore.Services.Interfaces;
 using System.Net.Http.Json;
 
 namespace IntelboardCore.Services

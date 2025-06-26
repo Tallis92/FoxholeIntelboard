@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using IntelboardCore.DTO;
+using IntelboardCore.DTO.Interfaces;
 
 namespace FoxholeIntelboard.Pages.Lists
 {

@@ -1,4 +1,5 @@
-﻿using IntelboardCore.Models;
+﻿using IntelboardCore.DAL.Interfaces;
+using IntelboardCore.Models;
 using System.Net.Http;
 using System.Text.Json;
 

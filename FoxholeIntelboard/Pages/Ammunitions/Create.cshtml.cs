@@ -1,5 +1,5 @@
 ﻿using IntelboardCore.DAL;
-using IntelboardCore.DTO;
+using IntelboardCore.DTO.Interfaces;
 using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

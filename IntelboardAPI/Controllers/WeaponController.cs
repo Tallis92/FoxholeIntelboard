@@ -1,6 +1,6 @@
 ﻿using IntelboardAPI.Data;
 using IntelboardCore.Models;
-using IntelboardCore.Services;
+using IntelboardCore.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,6 +1,6 @@
 ﻿using IntelboardCore.Models;
 
-namespace IntelboardCore.Services
+namespace IntelboardCore.Services.Interfaces
 {
     public interface IMaterialService
     {

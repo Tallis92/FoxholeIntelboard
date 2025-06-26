@@ -10,7 +10,7 @@ using IntelboardCore.Models;
 using IntelboardCore.DAL;
 using System.ComponentModel;
 using System.Reflection;
-using IntelboardCore.DTO;
+using IntelboardCore.DTO.Interfaces;
 
 namespace FoxholeIntelboard.Pages.Ammunitions
 {
