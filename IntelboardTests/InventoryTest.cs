@@ -1,14 +1,14 @@
-﻿using FoxholeIntelboard.DAL;
-using Moq;
-using IntelboardAPI.DTO;
-using IntelboardAPI.Models;
+﻿using Moq;
+using IntelboardCore.DTO;
+using IntelboardCore.Models;
 using Xunit;
-using IntelboardAPI.Services;
+using IntelboardCore.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IntelboardCore.DAL.Interfaces;
 
 namespace IntelboardTests
 {

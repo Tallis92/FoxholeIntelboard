@@ -1,6 +1,6 @@
-﻿using FoxholeIntelboard.DAL;
-using FoxholeIntelboard.DTO;
-using IntelboardAPI.Models;
+﻿using IntelboardCore.DAL;
+using IntelboardCore.DTO.Interfaces;
+using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;

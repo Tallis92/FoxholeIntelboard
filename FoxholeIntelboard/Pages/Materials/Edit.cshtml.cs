@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Models;
-using FoxholeIntelboard.DAL;
-using FoxholeIntelboard.DTO;
+using IntelboardCore.Models;
+using IntelboardCore.DAL;
+using IntelboardCore.DTO.Interfaces;
 
 namespace FoxholeIntelboard.Pages.Materials
 {

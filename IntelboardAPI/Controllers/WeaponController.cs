@@ -1,6 +1,6 @@
 ﻿using IntelboardAPI.Data;
-using IntelboardAPI.Models;
-using IntelboardAPI.Services;
+using IntelboardCore.Models;
+using IntelboardCore.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,11 +20,10 @@ namespace IntelboardAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Weapon>> GetWeapons()
+        public async Task<List<Weapon>> GetWeaponsAsync()
         {
             
             return await _context.Weapons.ToListAsync();
-
             
         }
 
@@ -57,7 +56,7 @@ namespace IntelboardAPI.Controllers
             {
                 return BadRequest();
             }
-            await _context.Weapons.AddAsync(weapon);
+            await _context.AddAsync(weapon);
             await _context.SaveChangesAsync();
             return Ok();
         }

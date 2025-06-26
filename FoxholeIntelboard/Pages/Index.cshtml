@@ -4,67 +4,67 @@
     ViewData["Title"] = "Home page";
 }
 <head style="">
-<link rel="stylesheet" href="/css/inventory-display.css" />
+    <link rel="stylesheet" href="/css/inventory-display.css" />
 </head>
 
-<h1 style="text-align: center; color: white;" >Welcome to the front!</h1>
+<h1 style="text-align: center; color: white;">Welcome to the front!</h1>
 <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-  <div class="yt-carousel">
-  <button class="yt-prev">&#10094;</button>
-  <div class="yt-slides">
-    <iframe src="https://www.youtube.com/embed/i-DTKFrJ6Qc" frameborder="0" allowfullscreen></iframe>
-    <iframe src="https://www.youtube.com/embed/aF7C99pdXUk" frameborder="0" allowfullscreen style="display:none"></iframe>
-    <iframe src="https://www.youtube.com/embed/W_X2TcrDBqY" frameborder="0" allowfullscreen style="display:none"></iframe>
-  </div>
-  <button class="yt-next">&#10095;</button>
-</div>
+    <div class="yt-carousel">
+        <button class="yt-prev">&#10094;</button>
+        <div class="yt-slides">
+            <iframe src="https://www.youtube.com/embed/i-DTKFrJ6Qc" frameborder="0" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/aF7C99pdXUk" frameborder="0" allowfullscreen style="display:none"></iframe>
+            <iframe src="https://www.youtube.com/embed/W_X2TcrDBqY" frameborder="0" allowfullscreen style="display:none"></iframe>
+        </div>
+        <button class="yt-next">&#10095;</button>
+    </div>
 </div>
 
 
 <script>
-  // Video carousel and background changer
-  const carouselData = [
-    {
-      video: "https://www.youtube.com/embed/i-DTKFrJ6Qc",
-      bg:   "url('/images/airborne-1.jpg')" 
-    },
-    {
-      video: "https://www.youtube.com/embed/aF7C99pdXUk",
-      bg:   "url('/images/inferno-1.jpg')" 
-    },
-    {
-      video: "https://www.youtube.com/embed/W_X2TcrDBqY",
-      bg:   "url('/images/naval-1.jpg')" 
+    // Video carousel and background changer
+    const carouselData = [
+      {
+        video: "https://www.youtube.com/embed/i-DTKFrJ6Qc",
+        bg:   "url('/images/misc/airborne-1.jpg')"
+      },
+      {
+        video: "https://www.youtube.com/embed/aF7C99pdXUk",
+        bg:   "url('/images/misc/inferno-1.jpg')"
+      },
+      {
+        video: "https://www.youtube.com/embed/W_X2TcrDBqY",
+        bg:   "url('/images/misc/naval-1.jpg')"
+      }
+    ];
+
+    const slides = document.querySelectorAll('.yt-slides iframe');
+    const prevBtn = document.querySelector('.yt-prev');
+    const nextBtn = document.querySelector('.yt-next');
+    let current = 0;
+
+    function showSlide(idx) {
+      slides.forEach((slide, i) => {
+        slide.style.display = (i === idx) ? 'block' : 'none';
+        // Stops the video if it's hidden
+        if(i !== idx) slide.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      });
+      // Switch background image
+      document.body.style.backgroundImage = carouselData[idx].bg;
+      document.body.style.backgroundSize = "cover";
+      document.body.style.backgroundPosition = "center";
+      document.body.style.backgroundRepeat = "no-repeat";
     }
-  ];
 
-  const slides = document.querySelectorAll('.yt-slides iframe');
-  const prevBtn = document.querySelector('.yt-prev');
-  const nextBtn = document.querySelector('.yt-next');
-  let current = 0;
+    prevBtn.onclick = function() {
+      current = (current - 1 + slides.length) % slides.length;
+      showSlide(current);
+    };
+    nextBtn.onclick = function() {
+      current = (current + 1) % slides.length;
+      showSlide(current);
+    };
 
-  function showSlide(idx) {
-    slides.forEach((slide, i) => {
-      slide.style.display = (i === idx) ? 'block' : 'none';
-      // Stops the video if it's hidden
-      if(i !== idx) slide.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-    });
-    // Switch background image
-    document.body.style.backgroundImage = carouselData[idx].bg;
-    document.body.style.backgroundSize = "cover";
-    document.body.style.backgroundPosition = "center";
-    document.body.style.backgroundRepeat = "no-repeat";
-  }
-
-  prevBtn.onclick = function() {
-    current = (current - 1 + slides.length) % slides.length;
+    // Show first slide and set initial background
     showSlide(current);
-  };
-  nextBtn.onclick = function() {
-    current = (current + 1) % slides.length;
-    showSlide(current);
-  };
-
-  // Show first slide and set initial background
-  showSlide(current);
 </script>

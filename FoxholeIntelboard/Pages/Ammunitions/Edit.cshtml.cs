@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Models;
-using FoxholeIntelboard.DAL;
+using IntelboardCore.Models;
+using IntelboardCore.DAL;
 using System.ComponentModel;
 using System.Reflection;
-using FoxholeIntelboard.DTO;
+using IntelboardCore.DTO.Interfaces;
 
 namespace FoxholeIntelboard.Pages.Ammunitions
 {

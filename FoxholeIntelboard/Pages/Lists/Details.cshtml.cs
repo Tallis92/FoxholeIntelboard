@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Data;
-using IntelboardAPI.Models;
-using FoxholeIntelboard.DAL;
-using IntelboardAPI.DTO;
-using FoxholeIntelboard.DTO;
+//using IntelboardAPI.Data;
+using IntelboardCore.Models;
+using IntelboardCore.DAL;
+using IntelboardCore.DTO;
+using IntelboardCore.DTO.Interfaces;
 
 namespace FoxholeIntelboard.Pages.Lists
 {

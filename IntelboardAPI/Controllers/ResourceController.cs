@@ -1,5 +1,5 @@
 ﻿using IntelboardAPI.Data;
-using IntelboardAPI.Models;
+using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.Design;
@@ -11,9 +11,9 @@ namespace IntelboardAPI.Controllers
     public class ResourceController : Controller
     {
         private readonly IntelboardDbContext _context;
-        private readonly Services.IResourceService _resourceService;
+        private readonly IntelboardCore.Services.Interfaces.IResourceService _resourceService;
 
-        public ResourceController(IntelboardDbContext context, Services.IResourceService resourceService)
+        public ResourceController(IntelboardDbContext context, IntelboardCore.Services.Interfaces.IResourceService resourceService)
         {
             _context = context;
             _resourceService = resourceService;

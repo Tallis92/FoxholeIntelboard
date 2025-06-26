@@ -1,4 +1,4 @@
-﻿using IntelboardAPI.Models;
+﻿using IntelboardCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 

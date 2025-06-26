@@ -1,5 +1,5 @@
 ﻿using IntelboardAPI.Data;
-using IntelboardAPI.Models;
+using IntelboardCore.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // Not currently in use, will be used and better implemented soon

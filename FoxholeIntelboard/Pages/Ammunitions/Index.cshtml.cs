@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using IntelboardAPI.Models;
-using FoxholeIntelboard.DAL;
-using IntelboardAPI.DTO;
+using IntelboardCore.Models;
+using IntelboardCore.DTO;
+using IntelboardCore.DAL.Interfaces;
 
 namespace FoxholeIntelboard.Pages.Ammunitions
 {

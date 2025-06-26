@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelboardAPI", "Intelboard
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelboardTests", "IntelboardTests\IntelboardTests.csproj", "{3B07E2C3-3C15-420E-BCA9-7AE02AD7C33A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelboardCore", "IntelboardCore\IntelboardCore.csproj", "{D2F6FEA9-6FAB-4BA8-8EA8-F7BEB6683004}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{3B07E2C3-3C15-420E-BCA9-7AE02AD7C33A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B07E2C3-3C15-420E-BCA9-7AE02AD7C33A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B07E2C3-3C15-420E-BCA9-7AE02AD7C33A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2F6FEA9-6FAB-4BA8-8EA8-F7BEB6683004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2F6FEA9-6FAB-4BA8-8EA8-F7BEB6683004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2F6FEA9-6FAB-4BA8-8EA8-F7BEB6683004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2F6FEA9-6FAB-4BA8-8EA8-F7BEB6683004}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

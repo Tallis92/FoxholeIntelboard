@@ -1,6 +1,5 @@
-﻿using FoxholeIntelboard.DAL;
-using IntelboardAPI.Models;
-using IntelboardAPI.DTO;
+﻿using IntelboardCore.Models;
+using IntelboardCore.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Moq;
+using IntelboardCore.DAL.Interfaces;
 
 namespace IntelboardTests
 {
