@@ -92,6 +92,27 @@
         updateCostUI();
     }
 
+    // Builds the costsection with specific stylings for the productionCosts.
+    function buildCostSection(title, totals){
+        const section = document.createElement("div");
+        const header = document.createElement("h5");
+        header.textContent = title;
+        section.appendChild(header);
+
+        for (const [name, total] of Object.entries(totals)) {
+            const row = document.createElement("div");
+            row.className = "d-flex justify-content-between ps-3";
+            if (total <= 0) {
+                row.innerHTML = `<span>- ${name}</span><span>${0}</span>`;
+            } else {
+                row.innerHTML = `<span>- ${name}</span><span>${total}</span>`;
+            }
+
+            section.appendChild(row);
+        }
+        return section;
+    };
+
     // Goes through the items ProductionCost in an outer loop, in the innerloop it loops through the subcosts with the names and amounts of materials
     // or resources. It then calculates the requiredAmounts total costs, calculates amounts totalcost and then subtract the amounts totalcost from the requiredAmounts totalcost
     // to dynamically change costs on the screen.
@@ -101,15 +122,34 @@
 
         const materialTotals = {};
         const resourceTotals = {};
-
-        list.forEach(item => {
+        for (const item of list) {
+            const costs = productionCosts.filter(c => c.craftableItemId === item.id);
+            for (const cost of costs) {
+                for (const sc of cost.productionCost) {
+                    if (sc.materialId) {
+                        const name = materials.find(m => m.id === sc.materialId)?.name;
+                        if (name && !(name in materialTotals)) materialTotals[name] = 0;
+                    }
+                    if (sc.resourceId) {
+                        const name = resources.find(r => r.id === sc.resourceId)?.name;
+                        if (name && !(name in resourceTotals)) resourceTotals[name] = 0;
+                    }
+                }
+            }
+        }
+        for (const item of list) {
             const costs = productionCosts.filter(c => c.craftableItemId === item.id);
 
             if (costs.length === 0) {
                 console.log("Cost not found");
             } else {
-                costs.forEach(cost => {  
-                    cost.productionCost.forEach(subCost => {
+                for (const cost of costs) {
+                    for (const subCost of cost.productionCost) {
+
+                        if (item.amount > item.requiredAmount) {
+                            continue;
+                        }
+
                         if (subCost.materialId != null) {
                             const materialName = materials.find(m => m.id === subCost.materialId)?.name;
                             const materialCrateAmount = materials.find(m => m.id === subCost.materialId)?.crateAmount || 1;
@@ -149,32 +189,9 @@
                             }    
                         }
                         console.log("Totals: ", resourceTotals);
-                    });
-                });
+                    };
+                };
             }
-        });
-
-        // Builds the costsection with specific stylings for the productionCosts.
-        const buildCostSection = (title, totals) => {
-            const section = document.createElement("div");
-            const header = document.createElement("h5");
-            header.textContent = title;
-            section.appendChild(header);
-
-            for (const [name, total] of Object.entries(totals)) {
-                
-                console.log(name, " total: ", total);
-                const row = document.createElement("div");
-                row.className = "d-flex justify-content-between ps-3";
-                if (total <= 0) {
-                    row.innerHTML = `<span>- ${name}</span><span>${0}</span>`;
-                } else {
-                    row.innerHTML = `<span>- ${name}</span><span>${total}</span>`;
-                }
-                
-                section.appendChild(row);
-            }
-            return section;
         };
 
         // Combines the different cost objects under two main categories.

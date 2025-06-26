@@ -86,6 +86,11 @@ namespace FoxholeIntelboard.Pages.Lists
         {
             // Removes Crateitems from modelstate as it only caused issues. Still saves correctly into db after removal.
             ModelState.Remove("Inventory.CratedItems");
+            if (string.IsNullOrWhiteSpace(SelectedItems))
+            {
+                ModelState.Remove("SelectedItems"); // Clears any previous auto-errors
+                ModelState.AddModelError("SelectedItems", "You must select at least one item.");
+            }
             if (!ModelState.IsValid)
                 return Page();
 
