@@ -20,14 +20,15 @@ namespace FoxholeIntelboard.Pages.Lists
             _manager = manager;
         }
 
-        public IList<Ammunition> Ammunitions { get; set; }
-        public IList<Material> Materials { get; set; }
-        public IList<Resource> Resources { get; set; }
-        public IList<Weapon> Weapons { get; set; }
-        public IList<Category> Categories { get; set; }
-        public IList<CraftableItemDto> CraftableItems { get; set; }
+        public IList<Ammunition> Ammunitions { get; set; } = new List<Ammunition>();
+        public IList<Material> Materials { get; set; } = new List<Material>();
+        public IList<Resource> Resources { get; set; } = new List<Resource>();
+        public IList<Weapon> Weapons { get; set; } = new List<Weapon>();
+        public IList<Category> Categories { get; set; } = new List<Category>();
+        public IList<CraftableItemDto> CraftableItems { get; set; } = new List<CraftableItemDto>();
         [BindProperty]
         public Inventory Inventory { get; set; }
+
         [BindProperty]
         public string SelectedItems { get; set; }
 
@@ -36,18 +37,20 @@ namespace FoxholeIntelboard.Pages.Lists
 
         public async Task OnGetAsync()
         {
-            Ammunitions = await _manager.AmmunitionManager.GetAmmunitionsAsync();
-            Resources = await _manager.ResourceManager.GetResourcesAsync();
-            Materials = await _manager.MaterialManager.GetMaterialsAsync();
-            Weapons = await _manager.WeaponManager.GetWeaponsAsync();
-            Categories = await _manager.CategoryManager.GetCategoriesAsync();
-            CraftableItems = await _manager.CraftableItemManager.GetCraftableItemsAsync();
+            await LoadDataAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (string.IsNullOrWhiteSpace(SelectedItems))
+            {
+                ModelState.Remove("SelectedItems"); // Clears any previous auto-errors
+                ModelState.AddModelError("SelectedItems", "You must select at least one item.");
+            }
+
             if (!ModelState.IsValid)
             {
+                await LoadDataAsync();
                 return Page();
             }
 
@@ -87,7 +90,15 @@ namespace FoxholeIntelboard.Pages.Lists
             return RedirectToPage("./Index");
         }
 
-       
-       
+        private async Task LoadDataAsync()
+        {
+            Ammunitions = await _manager.AmmunitionManager.GetAmmunitionsAsync();
+            Resources = await _manager.ResourceManager.GetResourcesAsync();
+            Materials = await _manager.MaterialManager.GetMaterialsAsync();
+            Weapons = await _manager.WeaponManager.GetWeaponsAsync();
+            Categories = await _manager.CategoryManager.GetCategoriesAsync();
+            CraftableItems = await _manager.CraftableItemManager.GetCraftableItemsAsync();
+        }
+
     }
 }

@@ -24,10 +24,9 @@
     function addToList(id, name, type) {
         const existing = list.find(c => c.id === id && c.type === type);
         if (existing) {
-            existing.amount++;
             existing.requiredAmount++;
         } else {
-            list.push({ id, name, type, amount: 1, requiredAmount: 1});
+            list.push({ id, name, type, amount: 0, requiredAmount: 1});
         }
         updateListUI();
     }
@@ -37,7 +36,11 @@
         if (index !== -1) {
             list[index].amount--;
             if (list[index].amount <= -1) {
-                list.splice(index, 1);
+                list[index].amount = 0;
+                list[index].requiredAmount -= 1;
+                if (list[index].requiredAmount <= 0) {
+                    list.splice(index, 1);
+                }
             }
         }
         updateListUI();
@@ -57,7 +60,7 @@
 
             const input = document.createElement("input");
             input.type = "number";
-            input.min = -1;
+            input.min = 0;
             input.value = item.amount;
             input.className = "form-control form-control-sm";
             input.style.width = "70px";
@@ -72,7 +75,7 @@
                 }
                 if (val <= -1) {
                     const idx = list.findIndex(i => i.id === item.id && i.type === item.type);
-                    list.splice(idx, 1);
+                    list[idx].amount = 0;
                 } else {
                     item.amount = val;
                 }
@@ -159,9 +162,16 @@
             section.appendChild(header);
 
             for (const [name, total] of Object.entries(totals)) {
+                
+                console.log(name, " total: ", total);
                 const row = document.createElement("div");
                 row.className = "d-flex justify-content-between ps-3";
-                row.innerHTML = `<span>- ${name}</span><span>${total}</span>`;
+                if (total <= 0) {
+                    row.innerHTML = `<span>- ${name}</span><span>${0}</span>`;
+                } else {
+                    row.innerHTML = `<span>- ${name}</span><span>${total}</span>`;
+                }
+                
                 section.appendChild(row);
             }
             return section;
