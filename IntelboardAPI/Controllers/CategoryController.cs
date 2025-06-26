@@ -24,6 +24,14 @@ namespace IntelboardAPI.Controllers
             return await _context.Categories.ToListAsync();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory([FromBody] Category newCategory)
+        {
+            _context.Categories.Add(newCategory);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetCategoriesAsync), new { id = newCategory.Id }, newCategory);
+        }
+
         [HttpPost("Seed")]
         public async Task<IActionResult> SeedCategoriesAsync()
         {
