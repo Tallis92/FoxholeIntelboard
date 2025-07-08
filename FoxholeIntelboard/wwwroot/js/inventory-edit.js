@@ -122,6 +122,8 @@
 
         const materialTotals = {};
         const resourceTotals = {};
+
+        // Fix this stuff, very annoying. Much hardship.
         for (const item of list) {
             const costs = productionCosts.filter(c => c.craftableItemId === item.id);
             for (const cost of costs) {
