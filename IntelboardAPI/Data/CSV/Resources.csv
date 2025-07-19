@@ -1,15 +1,15 @@
 Name,Image
-Salvage,SalvageIcon.webp
-Coal,CoalIcon.webp
-Oil,OilIcon.webp
-Sulfur,120px-SulfurIcon.webp
-Components,120px-ComponentsIcon.webp
-Rare Metal,RareMaterialIcon.webp
-Damaged Components,120px-ComponentsDamagedIcon.webp
-Aluminum,120px-ResourceAluminumIcon.webp
-Copper,120px-ResourceCopperIcon.webp
-Iron,120px-ResourceIronIcon.webp
-Water,WaterIcon.webp
-Power,
-Wreckage,WreckageIcon.webp
-Concrete,ConcreteBagIcon.webp
+Salvage,salvage.webp
+Coal,coal.webp
+Oil,raw_oil.webp
+Sulfur,sulfur.webp
+Components,components.webp
+Rare Metal,rare_material.webp
+Damaged Components,damaged_components.webp
+Aluminum,aluminum.webp
+Copper,copper.webp
+Iron,iron.webp
+Water,water.webp
+Power,power.webp
+Wreckage,wreckage.webp
+Concrete,concrete.webp

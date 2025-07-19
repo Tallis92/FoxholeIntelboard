@@ -58,6 +58,7 @@ namespace IntelboardCore.Services
                         List<WeaponProperties> weaponProperties = parts[7].Split(';', StringSplitOptions.RemoveEmptyEntries)
                                                                     .Select(p => (WeaponProperties)int.Parse(p))
                                                                     .ToList();
+                        string image = parts[8];
 
                         if (!weaponNames.Select(w => w.Name).Contains(name))
                         {
@@ -71,7 +72,8 @@ namespace IntelboardCore.Services
                                 WeaponType = weaponType,
                                 AmmunitionId = ammunitionId,
                                 WeaponProperties = weaponProperties,
-                                ProductionCost = new List<Cost>()
+                                ProductionCost = new List<Cost>(),
+                                Image = image
                             };
 
                             weaponLookup[name] = weapon;

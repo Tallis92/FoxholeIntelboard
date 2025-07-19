@@ -39,6 +39,7 @@ namespace IntelboardCore.Services
                     bool large = bool.Parse(parts[3]);
                     bool facility = bool.Parse(parts[4]);
                     int categoryId = int.Parse(parts[5]);
+                    string image = parts[6];
 
                     if (!materialNames.Select(m => m.Name).Contains(name))
                     {
@@ -50,7 +51,8 @@ namespace IntelboardCore.Services
                             LargeMaterial = large,
                             FacilityMade = facility,
                             CategoryId = categoryId,
-                            ProductionCost = new List<Cost>()
+                            ProductionCost = new List<Cost>(),
+                            Image = image
                         };
 
                         materialLookup[name] = material;

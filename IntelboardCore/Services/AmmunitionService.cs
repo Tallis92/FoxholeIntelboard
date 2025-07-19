@@ -42,6 +42,7 @@ namespace IntelboardCore.Services
                     List<AmmoProperties> ammoProperties = parts[5].Split(';', StringSplitOptions.RemoveEmptyEntries)
                                                                .Select(p => (AmmoProperties)int.Parse(p))
                                                                .ToList();
+                    string image = parts[6];
 
 
                     if (!ammunitions.Select(a => a.Name).Contains(name))
@@ -49,13 +50,13 @@ namespace IntelboardCore.Services
                         var ammunition = new Ammunition
                         {
                             Name = name,
-
                             CrateAmount = crateAmount,
                             CategoryId = categoryId,
                             Description = description,
                             DamageType = damagetype,
                             AmmoProperties = ammoProperties,
-                            ProductionCost = new List<Cost>()
+                            ProductionCost = new List<Cost>(),
+                            Image = image
                         };
 
                         ammunitionLookup[name] = ammunition;

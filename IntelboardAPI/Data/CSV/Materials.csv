@@ -1,10 +1,10 @@
-Name,CrateAmount,TechMaterial,LargeMaterial,FacilityMade,CategoryId
-Basic Materials,100,false,false,false,4
-Diesel,100,false,false,false,4
-Explosive Powder,40,false,false,false,4
-Heavy Explosive Powder,30,false,false,false,4
-Gravel,20,false,false,false,4
-Refined Materials,20,false,false,false,4
-Aluminum Alloy,20,true,false,false,4
-Copper Alloy,20,true,false,false,4
-Iron Alloy,20,true,false,false,4
+Name,CrateAmount,TechMaterial,LargeMaterial,FacilityMade,CategoryId,Image
+Basic Materials,100,false,false,false,4,basic_materials.webp
+Diesel,100,false,false,false,4,diesel.webp
+Explosive Powder,40,false,false,false,4,explosive_powder.webp
+Heavy Explosive Powder,30,false,false,false,4,he_powder.webp
+Gravel,20,false,false,false,4,gravel.webp
+Refined Materials,20,false,false,false,4,refined_materials.webp
+Aluminum Alloy,20,true,false,false,4,aluminum_alloy.webp
+Copper Alloy,20,true,false,false,4,copper_alloy.webp
+Iron Alloy,20,true,false,false,4,iron_alloy.webp
