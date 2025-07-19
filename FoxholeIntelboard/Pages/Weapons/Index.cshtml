@@ -52,7 +52,7 @@
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
-                        <img width="32" height="32" src="@Url.Content("~/images/weapons/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" />
+                        <img width="32" height="32" src="@Url.Content("~/images/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" />
                     </td>
                     <td>
                         @if (item.FactionId == 0)

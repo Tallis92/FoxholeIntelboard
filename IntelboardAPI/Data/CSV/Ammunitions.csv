@@ -1,14 +1,14 @@
 ﻿Name,CategoryId,CrateAmount,Description,Damage,AmmoProperties,Image
-7.62 mm,1,40,Standard ammunition for rifles,0,0,7.62mm.webp
-7.92 mm,1,30,Standard ammunition for Storm rifles and armoured car,0,0,7.92mm.webp
-8 mm,1,40,Standard ammunition for pistols,0,0,8mm.webp
-9 mm,1,40,Standard ammunition for Submachine Guns,0,0,9mm.webp
-.44,1,40,Standard ammunition for revolvers,0,0,0.44.webp
-Buckshot,1,40,Standard ammunition for shotguns,0,0,buckshot.webp
-12.7 mm,1,20,Standard ammunition for Machine Guns,1,0,12.7mm.webp
-30 mm,2,20,Standard explosive shells for vehicles and infantry weapons,2,2;3,30mm.webp
-20 mm,2,10,Standard ammunition for anti-tank rifles,8,1,20mm.webp
-40 mm,3,20,Standard payload for light tanks,2,2;3,40mm.webp
-68 mm,3,20,An Anti-Tank shell that's effective against penetrating tank armour,4,2;3,68mm.webp
-120 mm,3,5,Payload for light artillery weapons,3,4;5;6
+7.62 mm,1,40,Standard ammunition for rifles,0,0,ammunitions/7.62mm.webp
+7.92 mm,1,30,Standard ammunition for Storm rifles and armoured car,0,0,ammunitions/7.92mm.webp
+8 mm,1,40,Standard ammunition for pistols,0,0,ammunitions/8mm.webp
+9 mm,1,40,Standard ammunition for Submachine Guns,0,0,ammunitions/9mm.webp
+.44,1,40,Standard ammunition for revolvers,0,0,ammunitions/0.44.webp
+Buckshot,1,40,Standard ammunition for shotguns,0,0,ammunitions/buckshot.webp
+12.7 mm,1,20,Standard ammunition for Machine Guns,1,0,ammunitions/12.7mm.webp
+30 mm,2,20,Standard explosive shells for vehicles and infantry weapons,2,2;3,ammunitions/30mm.webp
+20 mm,2,10,Standard ammunition for anti-tank rifles,8,1,ammunitions/20mm.webp
+40 mm,3,20,Standard payload for light tanks,2,2;3,ammunitions/40mm.webp
+68 mm,3,20,An Anti-Tank shell that's effective against penetrating tank armour,4,2;3,ammunitions/68mm.webp
+120 mm,3,5,Payload for light artillery weapons,3,4;5;6,ammunitions/120mm.webp
 

@@ -1,15 +1,15 @@
 Name,Image
-Salvage,salvage.webp
-Coal,coal.webp
-Oil,raw_oil.webp
-Sulfur,sulfur.webp
-Components,components.webp
-Rare Metal,rare_material.webp
-Damaged Components,damaged_components.webp
-Aluminum,aluminum.webp
-Copper,copper.webp
-Iron,iron.webp
-Water,water.webp
-Power,power.webp
-Wreckage,wreckage.webp
-Concrete,concrete.webp
+Salvage,resources/salvage.webp
+Coal,resources/coal.webp
+Oil,resources/raw_oil.webp
+Sulfur,resources/sulfur.webp
+Components,resources/components.webp
+Rare Metal,resources/rare_material.webp
+Damaged Components,resources/damaged_components.webp
+Aluminum,resources/aluminum.webp
+Copper,resources/copper.webp
+Iron,resources/iron.webp
+Water,resources/water.webp
+Power,resources/power.webp
+Wreckage,resources/wreckage.webp
+Concrete,resources/concrete.webp

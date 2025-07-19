@@ -1,10 +1,10 @@
 Name,CrateAmount,TechMaterial,LargeMaterial,FacilityMade,CategoryId,Image
-Basic Materials,100,false,false,false,4,basic_materials.webp
-Diesel,100,false,false,false,4,diesel.webp
-Explosive Powder,40,false,false,false,4,explosive_powder.webp
-Heavy Explosive Powder,30,false,false,false,4,he_powder.webp
-Gravel,20,false,false,false,4,gravel.webp
-Refined Materials,20,false,false,false,4,refined_materials.webp
-Aluminum Alloy,20,true,false,false,4,aluminum_alloy.webp
-Copper Alloy,20,true,false,false,4,copper_alloy.webp
-Iron Alloy,20,true,false,false,4,iron_alloy.webp
+Basic Materials,100,false,false,false,4,materials/basic_materials.webp
+Diesel,100,false,false,false,4,materials/diesel.webp
+Explosive Powder,40,false,false,false,4,materials/explosive_powder.webp
+Heavy Explosive Powder,30,false,false,false,4,materials/he_powder.webp
+Gravel,20,false,false,false,4,materials/gravel.webp
+Refined Materials,20,false,false,false,4,materials/refined_materials.webp
+Aluminum Alloy,20,true,false,false,4,materials/aluminum_alloy.webp
+Copper Alloy,20,true,false,false,4,materials/copper_alloy.webp
+Iron Alloy,20,true,false,false,4,materials/iron_alloy.webp
