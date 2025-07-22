@@ -31,43 +31,51 @@ namespace IntelboardCore.Services
 
             if (File.Exists(ammunitionFilePath))
             {
-                foreach (var line in File.ReadLines(ammunitionFilePath).Skip(1))
+                try
                 {
-                    var parts = line.Split(',');
-                    string name = parts[0];
-                    int categoryId = int.Parse(parts[1]);
-                    int crateAmount = int.Parse(parts[2]);
-                    string description = parts[3];
-                    var damagetype = (DamageType)int.Parse(parts[4]);
-                    List<AmmoProperties> ammoProperties = parts[5].Split(';', StringSplitOptions.RemoveEmptyEntries)
-                                                               .Select(p => (AmmoProperties)int.Parse(p))
-                                                               .ToList();
-                    string image = parts[6];
-
-
-                    if (!ammunitions.Select(a => a.Name).Contains(name))
+                    foreach (var line in File.ReadLines(ammunitionFilePath).Skip(1))
                     {
-                        var ammunition = new Ammunition
+                        var parts = line.Split(',');
+                        string name = parts[0];
+                        int categoryId = int.Parse(parts[1]);
+                        int crateAmount = int.Parse(parts[2]);
+                        string description = parts[3];
+                        var damagetype = (DamageType)int.Parse(parts[4]);
+                        List<AmmoProperties> ammoProperties = parts[5].Split(';', StringSplitOptions.RemoveEmptyEntries)
+                                                                   .Select(p => (AmmoProperties)int.Parse(p))
+                                                                   .ToList();
+                        string image = parts[6];
+
+
+                        if (!ammunitions.Select(a => a.Name).Contains(name))
                         {
-                            Name = name,
-                            CrateAmount = crateAmount,
-                            CategoryId = categoryId,
-                            Description = description,
-                            DamageType = damagetype,
-                            AmmoProperties = ammoProperties,
-                            ProductionCost = new List<Cost>(),
-                            Image = image
-                        };
+                            var ammunition = new Ammunition
+                            {
+                                Name = name,
+                                CrateAmount = crateAmount,
+                                CategoryId = categoryId,
+                                Description = description,
+                                DamageType = damagetype,
+                                AmmoProperties = ammoProperties,
+                                ProductionCost = new List<Cost>(),
+                                Image = image
+                            };
 
-                        ammunitionLookup[name] = ammunition;
-                        var response = await _httpClient.PostAsJsonAsync("/api/Ammunition/", ammunition);
-                        Console.WriteLine(response.IsSuccessStatusCode ? $"{name} created successfully." : $"Error creating ammunition: {response.StatusCode} {response.Content}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{name} already exists in database!");
+                            ammunitionLookup[name] = ammunition;
+                            var response = await _httpClient.PostAsJsonAsync("/api/Ammunition/", ammunition);
+                            Console.WriteLine(response.IsSuccessStatusCode ? $"{name} created successfully." : $"Error creating ammunition: {response.StatusCode} {response.Content}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{name} already exists in database!");
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error during ammunition seeding: {ex.Message}");
+                }
+
             }
 
             // Reloads Ammunitions table to give access to newly assigned Id's, then uses a dictionary with a Name key to check

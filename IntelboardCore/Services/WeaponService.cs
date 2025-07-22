@@ -38,52 +38,58 @@ namespace IntelboardCore.Services
 
                 if (File.Exists(weaponFilePath))
                 {
-                    foreach (var line in File.ReadLines(weaponFilePath).Skip(1))
-                    {
-                        var parts = line.Split(',');
-
-                        if (parts.Length < 8)
+                    try { 
+                        foreach (var line in File.ReadLines(weaponFilePath).Skip(1))
                         {
-                            Console.WriteLine("Invalid line format, skipping: " + line);
-                            continue;
-                        }
+                            var parts = line.Split(',');
 
-                        string name = parts[0];
-                        int categoryId = int.Parse(parts[1]);
-                        int factionId = int.Parse(parts[2]);
-                        int crateAmount = int.Parse(parts[3]);
-                        string description = parts[4];
-                        var weaponType = (WeaponType)int.Parse(parts[5]);
-                        int ammunitionId = int.Parse(parts[6]);
-                        List<WeaponProperties> weaponProperties = parts[7].Split(';', StringSplitOptions.RemoveEmptyEntries)
-                                                                    .Select(p => (WeaponProperties)int.Parse(p))
-                                                                    .ToList();
-                        string image = parts[8];
-
-                        if (!weaponNames.Select(w => w.Name).Contains(name))
-                        {
-                            var weapon = new Weapon
+                            if (parts.Length < 8)
                             {
-                                Name = name,
-                                CategoryId = categoryId,
-                                FactionId = factionId,
-                                CrateAmount = crateAmount,
-                                Description = description,
-                                WeaponType = weaponType,
-                                AmmunitionId = ammunitionId,
-                                WeaponProperties = weaponProperties,
-                                ProductionCost = new List<Cost>(),
-                                Image = image
-                            };
+                                Console.WriteLine("Invalid line format, skipping: " + line);
+                                continue;
+                            }
 
-                            weaponLookup[name] = weapon;
-                            var response = await _httpClient.PostAsJsonAsync("/api/Weapon/", weapon);
-                            Console.WriteLine(response.IsSuccessStatusCode ? $"{name} created successfully." : $"Error creating weapon: {response.StatusCode} {response.Content}");
+                            string name = parts[0];
+                            int categoryId = int.Parse(parts[1]);
+                            int factionId = int.Parse(parts[2]);
+                            int crateAmount = int.Parse(parts[3]);
+                            string description = parts[4];
+                            var weaponType = (WeaponType)int.Parse(parts[5]);
+                            int ammunitionId = int.Parse(parts[6]);
+                            List<WeaponProperties> weaponProperties = parts[7].Split(';', StringSplitOptions.RemoveEmptyEntries)
+                                                                        .Select(p => (WeaponProperties)int.Parse(p))
+                                                                        .ToList();
+                            string image = parts[8];
+
+                            if (!weaponNames.Select(w => w.Name).Contains(name))
+                            {
+                                var weapon = new Weapon
+                                {
+                                    Name = name,
+                                    CategoryId = categoryId,
+                                    FactionId = factionId,
+                                    CrateAmount = crateAmount,
+                                    Description = description,
+                                    WeaponType = weaponType,
+                                    AmmunitionId = ammunitionId,
+                                    WeaponProperties = weaponProperties,
+                                    ProductionCost = new List<Cost>(),
+                                    Image = image
+                                };
+
+                                weaponLookup[name] = weapon;
+                                var response = await _httpClient.PostAsJsonAsync("/api/Weapon/", weapon);
+                                Console.WriteLine(response.IsSuccessStatusCode ? $"{name} created successfully." : $"Error creating weapon: {response.StatusCode} {response.Content}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{name} already exists in database!");
+                            }
                         }
-                        else
-                        {
-                            Console.WriteLine($"{name} already exists in database!");
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error during weapon seeding: {ex.Message}");
                     }
                 }
 
