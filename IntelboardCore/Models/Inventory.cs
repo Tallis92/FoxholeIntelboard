@@ -12,6 +12,8 @@ namespace IntelboardCore.Models
         public List<CratedItem> CratedItems{ get; set; } = new();
         [JsonPropertyName("factionId")]
         public int? FactionId { get; set; }
+        [JsonPropertyName("shareToken")]
+        public Guid? ShareToken { get; set; } = Guid.NewGuid();
 
     }
     public class CratedItem

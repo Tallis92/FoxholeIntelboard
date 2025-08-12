@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 //using IntelboardAPI.Data;
-using IntelboardCore.Models;
-using IntelboardCore.DAL;
 using IntelboardCore.DTO;
 using IntelboardCore.DTO.Interfaces;
+using IntelboardCore.Models;
 
 namespace FoxholeIntelboard.Pages.Lists
 {
@@ -23,6 +22,7 @@ namespace FoxholeIntelboard.Pages.Lists
         }
 
         public InventoryDto Inventory { get; set; } = default!;
+        public Inventory InventoryModel { get; set; } = default!;
         public IList<CraftableItemDto> CraftableItems { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)

@@ -15,6 +15,7 @@ namespace IntelboardCore.DTO
         public List<CratedItemDto> CratedItems { get; set; }
         [JsonPropertyName("factionId")]
         public int? FactionId { get; set; }
+        public Guid? ShareToken { get; set; } = Guid.NewGuid();
     }
 
     public class CratedItemDto

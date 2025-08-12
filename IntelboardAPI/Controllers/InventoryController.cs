@@ -45,6 +45,36 @@ namespace IntelboardAPI.Controllers
             return inventoryDtos;
         }
 
+        [HttpGet("Share")]
+        public async Task<IActionResult> Share([FromQuery] Guid token)
+        {
+            // Assuming Inventory has a ShareToken property (add if missing)
+            var inventories = await _context.Inventories
+                .Include(i => i.CratedItems)
+                    .ThenInclude(ci => ci.CraftableItem)
+                .Where(i => EF.Property<Guid>(i, "ShareToken") == token)
+                .ToListAsync();
+
+            if (inventories == null || inventories.Count == 0)
+                return NotFound();
+
+            var inventoryDtos = inventories.Select(inventory => new InventoryDto
+            {
+                InventoryId = inventory.Id,
+                FactionId = inventory.FactionId,
+                Name = inventory.Name,
+                CratedItems = inventory.CratedItems.Select(item => new CratedItemDto
+                {
+                    Description = item.Description,
+                    Amount = item.Amount,
+                    RequiredAmount = item.RequiredAmount,
+                    CraftableItemId = item.CraftableItem.Id
+                }).ToList()
+            }).ToList();
+
+            return Ok(inventoryDtos);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<InventoryDto>> GetInventoryByIdAsync(Guid id)
         {
