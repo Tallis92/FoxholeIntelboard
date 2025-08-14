@@ -15,3 +15,15 @@
 240,68 mm,Material,Explosive Powder
 120,120 mm,Material,Basic Materials
 10,120 mm,Material,Heavy Explosive Powder
+120,150 mm,Material,Basic Materials
+60,150 mm,Material,Heavy Explosive Powder
+120,250 mm "Purity" shell,Material,Basic Materials
+100,250 mm "Purity" shell,Material,Heavy Explosive Powder
+75,Tremola Grenade GPb-1,Material,Basic Materials
+100,Tremola Grenade GPb-1,Material,Explosive Powder
+60,RPG,Material,Basic Materials
+90,RPG,Material,Explosive Powder
+60,AP/RPG,Material,Basic Materials
+150,AP/RPG,Material,Explosive Powder
+60,ARC/RPG,Material,Basic Materials
+150,ARC/RPG,Material,Explosive Powder

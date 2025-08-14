@@ -58,6 +58,12 @@ namespace IntelboardCore.Models
         [Display(Name = "Increased Structures")]
         [Description("Increased damage against Field Structures")]
         Increased_Damage_To_Structures,
+        [Display(Name = "Enhanced AP")]
+        [Description("High chance to penetrate armoured vehicles")]
+        Enhanced_AP,
+        [Display(Name = "Guaranteed AP")]
+        [Description("Additional 100% chance to penetrate Armoured vehicles")]
+        Guaranteed_AP,
     }
 
     public class Ammunition : CraftableItem

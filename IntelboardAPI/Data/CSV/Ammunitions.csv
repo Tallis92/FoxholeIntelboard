@@ -11,4 +11,9 @@ Buckshot,1,40,Standard ammunition for shotguns,0,0,ammunitions/buckshot.webp
 40 mm,3,20,Standard payload for light tanks,2,2;3,ammunitions/40mm.webp
 68 mm,3,20,An Anti-Tank shell that's effective against penetrating tank armour,4,2;3,ammunitions/68mm.webp
 120 mm,3,5,Payload for light artillery weapons,3,4;5;6,ammunitions/120mm.webp
-
+150 mm,3,5,Payload for heavy artillery weapons,3,4;5;6,ammunitions/150mm.webp
+250 mm "Purity" shell,3,5,A shell that's launched over short distances by a spigot mortar,8,4,ammunitions/250mm.webp
+Tremola Grenade GPb-1,2,20,A highly explosive Estrellan grenade specially designed for use with handheld grenade launchers. This modern grenade boasts a larger payload and is deadly to lingering infantry and structural supports,2,,grenades/tremola.webp
+RPG,2,15,A fast moving projectile used with RPG launchers,2,2;3,ammunitions/rpg.webp
+AP/RPG,2,15,An armour piercing projectile used with specialized RPG launchers,4,2;3;7,ammunitions/ap_rpg.webp
+ARC/RPG,2,15,An armour piercing projectile used with indirect RPG launchers,4,2;7;8,ammunitions/arc_rpg.webp
