@@ -52,5 +52,15 @@
     }
     <a asp-page="./Index">Back to List</a>
     <br />
-     <a href="/Inventory/Share?token=@Model.Inventory.ShareToken">Share Inventory</a>
+    <a href="@Model.Inventory.ShareToken" id="copyHref">Copy Share Link</a>
  </div>
+<script>
+    document.getElementById("copyHref").addEventListener("click", function(e) {
+        e.preventDefault();
+        const link = this.getAttribute("href");
+
+        navigator.clipboard.writeText(link).then(() => {
+            alert("Länk kopierad: " + link);
+        });
+    });
+</script>

@@ -95,6 +95,7 @@ namespace IntelboardAPI.Controllers
                 InventoryId = inventory.Id,
                 Name = inventory.Name,
                 FactionId = inventory.FactionId,
+                ShareToken = inventory.ShareToken.ToString(), // Assuming ShareToken is a Guid
                 CratedItems = inventory.CratedItems.Select(ci => new CratedItemDto
                 {
                     Id = ci.Id,
