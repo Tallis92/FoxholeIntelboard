@@ -59,7 +59,23 @@ public enum WeaponType
 
     [Display(Name = "Anti-Tank Rifle")]
     [Description("Weapon that can suppress tanks")]
-    Anti_Tank_Rifle
+    Anti_Tank_Rifle,
+
+    [Display(Name = "Anti-Tank RPG")]
+    [Description("Weapon that can penetrate armour")]
+    Anti_Tank_RPG,
+
+    [Display(Name = " Mounted Anti-Tank RPG")]
+    [Description("Mounted weapon that can penetrate armour")]
+    Mounted_Anti_Tank_RPG,
+
+    [Display(Name = "Mounted Machine Gun")]
+    [Description(" Mounted automatic weapon with high damage")]
+    Mounted_Machine_Gun,
+
+    [Display(Name = "RPG")]
+    [Description("Launcher that deals explosive damage")]
+    RPG,
 }
 
 public enum WeaponProperties
@@ -70,11 +86,11 @@ public enum WeaponProperties
 
     [Display(Name = "Bayonette")]
     [Description("Allows buckhorn CCQ-18 (Bayonet) attatchment")]
-    bayonette,
+    Bayonette,
 
     [Display(Name = "Ospreay")]
     [Description("Compatible ammo the attached Ospreay(Grenade Launcher): Green Ash Grenade, A3 Harpa Fragmentation Gernade, B2 Varsi Anti-Tank Grenade")]
-    ospreay,
+    Ospreay,
 
     [Display(Name = "Damage -25%")]
     [Description("Equipped with a low velocity barrel that deals 25% less damage per shot")]
@@ -118,12 +134,49 @@ public enum WeaponProperties
     Higher_Penetration,
 
     [Display(Name = "Damage +30%")]
-    [Description("Equipped with a high velocity barrel that deals 30% etxra damage per shot")]
+    [Description("Equipped with a high velocity barrel that deals 30% extra damage per shot")]
     DamageIncrease30,
 
     [Display(Name = "Damage +150%")]
-    [Description("Equipped with a high velocity barrel that deals 150% etxra damage per shot")]
+    [Description("Equipped with a high velocity barrel that deals 150% extra damage per shot")]
     DamageIncrease150,
+
+    [Display(Name = "Damage -11%")]
+    [Description("Equipped with a low velocity barrel that deals 11% less damage per shot")]
+    DamageReduction11,
+
+    [Display(Name = "Damage -20%")]
+    [Description("Equipped with a low velocity barrel that deals 20% less damage per shot")]
+    DamageReduction20,
+
+    [Display(Name = "Damage +125%")]
+    [Description("Equipped with a high velocity barrel that deals 125% extra damage per shot")]
+    DamageIncrease125,
+
+    [Display(Name = "Ignore cover -95%")]
+    [Description("Accuracy bonus provided by cover is reduced by 95%")]
+    IgnoreCover95,
+
+    [Display(Name = "High Penetration")]
+    [Description("High chance to penetrate armoured vehicles")]
+    High_Penetration,
+
+    [Display(Name = "Penetration +100%")]
+    [Description("Additional 100% chance to penetrate armoured vehicles")]
+    Penetration_Increase100,
+
+    [Display(Name = "Damage +75%")]
+    [Description("Equipped with a high velocity barrel that deals 75% extra damage per shot")]
+    DamageIncrease75,
+
+    [Display(Name = "Damage +55%")]
+    [Description("Equipped with a high velocity barrel that deals 55% extra damage per shot")]
+    DamageIncrease55,
+
+    [Display(Name = "Damage +50%")]
+    [Description("Equipped with a high velocity barrel that deals 50% extra damage per shot")]
+    DamageIncrease50,
+
 }
 
 namespace IntelboardCore.Models
