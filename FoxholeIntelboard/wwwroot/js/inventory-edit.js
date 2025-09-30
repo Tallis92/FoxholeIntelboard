@@ -46,13 +46,9 @@
         }
         const index = list.findIndex(c => c.id === id && c.type === type);
         if (index !== -1) {
-            list[index].amount -= removeAmount;
-            if (list[index].amount <= -1) {
-                list[index].amount = 0;
-                list[index].requiredAmount -= removeAmount;
-                if (list[index].requiredAmount <= 0) {
-                    list.splice(index, 1);
-                }
+            list[index].requiredAmount -= removeAmount;
+            if (list[index].requiredAmount <= 0) {
+                list.splice(index, 1);
             }
         }
         updateListUI();
@@ -77,6 +73,17 @@
             input.value = item.amount;
             input.className = "form-control form-control-sm";
             input.style.width = "70px";
+            if (item.amount >= item.requiredAmount) { 
+                li.style.backgroundColor = "#28a745"; // dark green
+                input.style.backgroundColor = "#d4edda"; // light green
+            } else if (item.amount >= item.requiredAmount / 2) {
+                li.style.backgroundColor = "#ffc107"; // dark yellow
+                input.style.backgroundColor = "#fff3cd"; // light yellow
+            } else {
+                li.style.backgroundColor = "#dc3545"; // dark red
+                input.style.backgroundColor = "#f8d7da"; // light red
+            }
+
 
             const span = document.createElement("span");
             span.textContent = ` / ${item.requiredAmount}`;
