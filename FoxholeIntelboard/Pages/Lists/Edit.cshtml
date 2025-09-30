@@ -51,7 +51,7 @@
                                 <!-- Ammunition categories -->
                                 @foreach (var item in Model.Ammunitions.Where(i => i.CategoryId == category.Id))
                                 {
-                                    <li class="dropdown-item d-flex justify-content-between align-items-center dropdown-item dropdown-item-grid">
+                                    <li class="dropdown-item d-flex justify-content-between align-items-center dropdown-item-grid">
                                         <span><img width="32" height="32" src="@Url.Content("~/images/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" /> @item.Name</span>
                                         <span>
                                             <input style="width: 60px; text-align: center;" type="number" min="1" max="100" value="1" class="add-amount"/>
@@ -67,7 +67,7 @@
                                     .Where(w => w.FactionId == Model.SelectedFactionId && w.CategoryId == category.Id && category.Id != 4);
                                     foreach (var item in factionWeapons)
                                     {
-                                        <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                        <li class="dropdown-item d-flex justify-content-between align-items-center dropdown-item-grid">
                                             <span><img width="32" height="32" src="@Url.Content("~/images/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" /> @item.Name</span>
                                             <span>
                                                 <input style="width: 60px; text-align: center;" type="number" min="1" max="100" value="1" class="add-amount" />
@@ -80,7 +80,7 @@
                                 <!-- Material categories-->
                                 @foreach (var item in Model.Materials.Where(m => m.CategoryId == category.Id))
                                 {
-                                    <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                    <li class="dropdown-item d-flex justify-content-between align-items-center dropdown-item-grid">
                                         <span><img width="32" height="32" src="@Url.Content("~/images/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" /> @item.Name</span>
                                         <span>
                                             <input style="width: 60px; text-align: center;" type="number" min="1" max="100" value="1" class="add-amount" />

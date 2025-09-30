@@ -21,8 +21,8 @@
             @(Model.SelectedFactionId == 0 ? "Warden" : "Colonial")
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="?SelectedFactionId=0">Warden</a></li>
-            <li><a class="dropdown-item" href="?SelectedFactionId=1">Colonial</a></li>
+            <li><a class="dropdown-item dropdown-item-grid" href="?SelectedFactionId=0">Warden</a></li>
+            <li><a class="dropdown-item dropdown-item-grid" href="?SelectedFactionId=1">Colonial</a></li>
         </ul>
     </div>
 
@@ -56,7 +56,7 @@
                                     <!-- Ammunition categories -->
                                     @foreach (var item in Model.Ammunitions.Where(i => i.CategoryId == category.Id))
                                     {
-                                        <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                        <li class="dropdown-item d-flex justify-content-between align-items-center dropdown-item-grid">
                                             <span><img width="32" height="32" src="@Url.Content("~/images/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" /> @item.Name</span>
                                             <span>
                                                 <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Ammunition')">+</button>
@@ -71,7 +71,7 @@
                                         var factionWeapons = Model.Weapons.Where(w => w.FactionId == Model.SelectedFactionId && w.CategoryId == category.Id);
                                         foreach (var item in factionWeapons)
                                         {
-                                            <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                            <li class="dropdown-item d-flex justify-content-between align-items-center dropdown-item-grid">
                                                 <span><img width="32" height="32" src="@Url.Content("~/images/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" /> @item.Name</span>
                                                 <span>
                                                     <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Weapon')">+</button>
@@ -83,7 +83,7 @@
                                     <!-- Material categories-->
                                     @foreach (var item in Model.Materials.Where(m => m.CategoryId == category.Id))
                                     {
-                                        <li class="dropdown-item d-flex justify-content-between align-items-center">
+                                        <li class="dropdown-item d-flex justify-content-between align-items-center dropdown-item-grid">
                                             <span><img width="32" height="32" src="@Url.Content("~/images/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" /> @item.Name</span>
                                             <span>
                                                 <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
