@@ -5,6 +5,9 @@
     const resources = window.resources || [];
     const materials = window.materials || [];
     const existingItems = window.existingItems || [];
+   
+
+    
 
     // Loops through each item in existingItem, if it finds a match in List it sets the amount to the existing values, else it makes a shallow copy
     // and ads it to the list. Then calls updateListUI to show the changes in the UI. This is to combine both existing and new items.
@@ -21,23 +24,32 @@
     updateListUI();
 
     // Checks for existing items in the list, if they exist it just increases the values, if not it will create a new item and with amounts set to 1.
-    function addToList(id, name, type) {
+    function addToList(id, name, type, amountStr) {
+        let addAmount = parseInt(amountStr, 10) || 1;
+        if (addAmount >= 101) {
+            addAmount = 100;
+        }
         const existing = list.find(c => c.id === id && c.type === type);
         if (existing) {
-            existing.requiredAmount++;
+            
+            existing.requiredAmount += addAmount;
         } else {
-            list.push({ id, name, type, amount: 0, requiredAmount: 1});
+            list.push({ id, name, type, amount: 0, requiredAmount: addAmount});
         }
         updateListUI();
     }
 
-    function removeFromList(id, type) {
+    function removeFromList(id, type, amountStr) {
+        let removeAmount = parseInt(amountStr, 10) || 1;
+        if (removeAmount >= 101) {
+            removeAmount = 100;
+        }
         const index = list.findIndex(c => c.id === id && c.type === type);
         if (index !== -1) {
-            list[index].amount--;
+            list[index].amount -= removeAmount;
             if (list[index].amount <= -1) {
                 list[index].amount = 0;
-                list[index].requiredAmount -= 1;
+                list[index].requiredAmount -= removeAmount;
                 if (list[index].requiredAmount <= 0) {
                     list.splice(index, 1);
                 }
@@ -61,6 +73,7 @@
             const input = document.createElement("input");
             input.type = "number";
             input.min = 0;
+            input.max = 100;
             input.value = item.amount;
             input.className = "form-control form-control-sm";
             input.style.width = "70px";
@@ -82,9 +95,20 @@
                 updateListUI();
             };
 
+            const removeBtn = document.createElement("button");
+            removeBtn.textContent = "✕"; // or "X"
+            removeBtn.className = "btn btn-sm btn-outline-danger ms-2";
+            removeBtn.onclick = () => {
+                // remove this item from the list
+                const index = list.findIndex(i => i.id === item.id && i.type === item.type);
+                if (index !== -1) list.splice(index, 1);
+                updateListUI();
+            };
+
             li.appendChild(label);
             li.appendChild(input);
             li.appendChild(span);
+            li.appendChild(removeBtn);
             display.appendChild(li);
         });
 
@@ -212,4 +236,5 @@
 
     window.addToList = addToList;
     window.removeFromList = removeFromList;
+    //window.deleteIemFromList = deleteFromList;
 });

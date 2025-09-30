@@ -54,8 +54,9 @@
                                     <li class="dropdown-item d-flex justify-content-between align-items-center">
                                         <span><img width="32" height="32" src="@Url.Content("~/images/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" /> @item.Name</span>
                                         <span>
-                                            <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Ammunition')">+</button>
-                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Ammunition')">-</button>
+                                            <input style="width: 60px; text-align: center;" type="number" min="1" max="100" value="1" class="add-amount"/>
+                                            <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Ammunition', this.parentElement.querySelector('.add-amount').value)">+</button>
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Ammunition', this.parentElement.querySelector('.add-amount').value)">-</button>
                                         </span>
                                     </li>
                                 }
@@ -69,8 +70,9 @@
                                         <li class="dropdown-item d-flex justify-content-between align-items-center">
                                             <span><img width="32" height="32" src="@Url.Content("~/images/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" /> @item.Name</span>
                                             <span>
-                                                <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Weapon')">+</button>
-                                                <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Weapon')">-</button>
+                                                <input style="width: 60px; text-align: center;" type="number" min="1" max="100" value="1" class="add-amount" />
+                                                <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Weapon', this.parentElement.querySelector('.add-amount').value)">+</button>
+                                                <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'Weapon', this.parentElement.querySelector('.add-amount').value)">-</button>
                                             </span>
                                         </li>
                                     }
@@ -81,8 +83,9 @@
                                     <li class="dropdown-item d-flex justify-content-between align-items-center">
                                         <span><img width="32" height="32" src="@Url.Content("~/images/" + item.Image)" alt="@item.Image" style="background-color: dimgray; padding: 4px;" /> @item.Name</span>
                                         <span>
-                                            <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Material')">+</button>
-                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'MMaterial')">-</button>
+                                            <input style="width: 60px; text-align: center;" type="number" min="1" max="100" value="1" class="add-amount" />
+                                            <button type="button" class="btn btn-sm btn-success me-1" onclick="addToList(@item.Id, '@item.Name', 'Material', this.parentElement.querySelector('.add-amount').value)">+</button>
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeFromList(@item.Id, 'MMaterial', this.parentElement.querySelector('.add-amount').value)">-</button>
                                         </span>
                                     </li>
                                 }
