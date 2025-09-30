@@ -5,6 +5,20 @@
     width: 100%;
     font-weight: bold;
 }
+.dropdown-menu {
+    max-height: 300px; /* justera efter behov */
+    overflow-y: auto; /* scroll vid överflöd */
+    padding: 0.5rem; /* lite padding */
+}
+
+/* För grid-liknande layout i dropdown-item */
+.dropdown-item-grid {
+    display: grid;
+    grid-template-columns: 40px 1fr 140px; /* bild, namn, input+knappar */
+    align-items: center;
+    gap: 0.5rem;
+}
+
 
 .panel-row {
     display: none;
